@@ -6,6 +6,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
 #include <boost/program_options.hpp>
 #include <boost/regex.hpp>
 #include <sstream>
@@ -81,11 +82,14 @@ bool Bonus::loadAll(const std::string& dir)
 	fs::directory_iterator end;
 	for(fs::directory_iterator it(p); it != end; ++it)
 	{
-		Bonus* bon = new Bonus;
-		if(!bon->load(*it))
-			ret = false;
-		else
-			bonus.push_back(bon);
+		if(!fs::is_directory(*it))
+		{
+			Bonus* bon = new Bonus;
+			if(!bon->load(*it))
+				ret = false;
+			else
+				bonus.push_back(bon);
+		}
 	}
 	return ret;
 }
@@ -107,7 +111,7 @@ void Bonus::storeValue(const std::string& key, const std::string& value)
 		std::istringstream iss(value);
 		iss >> m_time;
 	}
-	else if(key == "picture")
+	else if(key == "picture") // TODO relatif à la position du fichier
 	{
 		m_img = IMG_Load(value.c_str());
 		if(m_img == NULL)
