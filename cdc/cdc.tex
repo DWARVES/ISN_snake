@@ -1,0 +1,61 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[frenchb]{babel}
+\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{fancybox}
+
+\hypersetup{
+	colorlinks=true
+}
+
+\title{Snakekans\\-- Projet ISN --}
+\author{Luc Chabassier <luc.linux@mailoo.org> \and Pablo Donato <pablo.donato@mailoo.org>}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Introduction.}
+Ce programme doit être créé dans le cadre d'un projet d'ISN en 2013. L'idée initiale est de faire un snake en réseau (deux joueurs) en c++, en utilisant SDL et socket.
+
+\section{Fonctionnalités.}
+Ce programme doit permettre de connecter deux joueurs, un qui héberge le jeu, et donc fait la majorité des calculs, et un qui se contente d'afficher et de capter les évènements. Le programme est un snake classique, c'est à dire que le terrain ne contient que les serpents et les bonus. Quand un serpent sort d'un côté, il entre de l'autre. Les bonus apportent un certain nombre de points chacun. Le jeu se termine quand un des serpents meurt, c'est à dire qu'il se cogne contre un autre des serpents. Le gagnant est celui qui a le plus de points.
+
+Le jeu s'organise sur une grille virtuelle composée de case de 10 pixels sur 10 pixels.
+
+\subsection{Les bonus.}
+Un bonus possède plusieurs attributs. Tout d'abord, le nombre de points qu'il rapporte et l'influence sur la taille : un bonus peut donc faire perdre des points et/ou raccourcir le serpent. Un bonus possède aussi une durée durant laquelle il reste affiché et une probabilité d'apparition. Enfin, chaque bonus possède une image propre.
+
+Les bonus sont stocké config (clé=valeur) dans un ficher de la forme :
+\begin{verbatim}
+pts = 10
+length = 3 # influence for the snake length
+time = 10 # in seconds
+picture = pictures/banana.png
+fact = 20 # Higher is fact, higher is the apparition frequency
+\end{verbatim}
+
+Tous les fichiers des bonus sont dans un dossier dont le contenu est scanné au début du programme.
+
+\subsection{Le serpent.}
+Le serpent est stocké dans un structure. Il peut se déplacer dans quatre dimensions. Un serpent est affiché avec une succession d'images, chargée depuis des tiles. Il existe quatre image pour le serpent : la tête, un corp droit, un corp courbe et la queue. Chacune de ces images existe en deux exemplaire, qui servent à créer une animation lors du déplacement du serpent.
+
+\subsection{Le terrain.}
+Le terrain est constitué d'une image de fond, uniquement décorative. Le nombre de cases est fixé dans le code et la taille est adaptée pour s'afficher en plein écran. Chaque case contient ou un bonus, ou une information de collision quand il y a le corp du serpent.
+
+\subsection{Le réseau.}
+Chaque modification apportée sur le terrain ou un serpent est envoyée au client, de façon à ce qu'il se mette à jour.
+
+\section{Outils et licence.}
+Ce jeu est codé en c++, et utilise les bibliothèques SDL et Socket. L'outil utilisé pour écrire le code est vim (éditeur et colorateur). Le code est versionné avec git (le code est hébergé sur github) et la chaine de compilation est générée par cmake. Le jeu est dévellopé sous Linux.
+
+Le code est sous licence GNU GPLv3, a copyright de Luc Chabassier et Pablo Donato.
+
+\end{document}
+
