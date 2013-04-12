@@ -25,6 +25,7 @@ class Bonus
 		int getFact() const;
 
 		static bool loadAll(const std::string& dir);
+		static void freeAll();
 
 	private:
 		signed int m_pts;
@@ -37,7 +38,7 @@ class Bonus
 		void storeValue(const std::string& key, const std::string& value);
 };
 
-extern std::vector<Bonus> bonus;
+extern std::vector<Bonus*> bonus;
 
 #endif
 

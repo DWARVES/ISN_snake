@@ -10,7 +10,7 @@
 #include <boost/regex.hpp>
 #include <sstream>
 
-std::vector<Bonus> bonus;
+std::vector<Bonus*> bonus;
 namespace fs = boost::filesystem;
 
 Bonus::Bonus()
@@ -59,13 +59,13 @@ bool Bonus::load(const fs::path& path)
 	if(!file)
 		return false;
 
-	boost::regex syntax("^[[:blanck:]]*([[:word:]]+)[[:blanck:]]*=[[:blanck:]]*([[:word:]]+)[[:blanck:]]*(#.*)?$");
+	boost::regex syntax("^[[:blank:]]*(pts|length|time|picture|fact)[[:blank:]]*=[[:blank:]]*(([[:word:]]|\\.|-|\\+)+)");
 	boost::smatch found;
 
 	std::string line;
 	while(std::getline(file, line))
 	{
-		if(boost::regex_search(path.string(), found, syntax))
+		if(boost::regex_search(line, found, syntax))
 			storeValue(found[1], found[2]);
 	}
 	m_name = path.leaf().string();
@@ -81,8 +81,8 @@ bool Bonus::loadAll(const std::string& dir)
 	fs::directory_iterator end;
 	for(fs::directory_iterator it(p); it != end; ++it)
 	{
-		Bonus bon;
-		if(!bon.load(*it))
+		Bonus* bon = new Bonus;
+		if(!bon->load(*it))
 			ret = false;
 		else
 			bonus.push_back(bon);
@@ -125,4 +125,9 @@ void Bonus::storeValue(const std::string& key, const std::string& value)
 	}
 }
 
+void Bonus::freeAll()
+{
+	for(auto it = bonus.begin(); it != bonus.end(); ++it)
+		delete *it;
+}
 
