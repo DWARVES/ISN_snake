@@ -28,11 +28,13 @@ include_directories(${SDL_IMAGE_INCLUDE_DIR})
 
 # Inclusion de Boost
 include(FindBoost)
-find_package(Boost COMPONENTS system filesystem REQUIRED)
+find_package(Boost COMPONENTS system filesystem regex REQUIRED)
 link_directories(${Boost_SYSTEM_LIBRARY_DIR})
 include_directories(${Boost_SYSTEM_INCLUDE_DIR})
 link_directories(${Boost_FILESYSTEM_LIBRARY_DIR})
 include_directories(${Boost_FILESYSTEM_INCLUDE_DIR})
+link_directories(${Boost_REGEX_LIBRARY_DIR})
+include_directories(${Boost_REGEX_INCLUDE_DIR})
 
 # L'exécutable et les sources
 add_executable(
@@ -47,5 +49,6 @@ target_link_libraries(
 	${SDL_IMAGE_LIBRARY}
 	${Boost_FILESYSTEM_LIBRARY}
 	${Boost_SYSTEM_LIBRARY}
+	${Boost_REGEX_LIBRARY}
 	)
 
