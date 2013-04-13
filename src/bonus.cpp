@@ -90,7 +90,10 @@ bool Bonus::loadAll(const std::string& dir)
 		{
 			Bonus* bon = new Bonus;
 			if(!bon->load(*it))
+			{
 				ret = false;
+				delete bon;
+			}
 			else
 				bonus.push_back(bon);
 		}
