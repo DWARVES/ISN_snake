@@ -8,8 +8,8 @@
 #define bg_path "bg.png"
 
 // Map
-#define widthMap 80
-#define heightMap 45
+#define widthMap 40
+#define heightMap 30
 #define sizeTile 20
 
 #endif
