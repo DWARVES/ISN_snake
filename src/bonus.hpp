@@ -34,8 +34,9 @@ class Bonus
 		SDL_Surface* m_img;
 		int m_fact;
 		std::string m_name;
+
 		bool load(const boost::filesystem::path& path);
-		void storeValue(const std::string& key, const std::string& value);
+		void storeValue(const std::string& key, const std::string& value, const boost::filesystem::path* path = NULL);
 };
 
 extern std::vector<Bonus*> bonus;

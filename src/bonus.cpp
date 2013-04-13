@@ -60,14 +60,15 @@ bool Bonus::load(const fs::path& path)
 	if(!file)
 		return false;
 
-	boost::regex syntax("^[[:blank:]]*(pts|length|time|picture|fact)[[:blank:]]*=[[:blank:]]*(([[:word:]]|\\.|-|\\+)+)");
+	boost::regex syntax("^[[:blank:]]*(pts|length|time|picture|fact)[[:blank:]]*=[[:blank:]]*(([[:word:]]|\\.|-|\\+|/|\\\\)+)");
 	boost::smatch found;
+	fs::path branch = path.branch_path();
 
 	std::string line;
 	while(std::getline(file, line))
 	{
 		if(boost::regex_search(line, found, syntax))
-			storeValue(found[1], found[2]);
+			storeValue(found[1], found[2], &branch);
 	}
 	m_name = path.leaf().string();
 
@@ -94,7 +95,7 @@ bool Bonus::loadAll(const std::string& dir)
 	return ret;
 }
 
-void Bonus::storeValue(const std::string& key, const std::string& value)
+void Bonus::storeValue(const std::string& key, const std::string& value, const fs::path* path)
 {
 	if(key == "pts")
 	{
@@ -111,9 +112,18 @@ void Bonus::storeValue(const std::string& key, const std::string& value)
 		std::istringstream iss(value);
 		iss >> m_time;
 	}
-	else if(key == "picture") // TODO relatif à la position du fichier
+	else if(key == "picture")
 	{
-		m_img = IMG_Load(value.c_str());
+		fs::path rp;
+		if(path == NULL // No path
+				|| !fs::is_directory(*path) // Invalid path
+				|| !path->root_path().string().empty()) // Absolute path
+			rp = "";
+		else
+			rp = *path;
+		rp /= value;
+
+		m_img = IMG_Load(rp.string().c_str());
 		if(m_img == NULL)
 			return;
 		SDL_Surface* tmp = SDL_DisplayFormat(m_img);
