@@ -98,14 +98,14 @@ bool Bonus::loadAll(const std::string& dir)
 			}
 			else
 			{
-				totFact += bon->fact;
+				totFact += bon->m_fact;
 				bonus.push_back(bon);
 			}
 		}
 	}
 
 	for(size_t i = 0; i < bonus.size(); ++i)
-		bonus[i]->fact = bonus[i]->fact * 1000 / totFact;
+		bonus[i]->m_fact = bonus[i]->m_fact * 1000 / totFact;
 
 	return ret;
 }
