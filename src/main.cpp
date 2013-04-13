@@ -4,12 +4,17 @@
 #include "config.hpp"
 #include "bonus.hpp"
 #include "map.hpp"
+#include <boost/filesystem/path.hpp>
+
+namespace fs = boost::filesystem;
 
 int main(int argc, char *argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Surface* ecran = SDL_SetVideoMode(widthMap * sizeTile, heightMap * sizeTile, 24, SDL_DOUBLEBUF);
-	Bonus::loadAll(rcdir);
+	fs::path bonPath(rcdir);
+	bonPath /= bonus_subdir;
+	Bonus::loadAll(bonPath.c_str());
 
 	srand(time(NULL));
 	Map map;
