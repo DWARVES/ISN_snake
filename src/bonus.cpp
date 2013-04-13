@@ -68,7 +68,10 @@ bool Bonus::load(const fs::path& path)
 	while(std::getline(file, line))
 	{
 		if(boost::regex_search(line, found, syntax))
-			storeValue(found[1], found[2], &branch);
+		{
+			if(!storeValue(found[1], found[2], &branch))
+				return false;
+		}
 	}
 	m_name = path.leaf().string();
 
@@ -95,7 +98,7 @@ bool Bonus::loadAll(const std::string& dir)
 	return ret;
 }
 
-void Bonus::storeValue(const std::string& key, const std::string& value, const fs::path* path)
+bool Bonus::storeValue(const std::string& key, const std::string& value, const fs::path* path)
 {
 	if(key == "pts")
 	{
@@ -125,10 +128,10 @@ void Bonus::storeValue(const std::string& key, const std::string& value, const f
 
 		m_img = IMG_Load(rp.string().c_str());
 		if(m_img == NULL)
-			return;
+			return false;
 		SDL_Surface* tmp = SDL_DisplayFormat(m_img);
 		if(tmp == NULL)
-			return;
+			return false;
 		SDL_FreeSurface(m_img);
 		m_img = tmp;
 	}
@@ -137,6 +140,9 @@ void Bonus::storeValue(const std::string& key, const std::string& value, const f
 		std::istringstream iss(value);
 		iss >> m_fact;
 	}
+	else
+		return false;
+	return true;
 }
 
 void Bonus::freeAll()
