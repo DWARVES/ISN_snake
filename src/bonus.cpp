@@ -83,6 +83,8 @@ bool Bonus::loadAll(const std::string& dir)
 	bonus.clear();
 	fs::path p(dir);
 	bool ret = true;
+
+	unsigned int totFact = 0;
 	fs::directory_iterator end;
 	for(fs::directory_iterator it(p); it != end; ++it)
 	{
@@ -95,9 +97,16 @@ bool Bonus::loadAll(const std::string& dir)
 				delete bon;
 			}
 			else
+			{
+				totFact += bon->fact;
 				bonus.push_back(bon);
+			}
 		}
 	}
+
+	for(size_t i = 0; i < bonus.size(); ++i)
+		bonus[i]->fact = bonus[i]->fact * 1000 / totFact;
+
 	return ret;
 }
 
