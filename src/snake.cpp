@@ -3,12 +3,13 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include <SDL/SDL_rotozoom.h>
 #include <algorithm>
 #include <boost/filesystem/path.hpp>
+
 #include "map.hpp"
 #include "config.hpp"
 #include "bonus.hpp"
+#include "utilities.hpp"
 
 namespace fs = boost::filesystem;
 
@@ -257,7 +258,7 @@ void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
 		if(spart != NULL)
 		{
 			SDL_BlitSurface(m_tile, &part, spart, NULL);
-			SDL_Surface* toblit = rotozoomSurface(spart, angle, 1, 0);
+			SDL_Surface* toblit = rotTile(spart, angle);
 
 			if(toblit != NULL)
 			{
@@ -294,9 +295,9 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 		switch(prev)
 		{
 			case Case::LEFT: *angle = 0; break;
-			case Case::RIGHT: *angle = 180; break;
-			case Case::UP: *angle = 270; break;
-			case Case::DOWN: *angle = 90; break;
+			case Case::RIGHT: *angle = 2; break;
+			case Case::UP: *angle = 3; break;
+			case Case::DOWN: *angle = 1; break;
 			default: break;
 		}
 	}
@@ -306,9 +307,9 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 		switch(next)
 		{
 			case Case::LEFT: *angle = 0; break;
-			case Case::RIGHT: *angle = 180; break;
-			case Case::UP: *angle = 270; break;
-			case Case::DOWN: *angle = 90; break;
+			case Case::RIGHT: *angle = 2; break;
+			case Case::UP: *angle = 3; break;
+			case Case::DOWN: *angle = 1; break;
 			default: break;
 		}
 	}
@@ -318,7 +319,7 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 		if(prev < Case::NONE)
 			*angle = 0;
 		else
-			*angle = 90;
+			*angle = 1;
 	}
 	else
 	{
