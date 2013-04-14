@@ -12,5 +12,8 @@
 #define heightMap 30
 #define sizeTile 20
 
+// Snakes
+#define snake_subdir "snake/1.png"
+
 #endif
 
