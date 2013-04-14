@@ -15,6 +15,21 @@ namespace fs = boost::filesystem;
 : m_map(map), m_x(begin.x), m_y(begin.y), m_toadd(0), m_score(0),
 	m_tile(NULL), m_ltime(SDL_GetTicks()), m_step(true), m_first(NULL), m_last(NULL)
 {
+	// Création des premières cases
+	m_first = new Case;
+	m_first->dprev = Case::NONE;
+	m_first->prev = NULL;
+	m_first->dnext = Case::LEFT;
+	m_first->next = new Case;
+
+	Case* scd = m_first->next;
+	scd->dprev = Case::RIGHT;
+	scd->prev = m_first;
+	scd->dnext = Case::NONE;
+	scd->next = NULL;
+	m_last = scd;
+
+	// Chargement de m_tile
 	fs::path path(rcdir);
 	path /= snake_subdir;
 	m_tile = IMG_Load(path.string().c_str());
@@ -256,10 +271,10 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 		dst->y = sizeTile;
 
 	// La colonne et l'angle
-	if(prev == Case::NONE)
+	if(next == Case::NONE)
 	{
 		dst->x = sizeTile * 3; // la queue, 4eme colonne
-		switch(next)
+		switch(prev)
 		{
 			case Case::LEFT: *angle = 0; break;
 			case Case::RIGHT: *angle = 180; break;
@@ -268,10 +283,10 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 			default: break;
 		}
 	}
-	else if(next == Case::NONE)
+	else if(prev == Case::NONE)
 	{
 		dst->x = 0; // La tête, 1ere colonne
-		switch(prev)
+		switch(next)
 		{
 			case Case::LEFT: *angle = 0; break;
 			case Case::RIGHT: *angle = 180; break;
@@ -292,6 +307,9 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 	{
 		dst->x = sizeTile * 2; // Corp courbe, 3eme colonne
 	}
+
+	// Largeur et hauteur
+	dst->w = dst->h = sizeTile;
 }
 
 void Snake::incrementPos(SDL_Rect* dst, signed int x, signed int y) const
