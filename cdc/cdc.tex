@@ -9,9 +9,7 @@
 \usepackage{fancyhdr}
 \usepackage{fancybox}
 
-\hypersetup{
-	colorlinks=true
-}
+\hypersetup{colorlinks=true}
 
 \title{Snakekans\\-- Projet ISN --}
 \author{Luc Chabassier <luc.linux@mailoo.org> \and Pablo Donato <pablo.donato@mailoo.org>}
@@ -47,7 +45,7 @@ Tous les fichiers des bonus sont dans un dossier dont le contenu est scanné au 
 Le serpent est stocké dans un structure. Il peut se déplacer dans quatre dimensions. Un serpent est affiché avec une succession d'images, chargée depuis des tiles. Il existe quatre image pour le serpent : la tête, un corp droit, un corp courbe et la queue. Chacune de ces images existe en deux exemplaire, qui servent à créer une animation lors du déplacement du serpent.
 
 \subsection{Le terrain.}
-Le terrain est constitué d'une image de fond, uniquement décorative. Le nombre de cases est fixé dans le code et la taille est adaptée pour s'afficher en plein écran. Chaque case contient ou un bonus, ou une information de collision quand il y a le corp du serpent.
+Le terrain est constitué d'une image de fond, uniquement décorative. Le nombre de cases, ainsi que leur taille, est fixé dans le code. Chaque case contient ou un bonus, ou une information de collision quand il y a le corp du serpent.
 
 \subsection{Le réseau.}
 Chaque modification apportée sur le terrain ou un serpent est envoyée au client, de façon à ce qu'il se mette à jour.
