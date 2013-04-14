@@ -37,7 +37,9 @@ Map::ColType Map::testCase(unsigned int x, unsigned int y) const
 
 Bonus* Map::getBonusAt(unsigned int x, unsigned int y)
 {
-	return bonus[ m_map[x][y].bon->idx ];
+	Bonus* ret =  bonus[ m_map[x][y].bon->idx ];
+	deleteBonus(m_map[x][y].bon);
+	return ret;
 }
 
 void Map::addBonus()
