@@ -4,6 +4,7 @@
 #include "config.hpp"
 #include "bonus.hpp"
 #include "map.hpp"
+#include "snake.hpp"
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
@@ -19,6 +20,11 @@ int main(int argc, char *argv[])
 	srand(time(NULL));
 	Map map;
 
+	SDL_Rect pos;
+	pos.x = 20;
+	pos.y = 10;
+	Snake snk(&map, pos);
+
 	SDL_Event ev;
 	SDL_WaitEvent(&ev);
 	bool continuer = true;
@@ -26,6 +32,7 @@ int main(int argc, char *argv[])
 	{
 		SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
 		map.blitOn(ecran, NULL);
+		snk.blitOn(ecran, NULL);
 		SDL_Flip(ecran);
 
 		while(SDL_PollEvent(&ev))
@@ -60,6 +67,18 @@ int main(int argc, char *argv[])
 							break;
 						case SDLK_SPACE:
 							map.addBonus();
+							break;
+						case SDLK_UP:
+							snk.moveUp();
+							break;
+						case SDLK_DOWN:
+							snk.moveDown();
+							break;
+						case SDLK_RIGHT:
+							snk.moveRight();
+							break;
+						case SDLK_LEFT:
+							snk.moveLeft();
 							break;
 						default:
 							break;
