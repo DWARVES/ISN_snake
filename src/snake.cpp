@@ -61,7 +61,8 @@ void Snake::moveUp()
 {
 	if(m_toadd == 0)
 	{
-		Case* actual = m_last;
+		m_last->dprev = m_last->prev->dprev;
+		Case* actual = m_last->prev;
 		while(actual != m_first)
 		{
 			actual->dnext = actual->prev->dnext;
@@ -92,7 +93,8 @@ void Snake::moveDown()
 {
 	if(m_toadd == 0)
 	{
-		Case* actual = m_last;
+		m_last->dprev = m_last->prev->dprev;
+		Case* actual = m_last->prev;
 		while(actual != m_first)
 		{
 			actual->dnext = actual->prev->dnext;
@@ -123,7 +125,8 @@ void Snake::moveLeft()
 {
 	if(m_toadd == 0)
 	{
-		Case* actual = m_last;
+		m_last->dprev = m_last->prev->dprev;
+		Case* actual = m_last->prev;
 		while(actual != m_first)
 		{
 			actual->dnext = actual->prev->dnext;
@@ -154,7 +157,8 @@ void Snake::moveRight()
 {
 	if(m_toadd == 0)
 	{
-		Case* actual = m_last;
+		m_last->dprev = m_last->prev->dprev;
+		Case* actual = m_last->prev;
 		while(actual != m_first)
 		{
 			actual->dnext = actual->prev->dnext;
