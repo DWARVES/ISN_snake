@@ -26,6 +26,11 @@ find_package(SDL_image REQUIRED)
 link_directories(${SDL_IMAGE_LIBRARY_DIR})
 include_directories(${SDL_IMAGE_INCLUDE_DIR})
 
+include(FindSDL_gfx)
+find_package(SDL_gfx REQUIRED)
+link_directories(${SDLGFX_LIBRARY_DIR})
+include_directories(${SDLGFX_INCLUDE_DIR})
+
 # Inclusion de Boost
 include(FindBoost)
 find_package(Boost COMPONENTS system filesystem regex REQUIRED)
@@ -47,6 +52,7 @@ target_link_libraries(
 	${executable}
 	${SDL_LIBRARY}
 	${SDL_IMAGE_LIBRARY}
+	${SDLGFX_LIBRARY}
 	${Boost_FILESYSTEM_LIBRARY}
 	${Boost_SYSTEM_LIBRARY}
 	${Boost_REGEX_LIBRARY}
