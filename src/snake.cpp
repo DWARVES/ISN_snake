@@ -3,6 +3,7 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include <SDL/SDL_rotozoom.h>
 #include <algorithm>
 #include <boost/filesystem/path.hpp>
 #include "map.hpp"
@@ -251,8 +252,20 @@ void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
 		cpos.y *= sizeTile;
 		cpos.y += rpos.y;
 
-		// TODO use angle
-		SDL_BlitSurface(m_tile, &part, dst, &cpos);
+		// La rotation
+		SDL_Surface* spart = SDL_CreateRGBSurface(0, sizeTile, sizeTile, 24, 0, 0, 0, 0);
+		if(spart != NULL)
+		{
+			SDL_BlitSurface(m_tile, &part, spart, NULL);
+			SDL_Surface* toblit = rotozoomSurface(spart, angle, 1, 0);
+
+			if(toblit != NULL)
+			{
+				SDL_BlitSurface(toblit, NULL, dst, &cpos);
+				SDL_FreeSurface(spart);
+				SDL_FreeSurface(toblit);
+			}
+		}
 
 		switch(actual->dnext)
 		{
