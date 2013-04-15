@@ -76,14 +76,7 @@ void Snake::moveUp()
 	m_first->next->dprev = Case::UP;
 	m_first->dnext = Case::DOWN;
 	m_first->dprev = Case::NONE;
-
-	SDL_Rect pos;
-	pos.x = m_first->x; pos.y = m_first->y;
-	incrementPos(&pos, 0, -1);
-	m_first->x = pos.x;
-	m_first->y = pos.y;
-	checkDeath();
-	m_map->addWall(m_first->x, m_first->y);
+	moveFirst(0, -1);
 }
 
 void Snake::moveDown()
@@ -93,14 +86,7 @@ void Snake::moveDown()
 	m_first->next->dprev = Case::DOWN;
 	m_first->dnext = Case::UP;
 	m_first->dprev = Case::NONE;
-
-	SDL_Rect pos;
-	pos.x = m_first->x; pos.y = m_first->y;
-	incrementPos(&pos, 0, 1);
-	m_first->x = pos.x;
-	m_first->y = pos.y;
-	checkDeath();
-	m_map->addWall(m_first->x, m_first->y);
+	moveFirst(0, 1);
 }
 
 void Snake::moveLeft()
@@ -110,14 +96,7 @@ void Snake::moveLeft()
 	m_first->next->dprev = Case::LEFT;
 	m_first->dnext = Case::RIGHT;
 	m_first->dprev = Case::NONE;
-
-	SDL_Rect pos;
-	pos.x = m_first->x; pos.y = m_first->y;
-	incrementPos(&pos, -1, 0);
-	m_first->x = pos.x;
-	m_first->y = pos.y;
-	checkDeath();
-	m_map->addWall(m_first->x, m_first->y);
+	moveFirst(-1, 0);
 }
 
 void Snake::moveRight()
@@ -127,14 +106,7 @@ void Snake::moveRight()
 	m_first->next->dprev = Case::RIGHT;
 	m_first->dnext = Case::LEFT;
 	m_first->dprev = Case::NONE;
-
-	SDL_Rect pos;
-	pos.x = m_first->x; pos.y = m_first->y;
-	incrementPos(&pos, 1, 0);
-	m_first->x = pos.x;
-	m_first->y = pos.y;
-	checkDeath();
-	m_map->addWall(m_first->x, m_first->y);
+	moveFirst(1, 0);
 }
 
 bool Snake::dead()
@@ -378,4 +350,18 @@ void Snake::checkDeath()
 	d.score = m_score;
 	throw d;
 }
+
+void Snake::moveFirst(signed int x, signed int y)
+{
+	SDL_Rect pos;
+	pos.x = m_first->x; pos.y = m_first->y;
+	incrementPos(&pos, x, y);
+
+	m_first->x = pos.x;
+	m_first->y = pos.y;
+	checkDeath();
+	m_map->addWall(m_first->x, m_first->y);
+}
+
+
 
