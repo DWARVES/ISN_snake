@@ -83,6 +83,8 @@ int main(int argc, char *argv[])
 						default:
 							break;
 					}
+					if(snk.dead())
+						continuer = false;
 					break;
 				default:
 					break;
