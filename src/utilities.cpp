@@ -16,7 +16,7 @@ SDL_Rect transform180(SDL_Rect pos)
 {
 	SDL_Rect ret;
 	ret.x = sizeTile - pos.x - 1;
-	ret.y = pos.y;
+	ret.y = sizeTile - pos.y - 1;
 	return ret;
 }
 
