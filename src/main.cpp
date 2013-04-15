@@ -8,6 +8,7 @@
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
+void drawCol(SDL_Surface* dst, Map* map);
 
 int main(int argc, char *argv[])
 {
@@ -33,6 +34,7 @@ int main(int argc, char *argv[])
 		SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
 		map.blitOn(ecran, NULL);
 		snk.blitOn(ecran, NULL);
+		drawCol(ecran, &map);
 		SDL_Flip(ecran);
 
 		while(SDL_PollEvent(&ev))
@@ -100,5 +102,23 @@ int main(int argc, char *argv[])
 	Bonus::freeAll();
 	SDL_Quit();
 	return 0;
+}
+
+void drawCol(SDL_Surface* dst, Map* map)
+{
+	for(int x = 0; x < widthMap; ++x)
+	{
+		for(int y = 0; y < heightMap; ++y)
+		{
+			if(map->testCase(x, y) == Map::WALL)
+			{
+				SDL_Rect r;
+				r.x = x * sizeTile + sizeTile / 4;
+				r.y = y * sizeTile + sizeTile / 4;
+				r.w = r.h = sizeTile / 2;
+				SDL_FillRect(dst, &r, SDL_MapRGB(dst->format, 0, 0, 255));
+			}
+		}
+	}
 }
 
