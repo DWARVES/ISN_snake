@@ -251,9 +251,9 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 			default: break;
 		}
 	}
-	else if(std::abs(prev - next) < 2)
+	else if(std::abs(prev - next) == 1)
 	{
-		dst->x = sizeTile; // Corp droit, 2nd colonne
+		dst->x = sizeTile * 2; // Corp droit, 3eme colonne
 		if(prev < Case::NONE)
 			*angle = 0;
 		else
@@ -261,7 +261,43 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 	}
 	else
 	{
-		dst->x = sizeTile * 2; // Corp courbe, 3eme colonne
+		dst->x = sizeTile; // Corp courbe, 2nd colonne
+		switch(next)
+		{
+			case Case::LEFT:
+				switch(prev)
+				{
+					case Case::UP: *angle = 2; break;
+					case Case::DOWN: *angle = 1; break;
+					default: break;
+				}
+				break;
+			case Case::RIGHT:
+				switch(prev)
+				{
+					case Case::UP: *angle = 3; break;
+					case Case::DOWN: *angle = 0; break;
+					default: break;
+				}
+				break;
+			case Case::UP:
+				switch(prev)
+				{
+					case Case::LEFT: *angle = 2; break;
+					case Case::RIGHT: *angle = 3; break;
+					default: break;
+				}
+				break;
+			case Case::DOWN:
+				switch(prev)
+				{
+					case Case::LEFT: *angle = 1; break;
+					case Case::RIGHT: *angle = 0; break;
+					default: break;
+				}
+				break;
+			default: break;
+		}
 	}
 
 	// Largeur et hauteur
