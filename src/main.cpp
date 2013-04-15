@@ -72,9 +72,6 @@ int main(int argc, char *argv[])
 							case SDLK_q:
 								continuer = false;
 								break;
-							case SDLK_SPACE:
-								map.addBonus();
-								break;
 							case SDLK_UP:
 								mv = &Snake::moveUp;
 								break;
@@ -106,6 +103,7 @@ int main(int argc, char *argv[])
 		{
 			(snk.*mv)();
 			ltime = SDL_GetTicks();
+			map.addBonus();
 		}
 	}
 
