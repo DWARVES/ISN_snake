@@ -304,6 +304,8 @@ void Snake::decal()
 		ncase->next = m_first->next;
 		ncase->dnext = m_first->dnext;
 		ncase->prev = m_first;
+
+		m_first->next->prev = ncase;
 		m_first->next = ncase;
 		--m_toadd;
 	}
