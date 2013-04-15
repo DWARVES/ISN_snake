@@ -268,14 +268,14 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 				switch(prev)
 				{
 					case Case::UP: *angle = 2; break;
-					case Case::DOWN: *angle = 1; break;
+					case Case::DOWN: *angle = 3; break;
 					default: break;
 				}
 				break;
 			case Case::RIGHT:
 				switch(prev)
 				{
-					case Case::UP: *angle = 3; break;
+					case Case::UP: *angle = 1; break;
 					case Case::DOWN: *angle = 0; break;
 					default: break;
 				}
@@ -284,14 +284,14 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 				switch(prev)
 				{
 					case Case::LEFT: *angle = 2; break;
-					case Case::RIGHT: *angle = 3; break;
+					case Case::RIGHT: *angle = 1; break;
 					default: break;
 				}
 				break;
 			case Case::DOWN:
 				switch(prev)
 				{
-					case Case::LEFT: *angle = 1; break;
+					case Case::LEFT: *angle = 3; break;
 					case Case::RIGHT: *angle = 0; break;
 					default: break;
 				}
