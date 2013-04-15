@@ -23,6 +23,8 @@ namespace fs = boost::filesystem;
 	m_first->prev = NULL;
 	m_first->dnext = Case::LEFT;
 	m_first->next = new Case;
+	m_first->x = m_x;
+	m_first->y = m_y;
 
 	Case* scd = m_first->next;
 	scd->dprev = Case::RIGHT;
@@ -34,6 +36,8 @@ namespace fs = boost::filesystem;
 	m_map->addWall(m_x, m_y);
 	SDL_Rect plast = begin;
 	incrementPos(&plast, -1, 0);
+	m_last->x = plast.x;
+	m_last->y = plast.y;
 	m_map->addWall(plast.x, plast.y);
 
 	// Chargement de m_tile
@@ -93,6 +97,8 @@ void Snake::moveUp()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, 0, -1);
 	m_x = pos.x; m_y = pos.y;
+	m_first->x = pos.x;
+	m_first->y = pos.y;
 	checkDeath();
 	m_map->addWall(m_x, m_y);
 }
@@ -109,6 +115,8 @@ void Snake::moveDown()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, 0, 1);
 	m_x = pos.x; m_y = pos.y;
+	m_first->x = pos.x;
+	m_first->y = pos.y;
 	checkDeath();
 	m_map->addWall(m_x, m_y);
 }
@@ -125,6 +133,8 @@ void Snake::moveLeft()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, -1, 0);
 	m_x = pos.x; m_y = pos.y;
+	m_first->x = pos.x;
+	m_first->y = pos.y;
 	checkDeath();
 	m_map->addWall(m_x, m_y);
 }
@@ -141,6 +151,8 @@ void Snake::moveRight()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, 1, 0);
 	m_x = pos.x; m_y = pos.y;
+	m_first->x = pos.x;
+	m_first->y = pos.y;
 	checkDeath();
 	m_map->addWall(m_x, m_y);
 }
@@ -367,6 +379,8 @@ void Snake::decal()
 		{
 			actual->dnext = actual->prev->dnext;
 			actual->dprev = actual->prev->dprev;
+			actual->x = actual->prev->x;
+			actual->y = actual->prev->y;
 			actual = actual->prev;
 
 			switch(actual->dnext)
@@ -398,6 +412,8 @@ void Snake::decal()
 		ncase->next = m_first->next;
 		ncase->dnext = m_first->dnext;
 		ncase->prev = m_first;
+		ncase->x = m_first->x;
+		ncase->y = m_first->y;
 
 		m_first->next->prev = ncase;
 		m_first->next = ncase;

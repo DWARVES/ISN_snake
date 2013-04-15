@@ -42,6 +42,7 @@ class Snake
 			Case* next;
 			Dir dprev;
 			Case* prev;
+			unsigned int x, y;
 		};
 		Case* m_first;
 		Case* m_last;
