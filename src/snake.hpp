@@ -26,7 +26,6 @@ class Snake
 
 	private:
 		Map* m_map;
-		unsigned int m_x, m_y;
 		unsigned int m_toadd;
 		unsigned int m_score;
 		SDL_Surface* m_tile;

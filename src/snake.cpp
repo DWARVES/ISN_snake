@@ -14,8 +14,8 @@
 namespace fs = boost::filesystem;
 
 	Snake::Snake(Map* map, const SDL_Rect& begin)
-: m_map(map), m_x(begin.x), m_y(begin.y), m_toadd(0), m_score(0),
-	m_tile(NULL), m_ltime(SDL_GetTicks()), m_step(true), m_first(NULL), m_last(NULL)
+: m_map(map), m_toadd(0), m_score(0), m_tile(NULL), 
+	m_ltime(SDL_GetTicks()), m_step(true), m_first(NULL), m_last(NULL)
 {
 	// Création des premières cases
 	m_first = new Case;
@@ -23,8 +23,8 @@ namespace fs = boost::filesystem;
 	m_first->prev = NULL;
 	m_first->dnext = Case::LEFT;
 	m_first->next = new Case;
-	m_first->x = m_x;
-	m_first->y = m_y;
+	m_first->x = begin.x;
+	m_first->y = begin.y;
 
 	Case* scd = m_first->next;
 	scd->dprev = Case::RIGHT;
@@ -33,7 +33,7 @@ namespace fs = boost::filesystem;
 	scd->next = NULL;
 	m_last = scd;
 
-	m_map->addWall(m_x, m_y);
+	m_map->addWall(m_first->x, m_first->y);
 	SDL_Rect plast = begin;
 	incrementPos(&plast, -1, 0);
 	m_last->x = plast.x;
@@ -66,7 +66,7 @@ Snake::~Snake()
 	Case* actual = m_first;
 	while(actual != NULL)
 	{
-		pos.x = m_x; pos.y = m_y;
+		pos.x = m_first->x; pos.y = m_first->y;
 		incrementPos(&pos, dec.x, dec.y);
 		m_map->deleteWall(pos.x, pos.y);
 
@@ -94,13 +94,12 @@ void Snake::moveUp()
 	m_first->dprev = Case::NONE;
 
 	SDL_Rect pos;
-	pos.x = m_x; pos.y = m_y;
+	pos.x = m_first->x; pos.y = m_first->y;
 	incrementPos(&pos, 0, -1);
-	m_x = pos.x; m_y = pos.y;
 	m_first->x = pos.x;
 	m_first->y = pos.y;
 	checkDeath();
-	m_map->addWall(m_x, m_y);
+	m_map->addWall(m_first->x, m_first->y);
 }
 
 void Snake::moveDown()
@@ -112,13 +111,12 @@ void Snake::moveDown()
 	m_first->dprev = Case::NONE;
 
 	SDL_Rect pos;
-	pos.x = m_x; pos.y = m_y;
+	pos.x = m_first->x; pos.y = m_first->y;
 	incrementPos(&pos, 0, 1);
-	m_x = pos.x; m_y = pos.y;
 	m_first->x = pos.x;
 	m_first->y = pos.y;
 	checkDeath();
-	m_map->addWall(m_x, m_y);
+	m_map->addWall(m_first->x, m_first->y);
 }
 
 void Snake::moveLeft()
@@ -130,13 +128,12 @@ void Snake::moveLeft()
 	m_first->dprev = Case::NONE;
 
 	SDL_Rect pos;
-	pos.x = m_x; pos.y = m_y;
+	pos.x = m_first->x; pos.y = m_first->y;
 	incrementPos(&pos, -1, 0);
-	m_x = pos.x; m_y = pos.y;
 	m_first->x = pos.x;
 	m_first->y = pos.y;
 	checkDeath();
-	m_map->addWall(m_x, m_y);
+	m_map->addWall(m_first->x, m_first->y);
 }
 
 void Snake::moveRight()
@@ -148,23 +145,22 @@ void Snake::moveRight()
 	m_first->dprev = Case::NONE;
 
 	SDL_Rect pos;
-	pos.x = m_x; pos.y = m_y;
+	pos.x = m_first->x; pos.y = m_first->y;
 	incrementPos(&pos, 1, 0);
-	m_x = pos.x; m_y = pos.y;
 	m_first->x = pos.x;
 	m_first->y = pos.y;
 	checkDeath();
-	m_map->addWall(m_x, m_y);
+	m_map->addWall(m_first->x, m_first->y);
 }
 
 bool Snake::dead()
 {
-	Map::ColType col = m_map->testCase(m_x, m_y);
+	Map::ColType col = m_map->testCase(m_first->x, m_first->y);
 	if(col == Map::WALL)
 		return true;
 	else if(col == Map::BONUS)
 	{
-		Bonus* bon = m_map->getBonusAt(m_x, m_y);
+		Bonus* bon = m_map->getBonusAt(m_first->x, m_first->y);
 
 		int scr = bon->getPts();
 		if(scr < 0 
@@ -226,7 +222,7 @@ void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
 		getRect(&part, &angle, actual->dprev, actual->dnext);
 
 		SDL_Rect cpos;
-		cpos.x = m_x; cpos.y = m_y;
+		cpos.x = m_first->x; cpos.y = m_first->y;
 		incrementPos(&cpos, dec.x, dec.y);
 		cpos.x *= sizeTile;
 		cpos.x += rpos.x;
@@ -402,7 +398,7 @@ void Snake::decal()
 			default: break;
 		}
 		SDL_Rect pos;
-		pos.x = m_x; pos.y = m_y;
+		pos.x = m_first->x; pos.y = m_first->y;
 		incrementPos(&pos, dec.x, dec.y);
 		m_map->deleteWall(pos.x, pos.y);
 	}
