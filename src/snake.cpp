@@ -141,6 +141,8 @@ bool Snake::dead()
 				actual->next = NULL;
 				actual->dnext = Case::NONE;
 				m_last = actual;
+
+				m_map->deleteWall(tofree->x, tofree->y);
 				delete tofree;
 			}
 		}
