@@ -79,6 +79,7 @@ void Snake::moveUp()
 		ncase->dnext = m_first->dnext;
 		ncase->prev = m_first;
 		m_first->next = ncase;
+		--m_toadd;
 	}
 
 	m_first->next->dprev = Case::UP;
@@ -111,6 +112,7 @@ void Snake::moveDown()
 		ncase->dnext = m_first->dnext;
 		ncase->prev = m_first;
 		m_first->next = ncase;
+		--m_toadd;
 	}
 
 	m_first->next->dprev = Case::DOWN;
@@ -143,6 +145,7 @@ void Snake::moveLeft()
 		ncase->dnext = m_first->dnext;
 		ncase->prev = m_first;
 		m_first->next = ncase;
+		--m_toadd;
 	}
 
 	m_first->next->dprev = Case::LEFT;
@@ -175,6 +178,7 @@ void Snake::moveRight()
 		ncase->dnext = m_first->dnext;
 		ncase->prev = m_first;
 		m_first->next = ncase;
+		--m_toadd;
 	}
 
 	m_first->next->dprev = Case::RIGHT;
