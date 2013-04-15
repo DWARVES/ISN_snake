@@ -31,6 +31,11 @@ namespace fs = boost::filesystem;
 	scd->next = NULL;
 	m_last = scd;
 
+	m_map->addWall(m_x, m_y);
+	SDL_Rect plast = begin;
+	incrementPos(&plast, -1, 0);
+	m_map->addWall(plast.x, plast.y);
+
 	// Chargement de m_tile
 	fs::path path(rcdir);
 	path /= snake_subdir;
@@ -50,9 +55,26 @@ Snake::~Snake()
 	if(m_tile != NULL)
 		delete m_tile;
 
+	SDL_Rect pos;
+	SDL_Rect dec;
+	dec.x = dec.y = 0;
+
 	Case* actual = m_first;
 	while(actual != NULL)
 	{
+		pos.x = m_x; pos.y = m_y;
+		incrementPos(&pos, dec.x, dec.y);
+		m_map->deleteWall(pos.x, pos.y);
+
+		switch(actual->dnext)
+		{
+			case Case::UP: --dec.y; break;
+			case Case::DOWN: ++dec.y; break;
+			case Case::LEFT: --dec.x; break;
+			case Case::RIGHT: ++dec.x; break;
+			default: break;
+		}
+
 		Case* tofree = actual;
 		actual = actual->next;
 		delete tofree;
@@ -71,6 +93,7 @@ void Snake::moveUp()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, 0, -1);
 	m_x = pos.x; m_y = pos.y;
+	m_map->addWall(m_x, m_y);
 }
 
 void Snake::moveDown()
@@ -85,6 +108,7 @@ void Snake::moveDown()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, 0, 1);
 	m_x = pos.x; m_y = pos.y;
+	m_map->addWall(m_x, m_y);
 }
 
 void Snake::moveLeft()
@@ -99,6 +123,7 @@ void Snake::moveLeft()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, -1, 0);
 	m_x = pos.x; m_y = pos.y;
+	m_map->addWall(m_x, m_y);
 }
 
 void Snake::moveRight()
@@ -113,6 +138,7 @@ void Snake::moveRight()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, 1, 0);
 	m_x = pos.x; m_y = pos.y;
+	m_map->addWall(m_x, m_y);
 }
 
 bool Snake::dead()
@@ -328,6 +354,9 @@ void Snake::decal()
 {
 	if(m_toadd == 0)
 	{
+		SDL_Rect dec;
+		dec.x = dec.y = 0;
+
 		m_last->dprev = m_last->prev->dprev;
 		Case* actual = m_last->prev;
 		while(actual != m_first)
@@ -335,7 +364,29 @@ void Snake::decal()
 			actual->dnext = actual->prev->dnext;
 			actual->dprev = actual->prev->dprev;
 			actual = actual->prev;
+
+			switch(actual->dnext)
+			{
+				case Case::UP: --dec.y; break;
+				case Case::DOWN: ++dec.y; break;
+				case Case::LEFT: --dec.x; break;
+				case Case::RIGHT: ++dec.x; break;
+				default: break;
+			}
 		}
+
+		switch(m_first->dnext)
+		{
+			case Case::UP: --dec.y; break;
+			case Case::DOWN: ++dec.y; break;
+			case Case::LEFT: --dec.x; break;
+			case Case::RIGHT: ++dec.x; break;
+			default: break;
+		}
+		SDL_Rect pos;
+		pos.x = m_x; pos.y = m_y;
+		incrementPos(&pos, dec.x, dec.y);
+		m_map->deleteWall(pos.x, pos.y);
 	}
 	else
 	{
