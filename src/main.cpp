@@ -92,9 +92,14 @@ int main(int argc, char *argv[])
 						break;
 				}
 			}
-			catch(Snake::Death d)
+			catch(const Snake::Death& d)
 			{
 				std::cout << "Game over : " << d.score << " points !" << std::endl;
+				continuer = false;
+			}
+			catch(...)
+			{
+				std::cerr << "Une exception inconnue a étée attrapée !" << std::endl;
 				continuer = false;
 			}
 		}
