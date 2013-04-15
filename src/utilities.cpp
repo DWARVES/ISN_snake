@@ -7,24 +7,24 @@ typedef SDL_Rect (*Transform)(SDL_Rect);
 SDL_Rect transform90(SDL_Rect pos)
 {
 	SDL_Rect ret;
-	ret.x = sizeTile - pos.y;
-	ret.y = ret.x;
+	ret.x = pos.y;
+	ret.y = sizeTile - pos.x - 1;
 	return ret;
 }
 
 SDL_Rect transform180(SDL_Rect pos)
 {
 	SDL_Rect ret;
-	ret.x = sizeTile - pos.y;
-	ret.y = sizeTile - pos.x;
+	ret.x = sizeTile - pos.x - 1;
+	ret.y = sizeTile - pos.y - 1;
 	return ret;
 }
 
 SDL_Rect transform270(SDL_Rect pos)
 {
 	SDL_Rect ret;
-	ret.x = pos.y;
-	ret.y = sizeTile - pos.x;
+	ret.x = sizeTile - pos.y - 1;
+	ret.y = pos.x;
 	return ret;
 }
 
@@ -46,7 +46,9 @@ SDL_Surface* rotTile(SDL_Surface* tile, int ang)
 			return rot;
 	}
 
+	SDL_FillRect(rot, NULL, SDL_MapRGB(rot->format, 0, 0, 0));
 	SDL_Rect pos;
+	SDL_LockSurface(rot);
 	for(pos.x = 0; pos.x < tile->w; ++pos.x)
 	{
 		for(pos.y = 0; pos.y < tile->h; ++pos.y)
@@ -56,6 +58,7 @@ SDL_Surface* rotTile(SDL_Surface* tile, int ang)
 			putPixel(rot, npos.x, npos.y, col);
 		}
 	}
+	SDL_UnlockSurface(rot);
 
 	return rot;
 }
