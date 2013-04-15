@@ -231,6 +231,13 @@ void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
 	if(m_tile == NULL)
 		return;
 
+	// Animation
+	if(SDL_GetTicks() - m_ltime > 500)
+	{
+		m_step = !m_step;
+		m_ltime = SDL_GetTicks();
+	}
+
 	SDL_Rect rpos;
 	if(pos == NULL)
 		rpos.x = rpos.y = 0;
