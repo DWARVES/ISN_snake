@@ -93,6 +93,7 @@ void Snake::moveUp()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, 0, -1);
 	m_x = pos.x; m_y = pos.y;
+	checkDeath();
 	m_map->addWall(m_x, m_y);
 }
 
@@ -108,6 +109,7 @@ void Snake::moveDown()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, 0, 1);
 	m_x = pos.x; m_y = pos.y;
+	checkDeath();
 	m_map->addWall(m_x, m_y);
 }
 
@@ -123,6 +125,7 @@ void Snake::moveLeft()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, -1, 0);
 	m_x = pos.x; m_y = pos.y;
+	checkDeath();
 	m_map->addWall(m_x, m_y);
 }
 
@@ -138,6 +141,7 @@ void Snake::moveRight()
 	pos.x = m_x; pos.y = m_y;
 	incrementPos(&pos, 1, 0);
 	m_x = pos.x; m_y = pos.y;
+	checkDeath();
 	m_map->addWall(m_x, m_y);
 }
 
@@ -399,5 +403,15 @@ void Snake::decal()
 		m_first->next = ncase;
 		--m_toadd;
 	}
+}
+
+void Snake::checkDeath()
+{
+	if(!dead())
+		return;
+
+	Death d;
+	d.score = m_score;
+	throw d;
 }
 

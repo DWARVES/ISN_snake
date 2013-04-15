@@ -17,10 +17,12 @@ class Snake
 		void moveLeft();
 		void moveRight();
 
-		bool dead(); // Indique si le serpent est mort et utilise les bonus
 		void blitOn(SDL_Surface* dst, SDL_Rect* pos) const;
-
 		unsigned int getScore() const;
+
+		struct Death { // Exception lancée pour signaler la mort du serpent
+			unsigned int score;
+		};
 
 	private:
 		Map* m_map;
@@ -47,6 +49,8 @@ class Snake
 		void getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) const; // Donne la partie de m_tile à blitter
 		void incrementPos(SDL_Rect* dst, signed int x, signed int y) const; // Gère le retour d'un côté quand on sort de l'autre
 		void decal();
+		void checkDeath();
+		bool dead(); // Indique si le serpent est mort et utilise les bonus
 };
 
 #endif
