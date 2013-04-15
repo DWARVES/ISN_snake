@@ -37,57 +37,62 @@ int main(int argc, char *argv[])
 
 		while(SDL_PollEvent(&ev))
 		{
-			switch(ev.type)
-			{
-				case SDL_QUIT:
-					continuer = false;
-					break;
-				case SDL_MOUSEBUTTONDOWN: 
-					{
-						unsigned int x = ev.button.x / sizeTile;
-						unsigned int y = ev.button.y / sizeTile;
-						if(map.testCase(x, y) == Map::EMPTY)
-							std::cout << "Empty case." << std::endl;
-						else if(map.testCase(x, y) == Map::BONUS)
-						{
-							Bonus* bon = map.getBonusAt(x, y);
-							std::cout << "Bonus : \n"
-								<< "\tPts : " << bon->getPts()
-								<< "\n\tLength : " << bon->getLength()
-								<< std::endl;
-						}
-					}
-					break;
-				case SDL_KEYDOWN:
-					switch(ev.key.keysym.sym)
-					{
-						case SDLK_ESCAPE:
-						case SDLK_q:
-							continuer = false;
-							break;
-						case SDLK_SPACE:
-							map.addBonus();
-							break;
-						case SDLK_UP:
-							snk.moveUp();
-							break;
-						case SDLK_DOWN:
-							snk.moveDown();
-							break;
-						case SDLK_RIGHT:
-							snk.moveRight();
-							break;
-						case SDLK_LEFT:
-							snk.moveLeft();
-							break;
-						default:
-							break;
-					}
-					if(snk.dead())
+			try {
+				switch(ev.type)
+				{
+					case SDL_QUIT:
 						continuer = false;
-					break;
-				default:
-					break;
+						break;
+					case SDL_MOUSEBUTTONDOWN: 
+						{
+							unsigned int x = ev.button.x / sizeTile;
+							unsigned int y = ev.button.y / sizeTile;
+							if(map.testCase(x, y) == Map::EMPTY)
+								std::cout << "Empty case." << std::endl;
+							else if(map.testCase(x, y) == Map::BONUS)
+							{
+								Bonus* bon = map.getBonusAt(x, y);
+								std::cout << "Bonus : \n"
+									<< "\tPts : " << bon->getPts()
+									<< "\n\tLength : " << bon->getLength()
+									<< std::endl;
+							}
+						}
+						break;
+					case SDL_KEYDOWN:
+						switch(ev.key.keysym.sym)
+						{
+							case SDLK_ESCAPE:
+							case SDLK_q:
+								continuer = false;
+								break;
+							case SDLK_SPACE:
+								map.addBonus();
+								break;
+							case SDLK_UP:
+								snk.moveUp();
+								break;
+							case SDLK_DOWN:
+								snk.moveDown();
+								break;
+							case SDLK_RIGHT:
+								snk.moveRight();
+								break;
+							case SDLK_LEFT:
+								snk.moveLeft();
+								break;
+							default:
+								break;
+						}
+						break;
+					default:
+						break;
+				}
+			}
+			catch(Snake::Death d)
+			{
+				std::cout << "Game over : " << d.score << " points !" << std::endl;
+				continuer = false;
 			}
 		}
 	}
