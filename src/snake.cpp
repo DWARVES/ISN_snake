@@ -47,7 +47,7 @@ namespace fs = boost::filesystem;
 	if(m_tile == NULL)
 		return;
 
-	SDL_Surface* tmp = SDL_DisplayFormat(m_tile);
+	SDL_Surface* tmp = SDL_DisplayFormatAlpha(m_tile);
 	if(tmp == NULL)
 		return;
 	SDL_FreeSurface(m_tile);

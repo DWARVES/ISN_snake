@@ -141,7 +141,7 @@ bool Bonus::storeValue(const std::string& key, const std::string& value, const f
 		m_img = IMG_Load(rp.string().c_str());
 		if(m_img == NULL)
 			return false;
-		SDL_Surface* tmp = SDL_DisplayFormat(m_img);
+		SDL_Surface* tmp = SDL_DisplayFormatAlpha(m_img);
 		if(tmp == NULL)
 			return false;
 		SDL_FreeSurface(m_img);
