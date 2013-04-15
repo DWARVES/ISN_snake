@@ -61,26 +61,7 @@ Snake::~Snake()
 
 void Snake::moveUp()
 {
-	if(m_toadd == 0)
-	{
-		m_last->dprev = m_last->prev->dprev;
-		Case* actual = m_last->prev;
-		while(actual != m_first)
-		{
-			actual->dnext = actual->prev->dnext;
-			actual->dprev = actual->prev->dprev;
-			actual = actual->prev;
-		}
-	}
-	else
-	{
-		Case* ncase = new Case;
-		ncase->next = m_first->next;
-		ncase->dnext = m_first->dnext;
-		ncase->prev = m_first;
-		m_first->next = ncase;
-		--m_toadd;
-	}
+	decal();
 
 	m_first->next->dprev = Case::UP;
 	m_first->dnext = Case::DOWN;
@@ -94,26 +75,7 @@ void Snake::moveUp()
 
 void Snake::moveDown()
 {
-	if(m_toadd == 0)
-	{
-		m_last->dprev = m_last->prev->dprev;
-		Case* actual = m_last->prev;
-		while(actual != m_first)
-		{
-			actual->dnext = actual->prev->dnext;
-			actual->dprev = actual->prev->dprev;
-			actual = actual->prev;
-		}
-	}
-	else
-	{
-		Case* ncase = new Case;
-		ncase->next = m_first->next;
-		ncase->dnext = m_first->dnext;
-		ncase->prev = m_first;
-		m_first->next = ncase;
-		--m_toadd;
-	}
+	decal();
 
 	m_first->next->dprev = Case::DOWN;
 	m_first->dnext = Case::UP;
@@ -127,26 +89,7 @@ void Snake::moveDown()
 
 void Snake::moveLeft()
 {
-	if(m_toadd == 0)
-	{
-		m_last->dprev = m_last->prev->dprev;
-		Case* actual = m_last->prev;
-		while(actual != m_first)
-		{
-			actual->dnext = actual->prev->dnext;
-			actual->dprev = actual->prev->dprev;
-			actual = actual->prev;
-		}
-	}
-	else
-	{
-		Case* ncase = new Case;
-		ncase->next = m_first->next;
-		ncase->dnext = m_first->dnext;
-		ncase->prev = m_first;
-		m_first->next = ncase;
-		--m_toadd;
-	}
+	decal();
 
 	m_first->next->dprev = Case::LEFT;
 	m_first->dnext = Case::RIGHT;
@@ -160,26 +103,7 @@ void Snake::moveLeft()
 
 void Snake::moveRight()
 {
-	if(m_toadd == 0)
-	{
-		m_last->dprev = m_last->prev->dprev;
-		Case* actual = m_last->prev;
-		while(actual != m_first)
-		{
-			actual->dnext = actual->prev->dnext;
-			actual->dprev = actual->prev->dprev;
-			actual = actual->prev;
-		}
-	}
-	else
-	{
-		Case* ncase = new Case;
-		ncase->next = m_first->next;
-		ncase->dnext = m_first->dnext;
-		ncase->prev = m_first;
-		m_first->next = ncase;
-		--m_toadd;
-	}
+	decal();
 
 	m_first->next->dprev = Case::RIGHT;
 	m_first->dnext = Case::LEFT;
@@ -360,3 +284,28 @@ unsigned int Snake::getScore() const
 {
 	return m_score;
 }
+
+void Snake::decal()
+{
+	if(m_toadd == 0)
+	{
+		m_last->dprev = m_last->prev->dprev;
+		Case* actual = m_last->prev;
+		while(actual != m_first)
+		{
+			actual->dnext = actual->prev->dnext;
+			actual->dprev = actual->prev->dprev;
+			actual = actual->prev;
+		}
+	}
+	else
+	{
+		Case* ncase = new Case;
+		ncase->next = m_first->next;
+		ncase->dnext = m_first->dnext;
+		ncase->prev = m_first;
+		m_first->next = ncase;
+		--m_toadd;
+	}
+}
+
