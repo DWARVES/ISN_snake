@@ -10,6 +10,8 @@
 namespace fs = boost::filesystem;
 void drawCol(SDL_Surface* dst, Map* map);
 
+typedef void (Snake::*Move)();
+
 int main(int argc, char *argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO);
@@ -25,6 +27,9 @@ int main(int argc, char *argv[])
 	pos.x = 20;
 	pos.y = 10;
 	Snake snk(&map, pos);
+
+	Uint32 ltime = SDL_GetTicks();
+	Move mv(&Snake::moveRight);
 
 	SDL_Event ev;
 	SDL_WaitEvent(&ev);
@@ -71,16 +76,16 @@ int main(int argc, char *argv[])
 								map.addBonus();
 								break;
 							case SDLK_UP:
-								snk.moveUp();
+								mv = &Snake::moveUp;
 								break;
 							case SDLK_DOWN:
-								snk.moveDown();
+								mv = &Snake::moveDown;
 								break;
 							case SDLK_RIGHT:
-								snk.moveRight();
+								mv = &Snake::moveRight;
 								break;
 							case SDLK_LEFT:
-								snk.moveLeft();
+								mv = &Snake::moveLeft;
 								break;
 							default:
 								break;
@@ -95,6 +100,12 @@ int main(int argc, char *argv[])
 				std::cout << "Game over : " << d.score << " points !" << std::endl;
 				continuer = false;
 			}
+		}
+
+		if(SDL_GetTicks() - ltime > 100)
+		{
+			(snk.*mv)();
+			ltime = SDL_GetTicks();
 		}
 	}
 
