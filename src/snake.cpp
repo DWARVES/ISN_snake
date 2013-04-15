@@ -141,9 +141,12 @@ bool Snake::dead()
 					&& actual->prev != m_first; // Minimum deux cases
 					++i)
 			{
-				actual->prev->next = NULL;
 				Case* tofree = actual;
 				actual = actual->prev;
+
+				actual->next = NULL;
+				actual->dnext = Case::NONE;
+				m_last = actual;
 				delete tofree;
 			}
 		}
