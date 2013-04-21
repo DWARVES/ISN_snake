@@ -31,7 +31,7 @@ SDL_Rect transform270(SDL_Rect pos)
 
 SDL_Surface* rotTile(SDL_Surface* tile, int ang)
 {
-	SDL_Surface* rot = SDL_CreateRGBSurface(0, tile->w, tile->h, 24, 0, 0, 0, 0);
+	SDL_Surface* rot = SDL_CreateRGBSurface(0, tile->w, tile->h, 24, rmask, gmask, bmask, amask);
 	if(rot == NULL)
 		return NULL;
 
