@@ -14,7 +14,7 @@
 namespace fs = boost::filesystem;
 
 	Snake::Snake(Map* map, const SDL_Rect& begin)
-: m_map(map), m_toadd(0), m_score(0), m_tile(NULL), 
+: m_map(map), m_toadd(0), m_score(0), m_dead(false), m_tile(NULL), 
 	m_ltime(SDL_GetTicks()), m_step(true), m_first(NULL), m_last(NULL)
 {
 	// Création des premières cases
@@ -347,10 +347,7 @@ void Snake::checkDeath()
 {
 	if(!dead())
 		return;
-
-	Death d;
-	d.score = m_score;
-	throw d;
+	m_dead = true;
 }
 
 void Snake::moveFirst(signed int x, signed int y)
@@ -365,5 +362,9 @@ void Snake::moveFirst(signed int x, signed int y)
 	m_map->addWall(m_first->x, m_first->y);
 }
 
+bool Snake::isDead() const
+{
+	return m_dead;
+}
 
 

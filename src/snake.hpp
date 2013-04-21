@@ -18,16 +18,14 @@ class Snake
 		void moveRight();
 
 		void blitOn(SDL_Surface* dst, SDL_Rect* pos) const;
+		bool isDead() const;
 		unsigned int getScore() const;
-
-		struct Death { // Exception lancée pour signaler la mort du serpent
-			unsigned int score;
-		};
 
 	private:
 		Map* m_map;
 		unsigned int m_toadd;
 		unsigned int m_score;
+		bool m_dead;
 		SDL_Surface* m_tile;
 
 		mutable unsigned int m_ltime;
