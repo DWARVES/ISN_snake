@@ -26,10 +26,10 @@ class Snake
 		unsigned int m_toadd;
 		unsigned int m_score;
 		bool m_dead;
-		SDL_Surface* m_tile;
+		SDL_Surface* m_tiles[4][4][2]; // [partie][rotation][anim]
 
 		mutable unsigned int m_ltime;
-		mutable bool m_step;
+		mutable int m_step;
 
 		struct Case {
 			enum Dir{LEFT, RIGHT,
@@ -44,7 +44,7 @@ class Snake
 		Case* m_first;
 		Case* m_last;
 
-		void getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) const; // Donne la partie de m_tile à blitter
+		void getRect(int* part, int* angle, Case::Dir prev, Case::Dir next) const; // Donne la partie de m_tile à blitter
 		void incrementPos(SDL_Rect* dst, signed int x, signed int y) const; // Gère le retour d'un côté quand on sort de l'autre
 		void decal();
 		void moveFirst(signed int x, signed int y);

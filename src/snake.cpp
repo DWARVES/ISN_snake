@@ -14,8 +14,8 @@
 namespace fs = boost::filesystem;
 
 	Snake::Snake(Map* map, const SDL_Rect& begin)
-: m_map(map), m_toadd(0), m_score(0), m_dead(false), m_tile(NULL), 
-	m_ltime(SDL_GetTicks()), m_step(true), m_first(NULL), m_last(NULL)
+: m_map(map), m_toadd(0), m_score(0), m_dead(false),
+	m_ltime(SDL_GetTicks()), m_step(0), m_first(NULL), m_last(NULL)
 {
 	// Création des premières cases
 	m_first = new Case;
@@ -40,24 +40,60 @@ namespace fs = boost::filesystem;
 	m_last->y = plast.y;
 	m_map->addWall(plast.x, plast.y);
 
-	// Chargement de m_tile
+	// Chargement de l'image des tiles
+	for(int i = 0; i < 4; ++i)
+		for(int j = 0; j < 4; ++j)
+			m_tiles[i][j][0] = m_tiles[i][j][1] = NULL;
+
 	fs::path path(rcdir);
 	path /= snake_subdir;
-	m_tile = IMG_Load(path.string().c_str());
-	if(m_tile == NULL)
+	SDL_Surface* tile = IMG_Load(path.string().c_str());
+	if(tile == NULL)
 		return;
 
-	SDL_Surface* tmp = SDL_DisplayFormatAlpha(m_tile);
+	SDL_Surface* tmp = SDL_DisplayFormatAlpha(tile);
 	if(tmp == NULL)
 		return;
-	SDL_FreeSurface(m_tile);
-	m_tile = tmp;
+	SDL_FreeSurface(tile);
+	tile = tmp;
+
+	// Conversion en tiles
+	for(int x = 0; x < 4; ++x)
+	{
+		for(int angle = 0; angle < 4; ++angle)
+		{
+			for(int step = 0; step < 2; ++step)
+			{
+				SDL_Rect part;
+				part.x = x * sizeTile;
+				part.y = step * sizeTile;
+				part.w = part.h = sizeTile;
+
+				SDL_Surface* tmp = SDL_CreateRGBSurface(tile->flags, sizeTile, sizeTile, tile->format->BitsPerPixel, 0, 0, 0, 0);
+				if(tmp == NULL)
+					return;
+
+				SDL_BlitSurface(tile, &part, tmp, NULL);
+				m_tiles[x][angle][step] = rotTile(tmp, angle);
+				SDL_FreeSurface(tmp);
+			}
+		}
+	}
+	SDL_FreeSurface(tile);
 }
 
 Snake::~Snake()
 {
-	if(m_tile != NULL)
-		delete m_tile;
+	for(int i = 0; i < 4; ++i)
+	{
+		for(int j = 0; j < 4; ++j)
+		{
+			if(m_tiles[i][j][0] != NULL)
+				SDL_FreeSurface(m_tiles[i][j][0]);
+			if(m_tiles[i][j][1] != NULL)
+				SDL_FreeSurface(m_tiles[i][j][1]);
+		}
+	}
 
 	Case* actual = m_first;
 	while(actual != NULL)
@@ -155,13 +191,10 @@ bool Snake::dead()
 
 void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
 {
-	if(m_tile == NULL)
-		return;
-
 	// Animation
 	if(SDL_GetTicks() - m_ltime > 500)
 	{
-		m_step = !m_step;
+		m_step = (m_step - 1) * -1;
 		m_ltime = SDL_GetTicks();
 	}
 
@@ -174,7 +207,7 @@ void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
 	Case* actual = m_first;
 	while(actual != NULL)
 	{
-		SDL_Rect part; int angle;
+		int part; int angle;
 		getRect(&part, &angle, actual->dprev, actual->dnext);
 
 		SDL_Rect cpos;
@@ -185,36 +218,17 @@ void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
 		cpos.y += rpos.y;
 
 		// La rotation
-		SDL_Surface* spart = SDL_CreateRGBSurface(0, sizeTile, sizeTile, 24, 0, 0, 0, 0);
-		if(spart != NULL)
-		{
-			SDL_BlitSurface(m_tile, &part, spart, NULL);
-			SDL_Surface* toblit = rotTile(spart, angle);
-
-			if(toblit != NULL)
-			{
-				SDL_BlitSurface(toblit, NULL, dst, &cpos);
-				SDL_FreeSurface(spart);
-				SDL_FreeSurface(toblit);
-			}
-		}
-
+		SDL_BlitSurface(m_tiles[part][angle][m_step], NULL, dst, &cpos);
 		actual = actual->next;
 	}
 }
 
-void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) const
+void Snake::getRect(int* part, int* angle, Case::Dir prev, Case::Dir next) const
 {
-	// La ligne utilisée
-	if(m_step)
-		dst->y = 0;
-	else
-		dst->y = sizeTile;
-
 	// La colonne et l'angle
 	if(next == Case::NONE)
 	{
-		dst->x = sizeTile * 3; // la queue, 4eme colonne
+		*part = 3; // la queue, 4eme colonne
 		switch(prev)
 		{
 			case Case::LEFT: *angle = 0; break;
@@ -226,7 +240,7 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 	}
 	else if(prev == Case::NONE)
 	{
-		dst->x = 0; // La tête, 1ere colonne
+		*part = 0; // La tête, 1ere colonne
 		switch(next)
 		{
 			case Case::LEFT: *angle = 0; break;
@@ -238,7 +252,7 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 	}
 	else if(std::abs(prev - next) == 1)
 	{
-		dst->x = sizeTile * 2; // Corp droit, 3eme colonne
+		*part = 2; // Corp droit, 3eme colonne
 		if(prev < Case::NONE)
 			*angle = 0;
 		else
@@ -246,7 +260,7 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 	}
 	else
 	{
-		dst->x = sizeTile; // Corp courbe, 2nd colonne
+		*part = 1; // Corp courbe, 2nd colonne
 		switch(next)
 		{
 			case Case::LEFT:
@@ -284,9 +298,6 @@ void Snake::getRect(SDL_Rect* dst, int* angle, Case::Dir prev, Case::Dir next) c
 			default: break;
 		}
 	}
-
-	// Largeur et hauteur
-	dst->w = dst->h = sizeTile;
 }
 
 void Snake::incrementPos(SDL_Rect* dst, signed int x, signed int y) const
