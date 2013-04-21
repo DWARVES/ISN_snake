@@ -43,74 +43,68 @@ int main(int argc, char *argv[])
 
 		while(SDL_PollEvent(&ev))
 		{
-			try {
-				switch(ev.type)
-				{
-					case SDL_QUIT:
-						continuer = false;
-						break;
-					case SDL_MOUSEBUTTONDOWN: 
-						{
-							unsigned int x = ev.button.x / sizeTile;
-							unsigned int y = ev.button.y / sizeTile;
-							if(map.testCase(x, y) == Map::EMPTY)
-								std::cout << "Empty case." << std::endl;
-							else if(map.testCase(x, y) == Map::BONUS)
-							{
-								Bonus* bon = map.getBonusAt(x, y);
-								std::cout << "Bonus : \n"
-									<< "\tPts : " << bon->getPts()
-									<< "\n\tLength : " << bon->getLength()
-									<< std::endl;
-							}
-						}
-						break;
-					case SDL_KEYDOWN:
-						switch(ev.key.keysym.sym)
-						{
-							case SDLK_ESCAPE:
-							case SDLK_q:
-								continuer = false;
-								break;
-							case SDLK_UP:
-								mv = &Snake::moveUp;
-								break;
-							case SDLK_DOWN:
-								mv = &Snake::moveDown;
-								break;
-							case SDLK_RIGHT:
-								mv = &Snake::moveRight;
-								break;
-							case SDLK_LEFT:
-								mv = &Snake::moveLeft;
-								break;
-							default:
-								break;
-						}
-						break;
-					default:
-						break;
-				}
-			}
-			catch(const Snake::Death& d)
+			switch(ev.type)
 			{
-				std::cout << "Game over : " << d.score << " points !" << std::endl;
-				continuer = false;
-			}
-			catch(...)
-			{
-				std::cerr << "Une exception inconnue a étée attrapée !" << std::endl;
-				continuer = false;
+				case SDL_QUIT:
+					continuer = false;
+					break;
+				case SDL_MOUSEBUTTONDOWN: 
+					{
+						unsigned int x = ev.button.x / sizeTile;
+						unsigned int y = ev.button.y / sizeTile;
+						if(map.testCase(x, y) == Map::EMPTY)
+							std::cout << "Empty case." << std::endl;
+						else if(map.testCase(x, y) == Map::BONUS)
+						{
+							Bonus* bon = map.getBonusAt(x, y);
+							std::cout << "Bonus : \n"
+								<< "\tPts : " << bon->getPts()
+								<< "\n\tLength : " << bon->getLength()
+								<< std::endl;
+						}
+					}
+					break;
+				case SDL_KEYDOWN:
+					switch(ev.key.keysym.sym)
+					{
+						case SDLK_ESCAPE:
+						case SDLK_q:
+							continuer = false;
+							break;
+						case SDLK_UP:
+							mv = &Snake::moveUp;
+							break;
+						case SDLK_DOWN:
+							mv = &Snake::moveDown;
+							break;
+						case SDLK_RIGHT:
+							mv = &Snake::moveRight;
+							break;
+						case SDLK_LEFT:
+							mv = &Snake::moveLeft;
+							break;
+						default:
+							break;
+					}
+					break;
+				default:
+					break;
 			}
 		}
 
 		if(SDL_GetTicks() - ltime > 100)
 		{
 			(snk.*mv)();
-			ltime = SDL_GetTicks();
-			map.addBonus();
+			if(snk.isDead())
+				continuer = false;
+			else
+			{
+				ltime = SDL_GetTicks();
+				map.addBonus();
+			}
 		}
 	}
+	std::cout << "Score : " << snk.getScore() << std::endl;
 
 	Bonus::freeAll();
 	SDL_Quit();
