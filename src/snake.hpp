@@ -10,6 +10,7 @@ class Snake
 {
 	public:
 		Snake(Map* map, const SDL_Rect& begin);
+		bool isLoaded() const;
 		~Snake();
 
 		void moveUp();
@@ -27,6 +28,7 @@ class Snake
 		unsigned int m_score;
 		bool m_dead;
 		SDL_Surface* m_tiles[4][4][2]; // [partie][rotation][anim]
+		bool m_loaded;
 
 		mutable unsigned int m_ltime;
 		mutable int m_step;

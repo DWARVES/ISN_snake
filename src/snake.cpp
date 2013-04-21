@@ -14,7 +14,7 @@
 namespace fs = boost::filesystem;
 
 	Snake::Snake(Map* map, const SDL_Rect& begin)
-: m_map(map), m_toadd(0), m_score(0), m_dead(false),
+: m_map(map), m_toadd(0), m_score(0), m_dead(false), m_loaded(true),
 	m_ltime(SDL_GetTicks()), m_step(0), m_first(NULL), m_last(NULL)
 {
 	// Création des premières cases
@@ -45,12 +45,18 @@ namespace fs = boost::filesystem;
 	path /= snake_subdir;
 	SDL_Surface* tile = IMG_Load(path.string().c_str());
 	if(tile == NULL)
+	{
+		m_loaded = false;
 		return;
+	}
 
 	SDL_Surface* tmp = SDL_DisplayFormatAlpha(tile);
-	if(tmp == NULL)
-		return;
 	SDL_FreeSurface(tile);
+	if(tmp == NULL)
+	{
+		m_loaded = false;
+		return;
+	}
 	tile = tmp;
 
 	// Conversion en tiles
@@ -67,7 +73,10 @@ namespace fs = boost::filesystem;
 
 				SDL_Surface* tmp = SDL_CreateRGBSurface(tile->flags, sizeTile, sizeTile, tile->format->BitsPerPixel, 0, 0, 0, 0);
 				if(tmp == NULL)
+				{
+					m_loaded = false;
 					return;
+				}
 
 				SDL_BlitSurface(tile, &part, tmp, NULL);
 				m_tiles[x][angle][step] = rotTile(tmp, angle);
@@ -76,6 +85,11 @@ namespace fs = boost::filesystem;
 		}
 	}
 	SDL_FreeSurface(tile);
+}
+
+bool Snake::isLoaded() const
+{
+	return m_loaded;
 }
 
 Snake::~Snake()
