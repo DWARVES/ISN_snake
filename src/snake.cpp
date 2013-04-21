@@ -19,17 +19,13 @@ namespace fs = boost::filesystem;
 {
 	// Création des premières cases
 	m_first = new Case;
-	m_first->dprev = Case::NONE;
 	m_first->prev = NULL;
-	m_first->dnext = Case::LEFT;
 	m_first->next = new Case;
 	m_first->x = begin.x;
 	m_first->y = begin.y;
 
 	Case* scd = m_first->next;
-	scd->dprev = Case::RIGHT;
 	scd->prev = m_first;
-	scd->dnext = Case::NONE;
 	scd->next = NULL;
 	m_last = scd;
 
@@ -108,40 +104,24 @@ Snake::~Snake()
 void Snake::moveUp()
 {
 	decal();
-
-	m_first->next->dprev = Case::UP;
-	m_first->dnext = Case::DOWN;
-	m_first->dprev = Case::NONE;
 	moveFirst(0, -1);
 }
 
 void Snake::moveDown()
 {
 	decal();
-
-	m_first->next->dprev = Case::DOWN;
-	m_first->dnext = Case::UP;
-	m_first->dprev = Case::NONE;
 	moveFirst(0, 1);
 }
 
 void Snake::moveLeft()
 {
 	decal();
-
-	m_first->next->dprev = Case::LEFT;
-	m_first->dnext = Case::RIGHT;
-	m_first->dprev = Case::NONE;
 	moveFirst(-1, 0);
 }
 
 void Snake::moveRight()
 {
 	decal();
-
-	m_first->next->dprev = Case::RIGHT;
-	m_first->dnext = Case::LEFT;
-	m_first->dprev = Case::NONE;
 	moveFirst(1, 0);
 }
 
@@ -175,7 +155,6 @@ bool Snake::dead()
 				actual = actual->prev;
 
 				actual->next = NULL;
-				actual->dnext = Case::NONE;
 				m_last = actual;
 
 				m_map->deleteWall(tofree->x, tofree->y);
@@ -208,7 +187,9 @@ void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
 	while(actual != NULL)
 	{
 		int part; int angle;
-		getRect(&part, &angle, actual->dprev, actual->dnext);
+		getRect(&part, &angle,
+				getDir(actual, actual->prev),
+				getDir(actual, actual->next));
 
 		SDL_Rect cpos;
 		cpos.x = actual->x; cpos.y = actual->y;
@@ -223,37 +204,37 @@ void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
 	}
 }
 
-void Snake::getRect(int* part, int* angle, Case::Dir prev, Case::Dir next) const
+void Snake::getRect(int* part, int* angle, Dir prev, Dir next) const
 {
 	// La colonne et l'angle
-	if(next == Case::NONE)
+	if(next == NONE)
 	{
 		*part = 3; // la queue, 4eme colonne
 		switch(prev)
 		{
-			case Case::LEFT: *angle = 0; break;
-			case Case::RIGHT: *angle = 2; break;
-			case Case::UP: *angle = 3; break;
-			case Case::DOWN: *angle = 1; break;
+			case LEFT: *angle = 0; break;
+			case RIGHT: *angle = 2; break;
+			case UP: *angle = 3; break;
+			case DOWN: *angle = 1; break;
 			default: break;
 		}
 	}
-	else if(prev == Case::NONE)
+	else if(prev == NONE)
 	{
 		*part = 0; // La tête, 1ere colonne
 		switch(next)
 		{
-			case Case::LEFT: *angle = 0; break;
-			case Case::RIGHT: *angle = 2; break;
-			case Case::UP: *angle = 3; break;
-			case Case::DOWN: *angle = 1; break;
+			case LEFT: *angle = 0; break;
+			case RIGHT: *angle = 2; break;
+			case UP: *angle = 3; break;
+			case DOWN: *angle = 1; break;
 			default: break;
 		}
 	}
 	else if(std::abs(prev - next) == 1)
 	{
 		*part = 2; // Corp droit, 3eme colonne
-		if(prev < Case::NONE)
+		if(prev < NONE)
 			*angle = 0;
 		else
 			*angle = 1;
@@ -263,35 +244,35 @@ void Snake::getRect(int* part, int* angle, Case::Dir prev, Case::Dir next) const
 		*part = 1; // Corp courbe, 2nd colonne
 		switch(next)
 		{
-			case Case::LEFT:
+			case LEFT:
 				switch(prev)
 				{
-					case Case::UP: *angle = 2; break;
-					case Case::DOWN: *angle = 3; break;
+					case UP: *angle = 2; break;
+					case DOWN: *angle = 3; break;
 					default: break;
 				}
 				break;
-			case Case::RIGHT:
+			case RIGHT:
 				switch(prev)
 				{
-					case Case::UP: *angle = 1; break;
-					case Case::DOWN: *angle = 0; break;
+					case UP: *angle = 1; break;
+					case DOWN: *angle = 0; break;
 					default: break;
 				}
 				break;
-			case Case::UP:
+			case UP:
 				switch(prev)
 				{
-					case Case::LEFT: *angle = 2; break;
-					case Case::RIGHT: *angle = 1; break;
+					case LEFT: *angle = 2; break;
+					case RIGHT: *angle = 1; break;
 					default: break;
 				}
 				break;
-			case Case::DOWN:
+			case DOWN:
 				switch(prev)
 				{
-					case Case::LEFT: *angle = 3; break;
-					case Case::RIGHT: *angle = 0; break;
+					case LEFT: *angle = 3; break;
+					case RIGHT: *angle = 0; break;
 					default: break;
 				}
 				break;
@@ -326,14 +307,11 @@ void Snake::decal()
 	{
 		m_map->deleteWall(m_last->x, m_last->y);
 
-		m_last->dprev = m_last->prev->dprev;
 		m_last->x = m_last->prev->x;
 		m_last->y = m_last->prev->y;
 		Case* actual = m_last->prev;
 		while(actual != m_first)
 		{
-			actual->dnext = actual->prev->dnext;
-			actual->dprev = actual->prev->dprev;
 			actual->x = actual->prev->x;
 			actual->y = actual->prev->y;
 			actual = actual->prev;
@@ -343,7 +321,6 @@ void Snake::decal()
 	{
 		Case* ncase = new Case;
 		ncase->next = m_first->next;
-		ncase->dnext = m_first->dnext;
 		ncase->prev = m_first;
 		ncase->x = m_first->x;
 		ncase->y = m_first->y;
@@ -378,4 +355,18 @@ bool Snake::isDead() const
 	return m_dead;
 }
 
+Snake::Dir Snake::getDir(const Case* c1, const Case* c2) const
+{
+	if(c1 == NULL || c2 == NULL)
+		return NONE;
+
+	if(c1->x > c2->x)
+		return LEFT;
+	else if(c1->x < c2->x)
+		return RIGHT;
+	else if(c1->y > c2->y)
+		return UP;
+	else
+		return DOWN;
+}
 

@@ -32,19 +32,19 @@ class Snake
 		mutable int m_step;
 
 		struct Case {
-			enum Dir{LEFT, RIGHT,
-				NONE, // Utilisé pour les calculs
-				UP, DOWN};
-			Dir dnext;
 			Case* next;
-			Dir dprev;
 			Case* prev;
 			unsigned int x, y;
 		};
 		Case* m_first;
 		Case* m_last;
 
-		void getRect(int* part, int* angle, Case::Dir prev, Case::Dir next) const; // Donne la partie de m_tile à blitter
+		enum Dir{LEFT, RIGHT,
+			NONE, // Utilisé pour les calculs
+			UP, DOWN};
+		void getRect(int* part, int* angle, Dir prev, Dir next) const; // Donne la partie de m_tile à blitter
+		Dir getDir(const Case* c1, const Case* c2) const;
+
 		void incrementPos(SDL_Rect* dst, signed int x, signed int y) const; // Gère le retour d'un côté quand on sort de l'autre
 		void decal();
 		void moveFirst(signed int x, signed int y);
