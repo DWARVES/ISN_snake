@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 		SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
 		map.blitOn(ecran, NULL);
 		snk.blitOn(ecran, NULL);
+		drawCol(ecran, &map);
 		SDL_Flip(ecran);
 
 		while(SDL_PollEvent(&ev))
