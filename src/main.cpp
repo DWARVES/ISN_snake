@@ -31,6 +31,10 @@ int main(int argc, char *argv[])
 	Uint32 ltime = SDL_GetTicks();
 	Move mv(&Snake::moveRight);
 
+#ifndef NDEBUG
+	Uint32 frameTime = SDL_GetTicks();
+#endif
+
 	SDL_Event ev;
 	SDL_WaitEvent(&ev);
 	bool continuer = true;
@@ -92,6 +96,11 @@ int main(int argc, char *argv[])
 			}
 		}
 
+#ifndef NDEBUG
+		std::cout << SDL_GetTicks() - frameTime << std::endl;
+		frameTime = SDL_GetTicks();
+#endif
+
 		if(SDL_GetTicks() - ltime > 100)
 		{
 			(snk.*mv)();
@@ -104,7 +113,6 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
-	std::cout << "Score : " << snk.getScore() << std::endl;
 
 	Bonus::freeAll();
 	SDL_Quit();
