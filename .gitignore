@@ -6,6 +6,10 @@ cmake_install.cmake
 install_manifest.txt
 bin
 
+# Tests
+.R*
+tmp
+
 # C
 *.o
 *.so
