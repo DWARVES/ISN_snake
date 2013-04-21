@@ -27,6 +27,8 @@ int main(int argc, char *argv[])
 	pos.x = 20;
 	pos.y = 10;
 	Snake snk(&map, pos);
+	if(!snk.isLoaded())
+		return 1;
 
 	Uint32 ltime = SDL_GetTicks();
 	Move mv(&Snake::moveRight);
