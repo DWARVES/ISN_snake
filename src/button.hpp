@@ -21,6 +21,7 @@ class Button
 		SDL_Rect m_pos; // Position du centre
 		SDL_Surface* m_txt;
 		bool m_hl; // highlight
+		Gui* m_gui;
 
 		SDL_Rect cRect() const;
 		bool col(SDL_Rect sc, SDL_Rect p) const;

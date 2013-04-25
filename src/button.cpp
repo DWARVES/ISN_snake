@@ -4,14 +4,12 @@
 #include <SDL_ttf.h>
 
 Button::Button(const char* text, Gui* gui)
-	: m_txt(NULL), m_hl(false)
+	: m_txt(NULL), m_hl(false), m_gui(gui)
 {
 	m_pos.x = m_pos.y = 0;
 
-	SDL_Color fg, bg;
-	fg.r = fg.b = bg.r = bg.g = bg.b = 0;
-	fg.g = 255;
-	m_txt = TTF_RenderText_Shaded(gui->getFont(), text, fg, bg);
+	m_txt = TTF_RenderText_Shaded(gui->getFont(), text,
+			m_gui->fgColor(), m_gui->bgColor());
 }
 
 Button::~Button()
@@ -43,8 +41,10 @@ void Button::blitOn(SDL_Surface* dst) const
 	SDL_Rect cr = cRect();
 	SDL_Rect pos = cr;
 
-	Uint32 fg = SDL_MapRGB(dst->format, 0, 255, 0);
-	Uint32 bg = SDL_MapRGB(dst->format, 0, 0, 0);
+	SDL_Color fgc = m_gui->fgColor();
+	Uint32 fg = SDL_MapRGB(dst->format, fgc.r, fgc.g, fgc.b);
+	SDL_Color bgc = m_gui->bgColor();
+	Uint32 bg = SDL_MapRGB(dst->format, bgc.r, bgc.g, bgc.b);
 	SDL_FillRect(dst, &cr, bg);
 	if(m_hl)
 	{
