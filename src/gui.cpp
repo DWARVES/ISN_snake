@@ -51,3 +51,19 @@ SDL_Color Gui::getPlayerColor(int p) const
 	}
 }
 
+SDL_Color Gui::fgColor() const
+{
+	SDL_Color c;
+	c.r = c.g = c.b = 100;
+	c.g = 255;
+	return c;
+}
+
+SDL_Color Gui::bgColor() const
+{
+	SDL_Color c;
+	c.r = c.g = c.b = 0;
+	return c;
+}
+
+
