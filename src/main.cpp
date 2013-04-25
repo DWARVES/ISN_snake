@@ -6,6 +6,7 @@
 #include "map.hpp"
 #include "snake.hpp"
 #include "gui.hpp"
+#include "scorebar.hpp"
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
@@ -16,7 +17,7 @@ typedef void (Snake::*Move)();
 int main(int argc, char *argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO);
-	SDL_Surface* ecran = SDL_SetVideoMode(widthMap * sizeTile, heightMap * sizeTile, 24, SDL_DOUBLEBUF);
+	SDL_Surface* ecran = SDL_SetVideoMode(widthMap * sizeTile, heightMap * sizeTile + 25, 24, SDL_DOUBLEBUF);
 	fs::path bonPath(rcdir);
 	bonPath /= bonus_subdir;
 	Bonus::loadAll(bonPath.c_str());
@@ -36,6 +37,17 @@ int main(int argc, char *argv[])
 	if(!snks[0]->isLoaded())
 		return 1;
 
+	// Gui
+	Gui gui;
+	if(gui.getFont() == NULL)
+		return 1;
+
+	// ScoreBar
+	ScoreBar bar(&gui, snks, ecran->w, 25);
+	SDL_Rect bpos;
+	bpos.x = 0;
+	bpos.y = heightMap * sizeTile;
+
 	Uint32 ltime = SDL_GetTicks();
 	Move mv(&Snake::moveRight);
 
@@ -51,6 +63,7 @@ int main(int argc, char *argv[])
 		SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
 		map.blitOn(ecran, NULL);
 		snks[0]->blitOn(ecran, NULL);
+		bar.blitOn(ecran, bpos);
 		SDL_Flip(ecran);
 
 		while(SDL_PollEvent(&ev))
