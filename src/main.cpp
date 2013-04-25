@@ -5,6 +5,7 @@
 #include "bonus.hpp"
 #include "map.hpp"
 #include "snake.hpp"
+#include "gui.hpp"
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
@@ -26,8 +27,13 @@ int main(int argc, char *argv[])
 	SDL_Rect pos;
 	pos.x = 20;
 	pos.y = 10;
-	Snake snk(&map, pos);
-	if(!snk.isLoaded())
+
+	// Snakes
+	Snake* snks[max_players];
+	for(int i = 0; i < max_players; ++i)
+		snks[i] = NULL;
+	snks[0] = new Snake(&map, pos);
+	if(!snks[0]->isLoaded())
 		return 1;
 
 	Uint32 ltime = SDL_GetTicks();
@@ -44,7 +50,7 @@ int main(int argc, char *argv[])
 	{
 		SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
 		map.blitOn(ecran, NULL);
-		snk.blitOn(ecran, NULL);
+		snks[0]->blitOn(ecran, NULL);
 		SDL_Flip(ecran);
 
 		while(SDL_PollEvent(&ev))
@@ -105,8 +111,8 @@ int main(int argc, char *argv[])
 
 		if(SDL_GetTicks() - ltime > 100)
 		{
-			(snk.*mv)();
-			if(snk.isDead())
+			(snks[0]->*mv)();
+			if(snks[0]->isDead())
 				continuer = false;
 			else
 			{
