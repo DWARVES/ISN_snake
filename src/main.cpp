@@ -7,6 +7,7 @@
 #include "snake.hpp"
 #include "gui.hpp"
 #include "scorebar.hpp"
+#include "button.hpp"
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
@@ -48,6 +49,12 @@ int main(int argc, char *argv[])
 	bpos.x = 0;
 	bpos.y = heightMap * sizeTile;
 
+	// Boutton
+	Button bquit("Quit", &gui);
+	pos.x = widthMap * sizeTile - 50;
+	pos.y = 50;
+	bquit.setPos(pos);
+
 	Uint32 ltime = SDL_GetTicks();
 	Move mv(&Snake::moveRight);
 
@@ -64,6 +71,7 @@ int main(int argc, char *argv[])
 		map.blitOn(ecran, NULL);
 		snks[0]->blitOn(ecran, NULL);
 		bar.blitOn(ecran, bpos);
+		bquit.blitOn(ecran);
 		SDL_Flip(ecran);
 
 		while(SDL_PollEvent(&ev))
@@ -88,6 +96,10 @@ int main(int argc, char *argv[])
 								<< std::endl;
 						}
 					}
+					pos.x = ev.button.x;
+					pos.y = ev.button.y;
+					if(bquit.clicked(pos))
+						continuer = false;
 					break;
 				case SDL_KEYDOWN:
 					switch(ev.key.keysym.sym)
@@ -112,6 +124,10 @@ int main(int argc, char *argv[])
 							break;
 					}
 					break;
+				case SDL_MOUSEMOTION:
+					pos.x = ev.motion.x;
+					pos.y = ev.motion.y;
+					bquit.mouse(pos);
 				default:
 					break;
 			}
