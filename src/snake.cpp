@@ -371,12 +371,32 @@ Snake::Dir Snake::getDir(const Case* c1, const Case* c2) const
 		return NONE;
 
 	if(c1->x > c2->x)
-		return LEFT;
+	{
+		if(c2->x == 0 && c1->x != 1)
+			return RIGHT;
+		else
+			return LEFT;
+	}
 	else if(c1->x < c2->x)
-		return RIGHT;
+	{
+		if(c1->x == 0 && c2->x != 1)
+			return LEFT;
+		else
+			return RIGHT;
+	}
 	else if(c1->y > c2->y)
-		return UP;
+	{
+		if(c2->y == 0 && c1->y != 1)
+			return DOWN;
+		else
+			return UP;
+	}
 	else
-		return DOWN;
+	{
+		if(c1->y == 0 && c2->y != 1)
+			return UP;
+		else
+			return DOWN;
+	}
 }
 
