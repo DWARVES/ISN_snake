@@ -21,10 +21,17 @@ find_package(SDL REQUIRED)
 link_directories(${SDL_LIBRARY_DIR})
 include_directories(${SDL_INCLUDE_DIR})
 
+# Inclusion de SDL_image
 include(FindSDL_image)
 find_package(SDL_image REQUIRED)
 link_directories(${SDL_IMAGE_LIBRARY_DIR})
 include_directories(${SDL_IMAGE_INCLUDE_DIR})
+
+# Inclusion de SDL_ttf
+include(FindSDL_ttf)
+find_package(SDL_ttf REQUIRED)
+link_directories(${SDL_TTF_LIBRARY_DIR})
+include_directories(${SDL_TTF_INCLUDE_DIR})
 
 # Inclusion de Boost
 include(FindBoost)
@@ -47,6 +54,7 @@ target_link_libraries(
 	${executable}
 	${SDL_LIBRARY}
 	${SDL_IMAGE_LIBRARY}
+	${SDL_TTF_LIBRARY}
 	${Boost_FILESYSTEM_LIBRARY}
 	${Boost_SYSTEM_LIBRARY}
 	${Boost_REGEX_LIBRARY}
