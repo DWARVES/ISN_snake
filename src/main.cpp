@@ -8,6 +8,7 @@
 #include "gui.hpp"
 #include "scorebar.hpp"
 #include "button.hpp"
+#include "progress.hpp"
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
@@ -55,6 +56,12 @@ int main(int argc, char *argv[])
 	pos.y = 50;
 	bquit.setPos(pos);
 
+	// ProgressBar
+	Progress pb(&gui, 300, 100, 10);
+	SDL_Rect ppos;
+	ppos.x = ecran->w - 120;
+	ppos.y = 100;
+
 	Uint32 ltime = SDL_GetTicks();
 	Move mv(&Snake::moveRight);
 
@@ -72,6 +79,7 @@ int main(int argc, char *argv[])
 		snks[0]->blitOn(ecran, NULL);
 		bar.blitOn(ecran, bpos);
 		bquit.blitOn(ecran);
+		pb.blitOn(ecran, ppos);
 		SDL_Flip(ecran);
 
 		while(SDL_PollEvent(&ev))
@@ -141,6 +149,7 @@ int main(int argc, char *argv[])
 		if(SDL_GetTicks() - ltime > 100)
 		{
 			(snks[0]->*mv)();
+			pb.set(snks[0]->getScore());
 			if(snks[0]->isDead())
 				continuer = false;
 			else
