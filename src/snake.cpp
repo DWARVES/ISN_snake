@@ -71,7 +71,7 @@ namespace fs = boost::filesystem;
 				part.y = step * sizeTile;
 				part.w = part.h = sizeTile;
 
-				SDL_Surface* tmp = SDL_CreateRGBSurface(tile->flags, sizeTile, sizeTile, tile->format->BitsPerPixel, rmask, gmask, bmask, amask);
+				SDL_Surface* tmp = SDL_CreateRGBSurface(tile->flags, sizeTile, sizeTile, tile->format->BitsPerPixel, 0, 0, 0, 0);
 				if(tmp == NULL)
 				{
 					m_loaded = false;
