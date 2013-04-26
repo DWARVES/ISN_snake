@@ -25,12 +25,19 @@ int main(int argc, char *argv[])
 	bonPath /= bonus_subdir;
 	Bonus::loadAll(bonPath.c_str());
 
-	srand(time(NULL));
-	Map map;
-
 	SDL_Rect pos;
 	pos.x = 20;
 	pos.y = 10;
+
+	// Gui
+	Gui gui;
+	if(gui.getFont() == NULL
+			|| gui.background() == NULL)
+		return 1;
+
+	// Map
+	srand(time(NULL));
+	Map map(&gui);
 
 	// Snakes
 	Snake* snks[max_players];
@@ -38,11 +45,6 @@ int main(int argc, char *argv[])
 		snks[i] = NULL;
 	snks[0] = new Snake(&map, pos);
 	if(!snks[0]->isLoaded())
-		return 1;
-
-	// Gui
-	Gui gui;
-	if(gui.getFont() == NULL)
 		return 1;
 
 	// ScoreBar
