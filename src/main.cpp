@@ -4,7 +4,7 @@
 #include "config.hpp"
 #include "bonus.hpp"
 #include "gui.hpp"
-#include "server.hpp"
+#include "menu.hpp"
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
@@ -43,8 +43,8 @@ int main(int argc, char *argv[])
 	}
 
 	// Lancement du jeu
-	Server game(&gui, scr);
-	if(!game.run())
+	Menu menu(&gui, scr);
+	if(!menu.run())
 		std::cout << "Jeu fermé afin sa fin." << std::endl;
 
 	// Libérations diverses
