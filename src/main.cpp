@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 		}
 
 #ifndef NDEBUG
-		// std::cout << SDL_GetTicks() - frameTime << std::endl;
+		std::cout << SDL_GetTicks() - frameTime << std::endl;
 		frameTime = SDL_GetTicks();
 #endif
 
