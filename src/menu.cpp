@@ -77,6 +77,12 @@ bool Menu::run()
 				case SDL_QUIT:
 					return false;
 					break;
+				case SDL_KEYDOWN:
+					if(ev.key.keysym.sym == SDLK_q
+							|| ev.key.keysym.sym == SDLK_BACKSPACE
+							|| ev.key.keysym.sym == SDLK_ESCAPE)
+						continuer = false;
+					break;
 				case SDL_MOUSEMOTION:
 					m.x = ev.motion.x;
 					m.y = ev.motion.y;
