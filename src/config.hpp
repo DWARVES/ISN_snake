@@ -33,6 +33,7 @@
 
 // Gui
 #define gui_subdir "gui/"
+#define title_path "title.png"
 
 #endif
 
