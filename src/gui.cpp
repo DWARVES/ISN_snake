@@ -1,11 +1,12 @@
 
 #include "gui.hpp"
 #include <boost/filesystem/path.hpp>
+#include <SDL_image.h>
 
 namespace fs = boost::filesystem;
 
 Gui::Gui()
-	: m_font(NULL)
+	: m_font(NULL), m_bg(NULL)
 {
 	// Les couleurs
 	for(int i = 0; i < max_players; ++i)
@@ -25,6 +26,11 @@ Gui::Gui()
 	p /= "font.ttf";
 
 	m_font = TTF_OpenFont(p.string().c_str(), 20);
+
+	// Chargement du fond d'écran
+	fs::path path(rcdir);
+	path /= bg_path;
+	m_bg = IMG_Load(path.string().c_str());
 }
 
 Gui::~Gui()
@@ -32,6 +38,9 @@ Gui::~Gui()
 	if(m_font != NULL)
 		TTF_CloseFont(m_font);
 	TTF_Quit();
+
+	if(m_bg != NULL)
+		SDL_FreeSurface(m_bg);
 }
 
 TTF_Font* Gui::getFont() const
@@ -65,5 +74,11 @@ SDL_Color Gui::bgColor() const
 	c.r = c.g = c.b = 0;
 	return c;
 }
+
+SDL_Surface* Gui::background() const
+{
+	return m_bg;
+}
+
 
 
