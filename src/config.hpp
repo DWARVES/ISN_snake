@@ -28,5 +28,11 @@
 #define amask 0xff000000
 #endif
 
+// Gameplay
+#define max_players 4
+
+// Gui
+#define gui_subdir "gui/"
+
 #endif
 

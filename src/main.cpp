@@ -5,6 +5,11 @@
 #include "bonus.hpp"
 #include "map.hpp"
 #include "snake.hpp"
+#include "gui.hpp"
+#include "scorebar.hpp"
+#include "button.hpp"
+#include "progress.hpp"
+#include "entry.hpp"
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
@@ -15,7 +20,7 @@ typedef void (Snake::*Move)();
 int main(int argc, char *argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO);
-	SDL_Surface* ecran = SDL_SetVideoMode(widthMap * sizeTile, heightMap * sizeTile, 24, SDL_DOUBLEBUF);
+	SDL_Surface* ecran = SDL_SetVideoMode(widthMap * sizeTile, heightMap * sizeTile + 25, 24, SDL_DOUBLEBUF);
 	fs::path bonPath(rcdir);
 	bonPath /= bonus_subdir;
 	Bonus::loadAll(bonPath.c_str());
@@ -26,9 +31,43 @@ int main(int argc, char *argv[])
 	SDL_Rect pos;
 	pos.x = 20;
 	pos.y = 10;
-	Snake snk(&map, pos);
-	if(!snk.isLoaded())
+
+	// Snakes
+	Snake* snks[max_players];
+	for(int i = 0; i < max_players; ++i)
+		snks[i] = NULL;
+	snks[0] = new Snake(&map, pos);
+	if(!snks[0]->isLoaded())
 		return 1;
+
+	// Gui
+	Gui gui;
+	if(gui.getFont() == NULL)
+		return 1;
+
+	// ScoreBar
+	ScoreBar bar(&gui, snks, ecran->w, 25);
+	SDL_Rect bpos;
+	bpos.x = 0;
+	bpos.y = heightMap * sizeTile;
+
+	// Boutton
+	Button bquit("Quit", &gui);
+	pos.x = widthMap * sizeTile - 50;
+	pos.y = 50;
+	bquit.setPos(pos);
+
+	// ProgressBar
+	Progress pb(&gui, 300, 100, 10);
+	SDL_Rect ppos;
+	ppos.x = ecran->w - 120;
+	ppos.y = 100;
+
+	// Entry
+	Entry ent(&gui, 150);
+	SDL_Rect epos;
+	epos.x = ecran->w - 170;
+	epos.y = 120;
 
 	Uint32 ltime = SDL_GetTicks();
 	Move mv(&Snake::moveRight);
@@ -44,11 +83,17 @@ int main(int argc, char *argv[])
 	{
 		SDL_FillRect(ecran, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
 		map.blitOn(ecran, NULL);
-		snk.blitOn(ecran, NULL);
+		snks[0]->blitOn(ecran, NULL);
+		bar.blitOn(ecran, bpos);
+		bquit.blitOn(ecran);
+		pb.blitOn(ecran, ppos);
+		ent.blitOn(ecran, epos);
 		SDL_Flip(ecran);
 
 		while(SDL_PollEvent(&ev))
 		{
+			if(ent.processEvent(ev))
+				continue;
 			switch(ev.type)
 			{
 				case SDL_QUIT:
@@ -69,6 +114,10 @@ int main(int argc, char *argv[])
 								<< std::endl;
 						}
 					}
+					pos.x = ev.button.x;
+					pos.y = ev.button.y;
+					if(bquit.clicked(pos))
+						continuer = false;
 					break;
 				case SDL_KEYDOWN:
 					switch(ev.key.keysym.sym)
@@ -93,20 +142,25 @@ int main(int argc, char *argv[])
 							break;
 					}
 					break;
+				case SDL_MOUSEMOTION:
+					pos.x = ev.motion.x;
+					pos.y = ev.motion.y;
+					bquit.mouse(pos);
 				default:
 					break;
 			}
 		}
 
 #ifndef NDEBUG
-		std::cout << SDL_GetTicks() - frameTime << std::endl;
+		// std::cout << SDL_GetTicks() - frameTime << std::endl;
 		frameTime = SDL_GetTicks();
 #endif
 
 		if(SDL_GetTicks() - ltime > 100)
 		{
-			(snk.*mv)();
-			if(snk.isDead())
+			(snks[0]->*mv)();
+			pb.set(snks[0]->getScore());
+			if(snks[0]->isDead())
 				continuer = false;
 			else
 			{
