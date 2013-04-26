@@ -5,10 +5,11 @@
 #include <SDL/SDL_image.h>
 #include <boost/filesystem/path.hpp>
 #include "bonus.hpp"
+#include "gui.hpp"
 
 namespace fs = boost::filesystem;
 
-Map::Map()
+Map::Map(Gui* g)
 	: m_bg(NULL)
 {
 	// Initialisation de la map
@@ -18,16 +19,7 @@ Map::Map()
 			m_map[x][y].col = EMPTY;
 	}
 
-	// Chargement du fond d'écran
-	fs::path path(rcdir);
-	path /= bg_path;
-	m_bg = IMG_Load(path.string().c_str());
-}
-
-Map::~Map()
-{
-	if(m_bg != NULL)
-		SDL_FreeSurface(m_bg);
+	m_bg = g->background();
 }
 
 Map::ColType Map::testCase(unsigned int x, unsigned int y) const

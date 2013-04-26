@@ -8,12 +8,12 @@
 class Bonus;
 struct SDL_Surface;
 struct SDL_Rect;
+class Gui;
 
 class Map
 {
 	public:
-		Map();
-		~Map();
+		Map(Gui* g);
 
 		enum ColType{BONUS, // Bonus
 			WALL, // Corp d'un serpent
