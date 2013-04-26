@@ -96,3 +96,9 @@ void Entry::blitOn(SDL_Surface* dst, SDL_Rect pos)
 	SDL_BlitSurface(txt, &part, dst, &pos);
 }
 
+std::string Entry::getText() const
+{
+	return m_txt;
+}
+
+

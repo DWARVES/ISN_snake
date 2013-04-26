@@ -13,6 +13,7 @@ class Entry
 
 		bool processEvent(const SDL_Event& ev);
 		void blitOn(SDL_Surface* dst, SDL_Rect pos);
+		std::string getText() const;
 
 	private:
 		std::string m_txt;
