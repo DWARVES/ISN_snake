@@ -9,6 +9,7 @@
 #include "scorebar.hpp"
 #include "button.hpp"
 #include "progress.hpp"
+#include "entry.hpp"
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
@@ -62,6 +63,12 @@ int main(int argc, char *argv[])
 	ppos.x = ecran->w - 120;
 	ppos.y = 100;
 
+	// Entry
+	Entry ent(&gui, 150);
+	SDL_Rect epos;
+	epos.x = ecran->w - 170;
+	epos.y = 120;
+
 	Uint32 ltime = SDL_GetTicks();
 	Move mv(&Snake::moveRight);
 
@@ -80,10 +87,13 @@ int main(int argc, char *argv[])
 		bar.blitOn(ecran, bpos);
 		bquit.blitOn(ecran);
 		pb.blitOn(ecran, ppos);
+		ent.blitOn(ecran, epos);
 		SDL_Flip(ecran);
 
 		while(SDL_PollEvent(&ev))
 		{
+			if(ent.processEvent(ev))
+				continue;
 			switch(ev.type)
 			{
 				case SDL_QUIT:
@@ -142,7 +152,7 @@ int main(int argc, char *argv[])
 		}
 
 #ifndef NDEBUG
-		std::cout << SDL_GetTicks() - frameTime << std::endl;
+		// std::cout << SDL_GetTicks() - frameTime << std::endl;
 		frameTime = SDL_GetTicks();
 #endif
 
