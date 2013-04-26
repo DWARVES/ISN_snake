@@ -4,6 +4,7 @@
 #include "map.hpp"
 #include "gui.hpp"
 #include "scorebar.hpp"
+#include "over.hpp"
 
 	Server::Server(Gui* g, SDL_Surface* scr)
 : m_g(g), m_scr(scr),
@@ -112,7 +113,12 @@ bool Server::run()
 		}
 	}
 
-	if(!end) {} // TODO game over
+	if(!end)
+	{
+		GameOver ov(m_g, m_scr, m_snks);
+		if(!ov.run())
+			return false;
+	}
 
 	return true;
 }
