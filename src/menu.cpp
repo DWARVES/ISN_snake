@@ -26,7 +26,7 @@ namespace fs = boost::filesystem;
 	m_bjoin->setPos(pos);
 
 	pos.y += 150;
-	m_bret = new Button("Back", m_gui);
+	m_bret = new Button("Quit", m_gui);
 	m_bret->setPos(pos);
 
 	fs::path tpath(rcdir);
