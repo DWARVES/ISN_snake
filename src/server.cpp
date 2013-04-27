@@ -16,7 +16,7 @@
 	{
 		bg.x = widthMap / 4 * (i%2 == 0 ? 1 : 3);
 		bg.y = heightMap / 4 * (i < 2 ? 1 : 3);
-		m_snks[i] = new Snake(m_map, bg);
+		m_snks[i] = new Snake(m_map, bg, i);
 	}
 
 	m_sb = new ScoreBar(g, m_snks, scr->w, 25);
