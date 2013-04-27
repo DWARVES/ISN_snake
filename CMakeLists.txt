@@ -33,6 +33,12 @@ find_package(SDL_ttf REQUIRED)
 link_directories(${SDL_TTF_LIBRARY_DIR})
 include_directories(${SDL_TTF_INCLUDE_DIR})
 
+# Inclusion de SDL_mixer
+include(FindSDL_mixer)
+find_package(SDL_mixer REQUIRED)
+link_directories(${SDL_MIXER_LIBRARY_DIR})
+include_directories(${SDL_MIXER_INCLUDE_DIR})
+
 # Inclusion de Boost
 include(FindBoost)
 find_package(Boost COMPONENTS system filesystem regex REQUIRED)
@@ -55,6 +61,7 @@ target_link_libraries(
 	${SDL_LIBRARY}
 	${SDL_IMAGE_LIBRARY}
 	${SDL_TTF_LIBRARY}
+	${SDL_MIXER_LIBRARY}
 	${Boost_FILESYSTEM_LIBRARY}
 	${Boost_SYSTEM_LIBRARY}
 	${Boost_REGEX_LIBRARY}
