@@ -3,6 +3,7 @@
 #include "gui.hpp"
 #include "snake.hpp"
 #include "button.hpp"
+#include "music.hpp"
 #include <sstream>
 #include <SDL_ttf.h>
 
@@ -87,7 +88,10 @@ bool GameOver::run()
 					pos.x = ev.button.x;
 					pos.y = ev.button.y;
 					if(m_back->clicked(pos))
+					{
+						music->playSound(Music::OK);
 						continuer = false;
+					}
 					break;
 				default:
 					break;
