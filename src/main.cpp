@@ -5,6 +5,7 @@
 #include "bonus.hpp"
 #include "gui.hpp"
 #include "menu.hpp"
+#include "music.hpp"
 #include <boost/filesystem/path.hpp>
 
 namespace fs = boost::filesystem;
@@ -41,6 +42,10 @@ int main(int argc, char *argv[])
 		SDL_Quit();
 		return 1;
 	}
+
+	// Chargement de la musique
+	Music mus;
+	mus.playMusic();
 
 	// Lancement du jeu
 	Menu menu(&gui, scr);
