@@ -3,6 +3,7 @@
 #include "button.hpp"
 #include "gui.hpp"
 #include "server.hpp"
+#include "music.hpp"
 #include <boost/filesystem/path.hpp>
 #include <SDL_image.h>
 #include <iostream>
@@ -96,12 +97,14 @@ bool Menu::run()
 
 					if(m_bplay->clicked(m))
 					{
+						music->playSound(Music::OK);
 						Server srv(m_gui, m_scr);
 						if(!srv.run())
 							return false;
 					}
 					else if(m_bjoin->clicked(m))
 					{
+						music->playSound(Music::OK);
 						std::cout << "Join game !" << std::endl;
 					}
 					else if(m_bret->clicked(m))
