@@ -31,11 +31,13 @@ SDL_Rect transform270(SDL_Rect pos)
 
 SDL_Surface* rotTile(SDL_Surface* tile, int ang)
 {
+	// Nouvelle surface
 	SDL_Surface* rot = SDL_CreateRGBSurface(0, tile->w, tile->h, 24, 0, 0, 0, 0);
 	if(rot == NULL)
 		return NULL;
 
-	Transform tr;
+	// Choix de la rotation
+	Transform tr = NULL;
 	switch(ang)
 	{
 		case 1: tr = transform90; break;
@@ -43,22 +45,30 @@ SDL_Surface* rotTile(SDL_Surface* tile, int ang)
 		case 3: tr = transform270; break;
 		default:
 			SDL_BlitSurface(tile, NULL, rot, NULL);
-			return rot;
+			break;
 	}
 
-	SDL_FillRect(rot, NULL, SDL_MapRGB(rot->format, 0, 0, 0));
-	SDL_Rect pos;
-	SDL_LockSurface(rot);
-	for(pos.x = 0; pos.x < tile->w; ++pos.x)
+	// Rotation
+	if(tr != NULL)
 	{
-		for(pos.y = 0; pos.y < tile->h; ++pos.y)
+		SDL_FillRect(rot, NULL, SDL_MapRGB(rot->format, 0, 0, 0));
+		SDL_Rect pos;
+		SDL_LockSurface(rot);
+		for(pos.x = 0; pos.x < tile->w; ++pos.x)
 		{
-			Uint32 col = getPixel(tile, pos.x, pos.y);
-			SDL_Rect npos = tr(pos);
-			putPixel(rot, npos.x, npos.y, col);
+			for(pos.y = 0; pos.y < tile->h; ++pos.y)
+			{
+				Uint32 col = getPixel(tile, pos.x, pos.y);
+				SDL_Rect npos = tr(pos);
+				putPixel(rot, npos.x, npos.y, col);
+			}
 		}
+		SDL_UnlockSurface(rot);
 	}
-	SDL_UnlockSurface(rot);
+
+	// Transparence
+	Uint32 trans = SDL_MapRGB(rot->format, 1, 1, 1);
+	SDL_SetColorKey(rot, SDL_SRCCOLORKEY, trans);
 
 	return rot;
 }
