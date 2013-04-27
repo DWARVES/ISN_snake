@@ -10,6 +10,7 @@
 #include "config.hpp"
 #include "bonus.hpp"
 #include "utilities.hpp"
+#include "music.hpp"
 
 	Snake::Snake(Map* map, const SDL_Rect& begin, int id)
 : m_map(map), m_toadd(0), m_score(0), m_dead(false), m_loaded(true),
@@ -141,12 +142,20 @@ bool Snake::dead()
 {
 	Map::ColType col = m_map->testCase(m_first->x, m_first->y);
 	if(col == Map::WALL)
+	{
+		music->playSound(Music::DEATH);
 		return true;
+	}
 	else if(col == Map::BONUS)
 	{
 		Bonus* bon = m_map->getBonusAt(m_first->x, m_first->y);
 
 		int scr = bon->getPts();
+		if(scr < 0)
+			music->playSound(Music::CANCEL);
+		else
+			music->playSound(Music::EAT);
+
 		if(scr < 0 
 				&& (unsigned int)-scr > m_score)
 			m_score = 0;
