@@ -4,16 +4,14 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <algorithm>
-#include <boost/filesystem/path.hpp>
+#include <sstream>
 
 #include "map.hpp"
 #include "config.hpp"
 #include "bonus.hpp"
 #include "utilities.hpp"
 
-namespace fs = boost::filesystem;
-
-	Snake::Snake(Map* map, const SDL_Rect& begin)
+	Snake::Snake(Map* map, const SDL_Rect& begin, int id)
 : m_map(map), m_toadd(0), m_score(0), m_dead(false), m_loaded(true),
 	m_ltime(SDL_GetTicks()), m_step(0), m_first(NULL), m_last(NULL)
 {
@@ -41,9 +39,9 @@ namespace fs = boost::filesystem;
 		for(int j = 0; j < 4; ++j)
 			m_tiles[i][j][0] = m_tiles[i][j][1] = NULL;
 
-	fs::path path(rcdir);
-	path /= snake_subdir;
-	SDL_Surface* tile = IMG_Load(path.string().c_str());
+	std::ostringstream path;
+	path << rcdir << snake_subdir << id << ".png";
+	SDL_Surface* tile = IMG_Load(path.str().c_str());
 	if(tile == NULL)
 	{
 		m_loaded = false;

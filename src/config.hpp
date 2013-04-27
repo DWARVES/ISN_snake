@@ -13,7 +13,7 @@
 #define sizeTile 20
 
 // Snakes
-#define snake_subdir "snake/1.png"
+#define snake_subdir "snake/"
 
 // SDL
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN

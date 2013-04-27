@@ -9,7 +9,7 @@ struct SDL_Rect;
 class Snake
 {
 	public:
-		Snake(Map* map, const SDL_Rect& begin);
+		Snake(Map* map, const SDL_Rect& begin, int id);
 		bool isLoaded() const;
 		~Snake();
 
