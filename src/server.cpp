@@ -77,7 +77,8 @@ bool Server::run()
 			bool check = true;
 			for(int i = 0; i < max_players; ++i)
 			{
-				if(m_conts[i]->processEvent(ev))
+				if(m_conts[i] != NULL
+						&& m_conts[i]->processEvent(ev))
 				{
 					check = false;
 					continue;
