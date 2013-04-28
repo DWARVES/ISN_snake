@@ -74,7 +74,16 @@ bool Server::run()
 		// Évènements
 		while(SDL_PollEvent(&ev))
 		{
-			if(m_conts[0]->processEvent(ev))
+			bool check = true;
+			for(int i = 0; i < max_players; ++i)
+			{
+				if(m_conts[i]->processEvent(ev))
+				{
+					check = false;
+					continue;
+				}
+			}
+			if(!check)
 				continue;
 
 			switch(ev.type)
@@ -108,9 +117,14 @@ bool Server::run()
 		// Serpents
 		if(SDL_GetTicks() - sltime > 100)
 		{
-			m_conts[0]->move();
-			if(m_snks[0]->isDead())
-				continuer = false;
+			for(int i = 0; i < max_players; ++i)
+			{
+				if(m_conts[i] == NULL)
+					continue;
+				m_conts[i]->move();
+				if(m_snks[i]->isDead())
+					continuer = false;
+			}
 			sltime = SDL_GetTicks();
 		}
 	}
