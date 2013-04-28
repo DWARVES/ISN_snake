@@ -15,7 +15,10 @@ GameOver::GameOver(Gui* g, SDL_Surface* s, Snake* snks[max_players])
 		createScr(snks, i);
 
 	std::ostringstream oss;
-	oss << "Player " << win + 1 << " won !";
+	if(win >= 0)
+		oss << "Player " << win + 1 << " won !";
+	else
+		oss << "Equality !";
 	m_txt = TTF_RenderText_Blended(m_gui->getFont(),
 			oss.str().c_str(),
 			m_gui->fgColor());
@@ -122,11 +125,14 @@ int GameOver::computeWin(Snake* snks[max_players]) const
 
 	for(int i = 1; i < max_players && snks[i] != NULL; ++i)
 	{
-		if(snks[i]->getScore() > max)
+		unsigned int scr = snks[i]->getScore();
+		if(scr > max)
 		{
 			max = snks[i]->getScore();
 			w = i;
 		}
+		else if(scr == max)
+			w = -1;
 	}
 
 	return w;
