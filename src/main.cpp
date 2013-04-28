@@ -13,7 +13,7 @@ namespace fs = boost::filesystem;
 int main(int argc, char *argv[])
 {
 	// Chargement de la SDL
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
 		std::cerr << "Erreur au chargement de la SDL : " << SDL_GetError() << std::endl;
 		return 1;
