@@ -5,18 +5,31 @@
 #include "gui.hpp"
 #include "scorebar.hpp"
 #include "over.hpp"
+#include "keyboardcontroler.hpp"
 
 	Server::Server(Gui* g, SDL_Surface* scr)
 : m_g(g), m_scr(scr),
 	m_map(NULL), m_sb(NULL)
 {
 	m_map = new Map(g);
+
+	// FIXME : conts doit être passé en paramètre
 	SDL_Rect bg;
+	bg.x = scr->w / 4 / sizeTile;
+	bg.y = scr->h / 4 / sizeTile;
+
+	for(int i = 0; i < max_players; ++i)
+		m_conts[i] = NULL;
+	m_conts[0] = new KeyboardControler;
+	m_conts[0]->loadSnake(m_map, bg, 0);
+	// END FIXME
+
 	for(int i = 0; i < max_players; ++i)
 	{
-		bg.x = widthMap / 4 * (i%2 == 0 ? 1 : 3);
-		bg.y = heightMap / 4 * (i < 2 ? 1 : 3);
-		m_snks[i] = new Snake(m_map, bg, i);
+		if(m_conts[i] != NULL)
+			m_snks[i] = m_conts[i]->getSnake();
+		else
+			m_snks[i] = NULL;
 	}
 
 	m_sb = new ScoreBar(g, m_snks, scr->w, 25);
@@ -28,14 +41,13 @@ Server::~Server()
 {
 	for(int i = 0; i < max_players; ++i)
 	{
-		if(m_snks[i] != NULL)
-			delete m_snks[i];
+		if(m_conts[i] != NULL)
+			delete m_conts[i];
 	}
 	delete m_map;
 	delete m_sb;
 }
 
-typedef void (Snake::*Move)();
 bool Server::run()
 {
 	// Initialisation
@@ -44,7 +56,6 @@ bool Server::run()
 	SDL_Event ev;
 	Uint32 sltime = SDL_GetTicks(); // Pour le déplacement du serpent
 	Uint32 bltime = sltime; // Pour les bonus
-	Move mv(&Snake::moveRight);
 
 	// Mainloop
 	while(continuer)
@@ -63,6 +74,9 @@ bool Server::run()
 		// Évènements
 		while(SDL_PollEvent(&ev))
 		{
+			if(m_conts[0]->processEvent(ev))
+				continue;
+
 			switch(ev.type)
 			{
 				case SDL_QUIT:
@@ -71,18 +85,6 @@ bool Server::run()
 				case SDL_KEYDOWN:
 					switch(ev.key.keysym.sym)
 					{
-						case SDLK_UP:
-							mv = &Snake::moveUp;
-							break;
-						case SDLK_DOWN:
-							mv = &Snake::moveDown;
-							break;
-						case SDLK_LEFT:
-							mv = &Snake::moveLeft;
-							break;
-						case SDLK_RIGHT:
-							mv = &Snake::moveRight;
-							break;
 						case SDLK_q:
 							continuer = false;
 							end = true;
@@ -106,7 +108,7 @@ bool Server::run()
 		// Serpents
 		if(SDL_GetTicks() - sltime > 100)
 		{
-			(m_snks[0]->*mv)();
+			m_conts[0]->move();
 			if(m_snks[0]->isDead())
 				continuer = false;
 			sltime = SDL_GetTicks();
