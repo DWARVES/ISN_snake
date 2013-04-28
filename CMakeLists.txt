@@ -13,7 +13,22 @@ file(
 	source_files
 	src/*.cpp
 	src/*.hpp
+	src/gui/*.cpp
+	src/gui/*.hpp
+	src/gameplay/*.cpp
+	src/gameplay/*.hpp
+	src/ctrls/*.cpp
+	src/ctrls/*.hpp
+	src/misc/*.cpp
+	src/misc/*.hpp
 	)
+
+# On indique les dossiers d'inclusion
+include_directories(src/)
+include_directories(src/gui/)
+include_directories(src/gameplay/)
+include_directories(src/ctrls/)
+include_directories(src/misc/)
 
 # Inclusion de la SDL
 include(FindSDL)
