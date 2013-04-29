@@ -71,7 +71,7 @@ SDL_Color Gui::fgColor() const
 SDL_Color Gui::bgColor() const
 {
 	SDL_Color c;
-	c.r = c.g = c.b = 0;
+	c.r = c.g = c.b = 50;
 	return c;
 }
 
