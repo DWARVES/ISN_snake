@@ -21,6 +21,7 @@ class JoystickControler : public LocalControler
 
 	private:
 		static std::vector<int> m_used; // Les joysticks utilisés
+		static size_t m_count;
 		mutable int m_valid;
 		mutable int m_joy;
 

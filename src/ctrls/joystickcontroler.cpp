@@ -1,16 +1,18 @@
 
 #include "joystickcontroler.hpp"
 #include "snake.hpp"
-#include <iostream>
 
 #define SENSIBILITY 26000
 
+size_t JoystickControler::m_count = 0;
 std::vector<int> JoystickControler::m_used;
 std::vector<SDL_Joystick*> m_allJoys; // Doivent être ouverts pour être utilisés
 
 JoystickControler::JoystickControler()
 	: LocalControler(), m_valid(-1), m_joy(-1)
 {
+	++m_count;
+
 	SDL_JoystickEventState(SDL_ENABLE);
 	if(m_allJoys.size() == 0)
 	{
@@ -24,7 +26,8 @@ JoystickControler::~JoystickControler()
 {
 	erase(m_joy);
 
-	if(m_used.size() == 0)
+	--m_count;
+	if(m_count == 0)
 	{
 		for(size_t i = 0; i < m_allJoys.size(); ++i)
 			SDL_JoystickClose(m_allJoys[i]);
