@@ -4,6 +4,7 @@
 #include "gui.hpp"
 #include "server.hpp"
 #include "music.hpp"
+#include "selecter.hpp"
 #include <boost/filesystem/path.hpp>
 #include <SDL_image.h>
 #include <iostream>
@@ -98,8 +99,8 @@ bool Menu::run()
 					if(m_bplay->clicked(m))
 					{
 						music->playSound(Music::OK);
-						Server srv(m_gui, m_scr);
-						if(!srv.run())
+						Selecter sel(m_gui, m_scr);
+						if(!sel.run())
 							return false;
 					}
 					else if(m_bjoin->clicked(m))
