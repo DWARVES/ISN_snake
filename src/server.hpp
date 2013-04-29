@@ -14,7 +14,7 @@ class ScoreBar;
 class Server
 {
 	public:
-		Server(Gui* g, SDL_Surface* scr);
+		Server(Gui* g, SDL_Surface* scr, LocalControler* c[max_players]);
 		~Server();
 
 		bool run(); // Si renvoie false, programme doit s'arrêter
@@ -23,7 +23,7 @@ class Server
 		Gui* m_g;
 		SDL_Surface* m_scr;
 
-		LocalControler* m_conts[max_players];
+		LocalControler** m_conts;
 		Snake* m_snks[max_players];
 		Map* m_map;
 		ScoreBar* m_sb;

@@ -7,27 +7,30 @@
 #include "over.hpp"
 #include "keyboardcontroler.hpp"
 
-	Server::Server(Gui* g, SDL_Surface* scr)
-: m_g(g), m_scr(scr),
+	Server::Server(Gui* g, SDL_Surface* scr, LocalControler* c[max_players])
+: m_g(g), m_scr(scr), m_conts(c),
 	m_map(NULL), m_sb(NULL)
 {
 	m_map = new Map(g);
 
-	// FIXME : conts doit être passé en paramètre
 	SDL_Rect bg;
 	bg.x = scr->w / 4 / sizeTile;
 	bg.y = scr->h / 4 / sizeTile;
-
-	for(int i = 0; i < max_players; ++i)
-		m_conts[i] = NULL;
-	m_conts[0] = new KeyboardControler;
-	m_conts[0]->loadSnake(m_map, bg, 0);
-	// END FIXME
-
 	for(int i = 0; i < max_players; ++i)
 	{
 		if(m_conts[i] != NULL)
+		{
+			SDL_Rect pos;
+			pos.x = bg.x * (i%2 == 0 ? 1 : 3);
+			pos.y = bg.y * (i < 2 ? 1 : 3);
+
 			m_snks[i] = m_conts[i]->getSnake();
+			if(m_snks[i] == NULL)
+			{
+				m_conts[i]->loadSnake(m_map, pos, i);
+				m_snks[i] = m_conts[i]->getSnake();
+			}
+		}
 		else
 			m_snks[i] = NULL;
 	}
@@ -39,11 +42,6 @@
 
 Server::~Server()
 {
-	for(int i = 0; i < max_players; ++i)
-	{
-		if(m_conts[i] != NULL)
-			delete m_conts[i];
-	}
 	delete m_map;
 	delete m_sb;
 }
