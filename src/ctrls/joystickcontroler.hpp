@@ -17,6 +17,7 @@ class JoystickControler : public LocalControler
 		virtual bool stillValid(const SDL_Event& ev) const; // Teste si le nouvel ev n'annule pas le premier
 
 		virtual bool processEvent(const SDL_Event& ev);
+		virtual LocalControler* duplicate() const; // Crée un nouveau du même type
 
 	private:
 		static std::vector<int> m_used; // Les joysticks utilisés

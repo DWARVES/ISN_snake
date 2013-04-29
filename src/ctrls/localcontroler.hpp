@@ -14,6 +14,7 @@ class LocalControler : public Controler // Controler pour les périphériques ph
 		// Utilisés lors de la détection des périphériques
 		virtual bool validEvent(const SDL_Event& ev) const = 0; // Teste si l'évènement peut être utilisé
 		virtual bool stillValid(const SDL_Event& ev) const = 0; // Teste si le nouvel ev n'annule pas le premier
+		virtual LocalControler* duplicate() const = 0; // Crée un nouveau du même type
 
 		virtual bool processEvent(const SDL_Event& ev) = 0;
 		virtual void move();

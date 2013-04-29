@@ -144,3 +144,9 @@ void JoystickControler::erase(int j) const
 	}
 }
 
+LocalControler* JoystickControler::duplicate() const
+{
+	return new JoystickControler;
+}
+
+

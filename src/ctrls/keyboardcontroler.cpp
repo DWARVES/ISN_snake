@@ -38,9 +38,6 @@ bool KeyboardControler::validEvent(const SDL_Event& ev) const
 
 bool KeyboardControler::stillValid(const SDL_Event& ev) const
 {
-	if(m_count > 1) // Ne devrait pas arriver
-		return false;
-	
 	if(ev.type != SDL_KEYUP)
 		return true;
 
@@ -52,9 +49,6 @@ bool KeyboardControler::stillValid(const SDL_Event& ev) const
 
 bool KeyboardControler::processEvent(const SDL_Event& ev)
 {
-	if(m_count > 1) // Ne devrait pas arriver
-		return false;
-
 	if(ev.type != SDL_KEYDOWN)
 		return false;
 
@@ -77,5 +71,11 @@ bool KeyboardControler::processEvent(const SDL_Event& ev)
 	};
 	return true;
 }
+
+LocalControler* KeyboardControler::duplicate() const
+{
+	return new KeyboardControler;
+}
+
 
 
