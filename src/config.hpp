@@ -35,6 +35,7 @@
 // Gui
 #define gui_subdir "gui/"
 #define title_path "title.png"
+#define player_time 1500 // Temps que doit rester appuyée une touche avant d'ajouter un controler
 
 #endif
 

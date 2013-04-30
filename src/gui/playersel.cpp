@@ -20,7 +20,7 @@ PlayerSelect::PlayerSelect(Gui* g, SDL_Rect r, int id)
 			m_gui->fgColor());
 
 	m_wait = new Progress(m_gui);
-	m_wait->setMax(3000); // Le nombre millisecondes du chargement
+	m_wait->setMax(player_time); // Le nombre millisecondes du chargement
 	m_wait->setSize(m_rect.w / 2, 20);
 
 	m_cancel = new Button("Cancel", m_gui);
@@ -67,7 +67,7 @@ void PlayerSelect::blitOn(SDL_Surface* dst)
 		m_wait->blitOn(dst, pos);
 
 		Uint32 time = SDL_GetTicks() - m_ltime;
-		if(time > 3000)
+		if(time > player_time)
 			m_ready = true;
 		else
 			m_wait->set(time);
