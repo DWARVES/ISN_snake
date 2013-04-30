@@ -1,10 +1,9 @@
 
 #include "controler.hpp"
 #include "snake.hpp"
-#define NULL 0
 
 Controler::Controler()
-	: m_snk(NULL)
+	: m_snk(NULL), m_mv(&Snake::moveRight)
 {}
 
 Controler::~Controler()
@@ -29,4 +28,10 @@ void Controler::clearSnake()
 		delete m_snk;
 	m_snk = NULL;
 }
+
+void Controler::move()
+{
+	(m_snk->*m_mv)();
+}
+
 
