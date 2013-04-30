@@ -13,6 +13,7 @@ class Controler
 		virtual ~Controler();
 
 		virtual void loadSnake(Map* map, const SDL_Rect& pos, int idx);
+		virtual void clearSnake();
 		Snake* getSnake() const;
 
 		virtual void move() = 0; // Déplace le serpent

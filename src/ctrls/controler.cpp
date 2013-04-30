@@ -23,4 +23,9 @@ Snake* Controler::getSnake() const
 	return m_snk;
 }
 
+void Controler::clearSnake()
+{
+	delete m_snk;
+	m_snk = NULL;
+}
 
