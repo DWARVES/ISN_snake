@@ -40,6 +40,8 @@ PlayerSelect::~PlayerSelect()
 		delete m_wait;
 	if(m_cancel != NULL)
 		delete m_cancel;
+	if(m_cont != NULL)
+		delete m_cont;
 }
 
 void PlayerSelect::blitOn(SDL_Surface* dst)
@@ -90,6 +92,7 @@ void PlayerSelect::checkEvent(std::vector<LocalControler*>* ctrls, const SDL_Eve
 			if(m_cancel->clicked(pos))
 			{
 				delete m_cont;
+				m_cont = NULL;
 				m_ready = m_busy = false;
 				m_wait->set(0);
 			}
@@ -106,6 +109,7 @@ void PlayerSelect::checkEvent(std::vector<LocalControler*>* ctrls, const SDL_Eve
 		if(!m_cont->stillValid(ev))
 		{
 			delete m_cont;
+			m_cont = NULL;
 			m_busy = false;
 			m_wait->set(0);
 			return;
