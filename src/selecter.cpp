@@ -5,7 +5,7 @@
 #include "gui/gui.hpp"
 #include "misc/music.hpp"
 
-#include "ctrls/localcontroler.hpp"
+#include "ctrls/controler.hpp"
 #include "ctrls/joystickcontroler.hpp"
 #include "ctrls/keyboardcontroler.hpp"
 
@@ -107,7 +107,7 @@ bool Selecter::run()
 					{
 						music->playSound(Music::CANCEL);
 
-						LocalControler* conts[max_players];
+						Controler* conts[max_players];
 						for(int i = 0; i < max_players; ++i)
 							conts[i] = m_sels[i]->getControler();
 

@@ -3,7 +3,7 @@
 #include "gui.hpp"
 #include "button.hpp"
 #include "progress.hpp"
-#include "localcontroler.hpp"
+#include "controler.hpp"
 #include <sstream>
 #include <SDL_ttf.h>
 
@@ -80,7 +80,7 @@ void PlayerSelect::blitOn(SDL_Surface* dst)
 	}
 }
 
-void PlayerSelect::checkEvent(std::vector<LocalControler*>* ctrls, const SDL_Event& ev)
+void PlayerSelect::checkEvent(std::vector<Controler*>* ctrls, const SDL_Event& ev)
 {
 	if(m_ready)
 	{
@@ -140,7 +140,7 @@ bool PlayerSelect::busy() const
 	return m_busy;
 }
 
-LocalControler* PlayerSelect::getControler() const
+Controler* PlayerSelect::getControler() const
 {
 	return m_cont;
 }

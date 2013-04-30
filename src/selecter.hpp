@@ -8,7 +8,7 @@
 #include "gui/playersel.hpp"
 class Button;
 class Gui;
-class LocalControler;
+class Controler;
 
 class Selecter
 {
@@ -26,7 +26,7 @@ class Selecter
 		Button* m_cancel;
 		PlayerSelect* m_sels[max_players];
 
-		std::vector<LocalControler*> m_conts;
+		std::vector<Controler*> m_conts;
 
 		void loadSels();
 		void loadConts();

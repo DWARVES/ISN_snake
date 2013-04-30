@@ -7,7 +7,7 @@
 class Gui;
 class Button;
 class Progress;
-class LocalControler;
+class Controler;
 
 class PlayerSelect
 {
@@ -16,18 +16,18 @@ class PlayerSelect
 		~PlayerSelect();
 
 		void blitOn(SDL_Surface* dst);
-		void checkEvent(std::vector<LocalControler*>* ctrls, const SDL_Event& ev);
+		void checkEvent(std::vector<Controler*>* ctrls, const SDL_Event& ev);
 
 		bool ready() const;
 		bool busy() const;
-		LocalControler* getControler() const;
+		Controler* getControler() const;
 
 	private:
 		Gui* m_gui;
 		SDL_Rect m_rect;
 		int m_id;
 
-		LocalControler* m_cont;
+		Controler* m_cont;
 		bool m_busy; // en attente
 		bool m_ready; // chargé
 

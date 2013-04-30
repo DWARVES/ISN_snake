@@ -7,7 +7,7 @@
 #include "over.hpp"
 #include "keyboardcontroler.hpp"
 
-	Server::Server(Gui* g, SDL_Surface* scr, LocalControler* c[max_players])
+	Server::Server(Gui* g, SDL_Surface* scr, Controler* c[max_players])
 : m_g(g), m_scr(scr), m_conts(c),
 	m_map(NULL), m_sb(NULL)
 {
