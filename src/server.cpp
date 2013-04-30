@@ -26,10 +26,9 @@
 
 			m_snks[i] = m_conts[i]->getSnake();
 			if(m_snks[i] == NULL)
-			{
-				m_conts[i]->loadSnake(m_map, pos, i);
-				m_snks[i] = m_conts[i]->getSnake();
-			}
+				m_conts[i]->clearSnake();
+			m_conts[i]->loadSnake(m_map, pos, i);
+			m_snks[i] = m_conts[i]->getSnake();
 		}
 		else
 			m_snks[i] = NULL;
