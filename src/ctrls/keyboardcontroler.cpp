@@ -5,7 +5,7 @@
 int KeyboardControler::m_count = 0;
 
 	KeyboardControler::KeyboardControler()
-: m_valid(SDLK_UNKNOWN)
+: Controler(), m_valid(SDLK_UNKNOWN)
 {
 	++m_count;
 }
@@ -72,7 +72,7 @@ bool KeyboardControler::processEvent(const SDL_Event& ev)
 	return true;
 }
 
-LocalControler* KeyboardControler::duplicate() const
+Controler* KeyboardControler::duplicate() const
 {
 	return new KeyboardControler;
 }

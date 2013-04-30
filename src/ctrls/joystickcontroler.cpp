@@ -9,7 +9,7 @@ std::vector<int> JoystickControler::m_used;
 std::vector<SDL_Joystick*> m_allJoys; // Doivent être ouverts pour être utilisés
 
 JoystickControler::JoystickControler()
-	: LocalControler(), m_valid(-1), m_joy(-1)
+	: Controler(), m_valid(-1), m_joy(-1)
 {
 	++m_count;
 
@@ -147,7 +147,7 @@ void JoystickControler::erase(int j) const
 	}
 }
 
-LocalControler* JoystickControler::duplicate() const
+Controler* JoystickControler::duplicate() const
 {
 	return new JoystickControler;
 }

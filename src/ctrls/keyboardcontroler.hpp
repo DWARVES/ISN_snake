@@ -2,10 +2,10 @@
 #ifndef DEF_KEYBOARDCONTROLER
 #define DEF_KEYBOARDCONTROLER
 
-#include "localcontroler.hpp"
+#include "controler.hpp"
 #include <SDL.h>
 
-class KeyboardControler : public LocalControler
+class KeyboardControler : public Controler
 {
 	public:
 		KeyboardControler();
@@ -16,7 +16,7 @@ class KeyboardControler : public LocalControler
 		virtual bool stillValid(const SDL_Event& ev) const; // Teste si le nouvel ev n'annule pas le premier
 
 		virtual bool processEvent(const SDL_Event& ev);
-		virtual LocalControler* duplicate() const; // Crée un nouveau du même type
+		virtual Controler* duplicate() const; // Crée un nouveau du même type
 
 	private:
 		static int m_count; // Ne peut y avoir qu'un seul clavier
