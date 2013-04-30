@@ -25,7 +25,8 @@ Snake* Controler::getSnake() const
 
 void Controler::clearSnake()
 {
-	delete m_snk;
+	if(m_snk != NULL)
+		delete m_snk;
 	m_snk = NULL;
 }
 
