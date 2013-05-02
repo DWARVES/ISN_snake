@@ -78,6 +78,14 @@ void PlayerSelect::blitOn(SDL_Surface* dst)
 		pos.y = m_rect.y + m_rect.h / 4 * 3 - m_mustc->h / 2;
 		SDL_BlitSurface(m_mustc, NULL, dst, &pos);
 	}
+
+	if(m_cont != NULL)
+	{
+		SDL_Surface* cont = m_cont->picture();
+		pos.x = m_rect.x + m_rect.w / 2 - cont->w / 2;
+		pos.y = m_rect.y + m_rect.h / 2 - cont->h / 2;
+		SDL_BlitSurface(cont, NULL, dst, &pos);
+	}
 }
 
 void PlayerSelect::checkEvent(std::vector<Controler*>* ctrls, const SDL_Event& ev)
