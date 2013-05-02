@@ -20,6 +20,8 @@ JoystickControler::JoystickControler()
 		for(size_t i = 0; i < m_allJoys.size(); ++i)
 			m_allJoys[i] = SDL_JoystickOpen(i);
 	}
+
+	loadPict("joystick.png");
 }
 
 JoystickControler::~JoystickControler()

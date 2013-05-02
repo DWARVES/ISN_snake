@@ -8,6 +8,7 @@ int KeyboardControler::m_count = 0;
 : Controler(), m_valid(SDLK_UNKNOWN)
 {
 	++m_count;
+	loadPict("keyboard.png");
 }
 
 KeyboardControler::~KeyboardControler()
