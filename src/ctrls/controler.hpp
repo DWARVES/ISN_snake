@@ -16,6 +16,7 @@ class Controler
 
 		virtual void loadSnake(Map* map, const SDL_Rect& pos, int idx);
 		virtual void clearSnake();
+		virtual void clearMove();
 		Snake* getSnake() const;
 
 		virtual bool validEvent(const SDL_Event& ev) const = 0; // Teste si l'évènement peut être utilisé

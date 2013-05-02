@@ -19,6 +19,7 @@ Controler::~Controler()
 
 void Controler::loadSnake(Map* map, const SDL_Rect& pos, int idx)
 {
+	clearSnake();
 	m_snk = new Snake(map, pos, idx);
 }
 
@@ -32,6 +33,11 @@ void Controler::clearSnake()
 	if(m_snk != NULL)
 		delete m_snk;
 	m_snk = NULL;
+}
+
+void Controler::clearMove()
+{
+	m_mv = &Snake::moveRight;
 }
 
 void Controler::move()
