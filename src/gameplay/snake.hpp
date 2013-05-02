@@ -19,7 +19,7 @@ class Snake
 		void moveRight();
 
 		void blitOn(SDL_Surface* dst, SDL_Rect* pos) const;
-		bool died() const;
+		bool died(int still); // still = nombre de snakes encore vivants
 		bool isDead() const;
 		unsigned int getScore() const;
 

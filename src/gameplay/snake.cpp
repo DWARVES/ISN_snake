@@ -385,10 +385,13 @@ void Snake::moveFirst(signed int x, signed int y)
 		m_map->addWall(m_first->x, m_first->y);
 }
 
-bool Snake::died() const
+bool Snake::died(int still)
 {
 	bool ret = (m_dead != m_lastd); // seul cas possible pour true : m_dead = true et m_lastd = false
 	m_lastd = m_dead;
+
+	if(ret)
+		m_score /= still;
 	return ret;
 }
 
