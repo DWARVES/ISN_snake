@@ -26,9 +26,7 @@
 			pos.x = bg.x * (i%2 == 0 ? 1 : 3);
 			pos.y = bg.y * (i < 2 ? 1 : 3);
 
-			m_snks[i] = m_conts[i]->getSnake();
-			if(m_snks[i] == NULL)
-				m_conts[i]->clearSnake();
+			m_conts[i]->clearMove();
 			m_conts[i]->loadSnake(m_map, pos, i);
 			m_snks[i] = m_conts[i]->getSnake();
 		}
