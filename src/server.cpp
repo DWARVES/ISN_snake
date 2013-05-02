@@ -129,6 +129,7 @@ bool Server::run()
 
 	if(!end)
 	{
+		SDL_Delay(2000);
 		GameOver ov(m_g, m_scr, m_snks);
 		if(!ov.run())
 			return false;
