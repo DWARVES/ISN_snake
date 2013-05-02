@@ -3,6 +3,7 @@
 #define DEF_CONTROLER
 
 #include <SDL.h>
+#include <string>
 class Snake;
 class Map;
 struct SDL_Rect;
@@ -24,11 +25,15 @@ class Controler
 		virtual bool processEvent(const SDL_Event& ev) = 0;
 		virtual void move(); // Déplace le serpent
 
+		SDL_Surface* picture() const;
+
 	protected:
 		Snake* m_snk;
+		SDL_Surface* m_img;
 
 		typedef void (Snake::*Move)();
 		Move m_mv;
+		void loadPict(std::string name);
 };
 
 #endif

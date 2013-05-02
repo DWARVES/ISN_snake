@@ -7,6 +7,7 @@
 #define bonus_subdir "bonus/" // bonus_dir rcdir/bonus_subdir
 #define bg_path "bg.png"
 #define music_subdir "music/"
+#define ctrl_subdir "ctrl/"
 
 // Map
 #define widthMap 40
