@@ -19,6 +19,7 @@ class Snake
 		void moveRight();
 
 		void blitOn(SDL_Surface* dst, SDL_Rect* pos) const;
+		bool died() const;
 		bool isDead() const;
 		unsigned int getScore() const;
 
@@ -27,6 +28,7 @@ class Snake
 		unsigned int m_toadd;
 		unsigned int m_score;
 		bool m_dead;
+		mutable bool m_lastd; // m_dead avant l'appel à isDead
 		SDL_Surface* m_tiles[4][4][2]; // [partie][rotation][anim]
 		bool m_loaded;
 

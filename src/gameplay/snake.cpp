@@ -13,7 +13,7 @@
 #include "music.hpp"
 
 	Snake::Snake(Map* map, const SDL_Rect& begin, int id)
-: m_map(map), m_toadd(0), m_score(0), m_dead(false), m_loaded(true),
+: m_map(map), m_toadd(0), m_score(0), m_dead(false), m_lastd(m_dead), m_loaded(true),
 	m_ltime(SDL_GetTicks()), m_step(0), m_first(NULL), m_last(NULL)
 {
 	// Création des premières cases
@@ -191,6 +191,9 @@ bool Snake::dead()
 
 void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
 {
+	if(m_dead)
+		return;
+
 	// Animation
 	if(SDL_GetTicks() - m_ltime > 500)
 	{
@@ -357,10 +360,20 @@ void Snake::checkDeath()
 	if(!dead())
 		return;
 	m_dead = true;
+
+	Case* actual = m_first;
+	while(actual != NULL)
+	{
+		m_map->deleteWall(actual->x, actual->y);
+		actual = actual->next;
+	}
 }
 
 void Snake::moveFirst(signed int x, signed int y)
 {
+	if(m_dead)
+		return;
+
 	SDL_Rect pos;
 	pos.x = m_first->x; pos.y = m_first->y;
 	incrementPos(&pos, x, y);
@@ -368,7 +381,15 @@ void Snake::moveFirst(signed int x, signed int y)
 	m_first->x = pos.x;
 	m_first->y = pos.y;
 	checkDeath();
-	m_map->addWall(m_first->x, m_first->y);
+	if(!m_dead)
+		m_map->addWall(m_first->x, m_first->y);
+}
+
+bool Snake::died() const
+{
+	bool ret = (m_dead != m_lastd); // seul cas possible pour true : m_dead = true et m_lastd = false
+	m_lastd = m_dead;
+	return ret;
 }
 
 bool Snake::isDead() const
