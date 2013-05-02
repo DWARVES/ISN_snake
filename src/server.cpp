@@ -8,7 +8,7 @@
 #include "keyboardcontroler.hpp"
 
 	Server::Server(Gui* g, SDL_Surface* scr, Controler* c[max_players])
-: m_g(g), m_scr(scr), m_conts(c),
+: m_g(g), m_scr(scr), m_conts(c), m_alive(0), m_onlyone(true),
 	m_map(NULL), m_sb(NULL)
 {
 	m_map = new Map(g);
@@ -20,6 +20,8 @@
 	{
 		if(m_conts[i] != NULL)
 		{
+			++m_alive;
+
 			SDL_Rect pos;
 			pos.x = bg.x * (i%2 == 0 ? 1 : 3);
 			pos.y = bg.y * (i < 2 ? 1 : 3);
@@ -33,6 +35,9 @@
 		else
 			m_snks[i] = NULL;
 	}
+
+	if(m_alive > 1)
+		m_onlyone = false;
 
 	m_sb = new ScoreBar(g, m_snks, scr->w, 25);
 	m_sbp.y = scr->h - 25;
@@ -120,8 +125,15 @@ bool Server::run()
 				if(m_conts[i] == NULL)
 					continue;
 				m_conts[i]->move();
-				if(m_snks[i]->isDead())
-					continuer = false;
+
+				if(m_snks[i]->died())
+				{
+					--m_alive;
+					if(m_alive == 0 && m_onlyone)
+						continuer = false;
+					else if(m_alive == 1 && !m_onlyone)
+						continuer = false;
+				}
 			}
 			sltime = SDL_GetTicks();
 		}

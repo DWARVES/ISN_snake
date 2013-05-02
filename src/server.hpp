@@ -25,6 +25,8 @@ class Server
 
 		Controler** m_conts;
 		Snake* m_snks[max_players];
+		int m_alive;
+		bool m_onlyone; // Un seul joueur
 		Map* m_map;
 		ScoreBar* m_sb;
 		SDL_Rect m_sbp;
