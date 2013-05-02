@@ -126,7 +126,7 @@ bool Server::run()
 					continue;
 				m_conts[i]->move();
 
-				if(m_snks[i]->died())
+				if(m_snks[i]->died(m_alive))
 				{
 					--m_alive;
 					if(m_alive == 0 && m_onlyone)
