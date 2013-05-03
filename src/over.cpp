@@ -47,6 +47,9 @@ GameOver::~GameOver()
 
 bool GameOver::run()
 {
+	SDL_Color bgc = m_gui->bgColor();
+	Uint32 bg = SDL_MapRGB(m_scr->format, bgc.r, bgc.g, bgc.b);
+
 	bool continuer = true;
 	SDL_Rect pos;
 	SDL_Event ev;
@@ -56,14 +59,29 @@ bool GameOver::run()
 		// Affichage
 		SDL_FillRect(m_scr, NULL, SDL_MapRGB(m_scr->format, 0, 0, 0));
 		SDL_BlitSurface(m_gui->background(), NULL, m_scr, NULL);
+
 		pos.x = m_scr->w / 2 - m_txt->w / 2;
 		pos.y = m_scr->h / 4 - m_txt->h / 2;
+		{
+			SDL_Rect tmp = pos;
+			tmp.x -= 10;
+			tmp.y -= 10;
+			tmp.w = m_txt->w + 20;
+			tmp.h = m_txt->h + 20;
+			SDL_FillRect(m_scr, &tmp, bg);
+		}
 		SDL_BlitSurface(m_txt, NULL, m_scr, &pos);
 
+		pos.x = 300; pos.w = 200;
+		pos.y = 300; pos.h = 140;
+		SDL_FillRect(m_scr, &pos, bg);
+
+		int y = pos.y + 5;
 		for(int i = 0; i < max_players; ++i)
 		{
-			pos.x = m_scr->w / 3 * (i%2 + 1) - m_scores[i]->w / 2;
-			pos.y = m_scr->h / 6 * (i<2 ? 4 : 5) - m_scores[i]->h / 2;
+			pos.x = m_scr->w / 2 - m_scores[i]->w / 2;
+			y += 25;
+			pos.y = y - m_scores[i]->h / 2;
 			SDL_BlitSurface(m_scores[i], NULL, m_scr, &pos);
 		}
 		m_back->blitOn(m_scr);
