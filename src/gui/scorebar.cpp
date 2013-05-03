@@ -63,6 +63,7 @@ void ScoreBar::genPlayerPart(int p)
 		pos.x = m_parts[p]->w / 2 - txt->w / 2;
 		pos.y = m_parts[p]->h / 2 - txt->h / 2;
 		SDL_BlitSurface(txt, NULL, m_parts[p], &pos);
+		SDL_FreeSurface(txt);
 	}
 	else
 	{
@@ -72,6 +73,7 @@ void ScoreBar::genPlayerPart(int p)
 		pos.x = m_parts[p]->w / 2 - txt->w / 2;
 		pos.y = m_parts[p]->h / 2 - txt->h / 2;
 		SDL_BlitSurface(txt, NULL, m_parts[p], &pos);
+		SDL_FreeSurface(txt);
 	}
 }
 
