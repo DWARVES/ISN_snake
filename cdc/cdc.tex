@@ -12,7 +12,7 @@
 \hypersetup{colorlinks=true}
 
 \title{Snakekans\\-- Projet ISN --}
-\author{Luc Chabassier <luc.linux@mailoo.org> \and Pablo Donato <pablo.donato@mailoo.org>}
+\author{Luc Chabassier <\href{mailto:luc.linux@mailoo.org}{\nolinkurl{luc.linux@mailoo.org}}> \and Pablo Donato <\href{mailto:pablo.donato@mailoo.org}{\nolinkurl{pablo.donato@mailoo.org}}>}
 
 \begin{document}
 \maketitle
@@ -122,19 +122,23 @@ Cet écran affiche le score de chaque joueur ainsi que le gagnant. Le bouton \em
 
 \section{Développement.}
 \subsection{Bibliothèques utilisées.}
-Ce jeu est codé en c++, et certaines bibliothèques SDL : tout d'abord la bibliothèque SDL de base, avec ses extensions SDL\_image, SDL\_ttf et SDL\_mixer. Certaines bibliothèque boost sont elles aussi utilisées : boost.filesystem et boost.regex.
+Ce jeu est codé en c++, et certaines bibliothèques SDL : tout d'abord la bibliothèque \href{http://www.libsdl.org/}{SDL} de base, avec ses extensions \href{http://www.libsdl.org/projects/SDL\_image/}{SDL\_image}, \href{http://www.libsdl.org/projects/SDL\_ttf/}{SDL\_ttf} et \href{http://www.libsdl.org/projects/SDL\_mixer/}{SDL\_mixer}. Certaines bibliothèque \href{http://www.boost.org/}{boost} sont elles aussi utilisées : \href{http://www.boost.org/doc/libs/1\_39\_0/libs/filesystem/doc/index.htm}{boost.filesystem} et \href{http://www.boost.org/doc/libs/1\_53\_0/libs/regex/doc/html/index.html}{boost.regex}.
 
-Ce cahier des charges est rédigé en \LaTeX.
+Ce cahier des charges est rédigé en \href{http://www.latex-project.org/}{\LaTeX}.
 
 \subsection{Outils.}
-L'outil utilisé pour écrire le code est Vim (éditeur et colorateur). Le code est versionné avec git (le code est hébergé sur github) et la chaine de compilation est générée par Cmake. Le jeu est dévellopé sous Linux mais devra être compatible avec d'autre plateforme comme Windows ou Mac.
+L'outil utilisé pour écrire le code est \href{http://www.vim.org/}{Vim} (éditeur et colorateur). Le code est versionné avec \href{http://git-scm.com/}{git} (le code est hébergé sur \href{https://github.com/Lycee/ISN\_snake}{github}) et la chaine de compilation est générée par \href{http://www.cmake.org/}{Cmake}. Le jeu est dévellopé sous \href{https://en.wikipedia.org/wiki/Linux}{GNU/Linux} mais devra être compatible avec d'autre plateforme comme Windows ou Mac.
 
 \section{Licence.}
-Le code est sous licence GNU GPLv3 (voir le fichier LICENCE fournit avec le code), au copyright de Luc Chabassier et Pablo Donato.
+Le code est sous licence \href{http://gplv3.fsf.org/}{GNU GPLv3} (voir le fichier LICENCE fournit avec le code), au copyright de Luc Chabassier et Pablo Donato.
 
-Les ressources graphiques (images, tileset) ont été crées par Luc Chabassier à l'aide de Gimp et de MyPaint, et sont sous licence CC-BY-SA.
+Les ressources graphiques (images, tileset) ont été crées par Luc Chabassier à l'aide de \href{http://www.gimp.org/}{Gimp} et de \href{http://mypaint.intilinux.com/}{MyPaint}, et sont sous licence \href{https://creativecommons.org/licenses/by-sa/2.0/}{CC-BY-SA}.
 
-Les sons et musiques sont tirées du jeu SuperTux2, et sont sous licence CC-BY-SA.
+Les sons et musiques sont tirées du jeu \href{http://supertux.lethargik.org/}{SuperTux2}, et sont sous licence \href{https://creativecommons.org/licenses/by-sa/2.0/}{CC-BY-SA}.
+
+La police d'écriture est une police trouvée sur internet. Elle n'est probablement pas libre et est utilisée uniquement à but expérimental. Elle sera remplacée dès que possible par une police d'écriture libre. Peut-être même par une police bitmap, permettant ainsi de supprimer SDL\_ttf des dépendances.
+
+Ce document lui-même et ses sources sont sous licence \href{https://creativecommons.org/licenses/by-sa/2.0/}{CC-BY-SA}.
 
 \end{document}
 
