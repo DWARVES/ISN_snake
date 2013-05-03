@@ -9,6 +9,7 @@ bin
 # Tests
 .R*
 tmp
+scrshoots
 
 # C
 *.o
