@@ -139,10 +139,13 @@ void GameOver::createScr(Snake* snks[max_players], int idx)
 int GameOver::computeWin(Snake* snks[max_players]) const
 {
 	int w = 0;
-	unsigned int max = snks[0]->getScore();
+	unsigned int max = 0;
 
-	for(int i = 1; i < max_players && snks[i] != NULL; ++i)
+	for(int i = 0; i < max_players; ++i)
 	{
+		if(snks[i] == NULL)
+			continue;
+
 		unsigned int scr = snks[i]->getScore();
 		if(scr > max)
 		{
