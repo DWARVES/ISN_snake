@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Ouverture de la fenêtre
+	SDL_WM_SetCaption("SankekanS", NULL);
 	SDL_Surface* scr = SDL_SetVideoMode(widthMap * sizeTile, heightMap * sizeTile + 25, 24, SDL_DOUBLEBUF);
 	if(scr == NULL)
 	{
