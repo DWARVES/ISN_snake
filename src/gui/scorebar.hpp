@@ -22,7 +22,6 @@ class ScoreBar
 
 		Snake** m_players;
 		SDL_Surface* m_parts[max_players];
-		int m_actives; // Combien sont utilisés
 
 		void genPlayerPart(int p);
 };

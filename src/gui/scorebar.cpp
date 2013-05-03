@@ -5,15 +5,12 @@
 #include <sstream>
 
 	ScoreBar::ScoreBar(const Gui* gui, Snake* p[max_players], int w, int h)
-: m_width(w), m_height(h), m_gui(gui), m_players(p), m_actives(0)
+: m_width(w), m_height(h), m_gui(gui), m_players(p)
 {
 	int pw = m_width / max_players;
 
 	for(int i = 0; i < max_players; ++i)
 	{
-		if(m_players[i] != NULL)
-			++m_actives;
-
 		m_parts[i] = NULL;
 		m_parts[i] = SDL_CreateRGBSurface(SDL_SWSURFACE, pw, m_height, 24, 0, 0, 0, 0);
 		genPlayerPart(i);
@@ -34,8 +31,9 @@ void ScoreBar::blitOn(SDL_Surface* dst, SDL_Rect pos)
 	int pw = m_width / max_players;
 	for(int i = 0; i < max_players; ++i)
 	{
-		if(i < m_actives)
+		if(m_players[i] != NULL)
 			genPlayerPart(i);
+
 		if(m_parts[i] == NULL)
 			continue;
 		SDL_BlitSurface(m_parts[i], NULL, dst, &pos);
@@ -54,7 +52,7 @@ void ScoreBar::genPlayerPart(int p)
 	SDL_Color fg;
 	fg.r = fg.g = fg.b = 0;
 
-	if(p < m_actives)
+	if(m_players[p] != NULL)
 	{
 		std::ostringstream oss;
 		oss << m_players[p]->getScore();
