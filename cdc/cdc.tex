@@ -3,7 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[frenchb]{babel}
-\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage[top=2cm, bottom=2cm, left=3cm, right=3cm]{geometry}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -70,6 +70,56 @@ Le serpent est stocké dans un structure. Il peut se déplacer dans quatre direc
 \subsection{Le terrain.}
 Le terrain est constitué d'une image de fond, uniquement décorative. Le nombre de cases, ainsi que leur taille, est fixé dans le code. Chaque case non vide contient ou un bonus, ou une information de collision quand il y a le corp du serpent.
 
+\section{L'interface.}
+\subsection{Le menu.} \label{menu}
+\begin{center}
+	\includegraphics[scale=0.4]{img/menu.png}
+\end{center}
+Le menu possède trois boutons, en dessous du titre :
+\begin{description}
+	\item[New Game] Ce bouton permet de lancer une partie en local et/ou en serveur. Il amène à l'écran décrit en~\ref{select}.
+	\item[Join Game] Ce bouton permet de rejoindre une partie créée par un New Game sur un autre ordinateur. Il lance le client réseau et amène à l'écran décrit en~\ref{connect}.
+	\item[Quit] Ce bouton termine le jeu. Il a le même effet que fermer la fenêtre.
+\end{description}
+
+\subsection{La sélection des joueurs.} \label{select}
+\begin{center}
+	\includegraphics[scale=0.4]{img/empty.png}
+\end{center}
+Ce menu possède quatre case. Chaque case correspond à un joueur. Pour ajouter un joueur, il faut laisser appuyé un bouton sur le controleur (joystick ou clavier) qu'il souhaite utiliser. Les conexions de clients apparaissent aussi ici.
+
+Ce menu avec un clavier et un joystick connecté ressemble à :
+\begin{center}
+	\includegraphics[scale=0.4]{img/full.png}
+\end{center}
+
+Ce menu possède deux boutons :
+\begin{description}
+	\item[Cancel] Ce bouton ramène au menu général, décrit en~\ref{menu}.
+	\item[Play] Ce bouton lance un jeu (voir~\ref{game}) avec les joueurs connectés.
+\end{description}
+
+\subsection{La connexion.} \label{connect}
+Cet écran n'a pas encore été implémenté, donc aucune image ne sera montrée.
+
+Cet écran contient trois éléments importants : \begin{enumerate}
+	\item Un champ de texte associé à un bouton \emph{Connect} qui permet d'entrer l'adresse à laquelle se connecter puis de lancer la connexion.
+	\item Un cadre permettant de choisir quel contrôleur (joystick, clavier) on veut utiliser. Ce contrôleur est identique aux quatre que l'on trouve en~\ref{select}.
+	\item Un bouton cancel qui permet de retourné au menu principal décrit en~\ref{menu}.
+\end{enumerate}
+
+\subsection{Le jeu.} \label{game}
+\begin{center}
+	\includegraphics[scale=0.4]{img/game.png}
+\end{center}
+On remarque sur cette capture d'écran deux serpents, donc deux joueurs connectés, ainsi que divers bonus. En bas de l'écran se trouve la barre qui indique les score des joueurs.
+
+Lorsque le jeu est terminé, on arrive sur cet écran :
+\begin{center}
+	\includegraphics[scale=0.4]{img/game_over.png}
+\end{center}
+Cet écran affiche le score de chaque joueur ainsi que le gagnant. Le bouton \emph{End} permet de retourner à l'écran de sélection des joueurs (partie~\ref{select}) avec les joueurs connectés comme avant la partie, permettant de relancer une partie très rapidement.
+
 \section{Développement.}
 \subsection{Bibliothèques utilisées.}
 Ce jeu est codé en c++, et certaines bibliothèques SDL : tout d'abord la bibliothèque SDL de base, avec ses extensions SDL\_image, SDL\_ttf et SDL\_mixer. Certaines bibliothèque boost sont elles aussi utilisées : boost.filesystem et boost.regex.
@@ -82,7 +132,7 @@ L'outil utilisé pour écrire le code est Vim (éditeur et colorateur). Le code 
 \section{Licence.}
 Le code est sous licence GNU GPLv3 (voir le fichier LICENCE fournit avec le code), au copyright de Luc Chabassier et Pablo Donato.
 
-Les ressources graphiques (images, tileset) ont été crées par Luc Chabassier, et sont sous licence CC-BY-SA.
+Les ressources graphiques (images, tileset) ont été crées par Luc Chabassier à l'aide de Gimp et de MyPaint, et sont sous licence CC-BY-SA.
 
 Les sons et musiques sont tirées du jeu SuperTux2, et sont sous licence CC-BY-SA.
 
