@@ -12,7 +12,7 @@ PlayerSelect::PlayerSelect(Gui* g, SDL_Rect r, int id)
 	m_player(NULL), m_mustc(NULL), m_wait(NULL), m_cancel(NULL), m_ltime(0)
 {
 	std::ostringstream txt;
-	txt << "Player " << id;
+	txt << "Player " << id + 1;
 	m_player = TTF_RenderText_Blended(m_gui->getFont(), txt.str().c_str(), m_gui->getPlayerColor(id));
 
 	m_mustc = TTF_RenderText_Blended(m_gui->getFont(),
