@@ -56,16 +56,16 @@ bool KeyboardControler::processEvent(const SDL_Event& ev)
 	switch(ev.key.keysym.sym)
 	{
 		case SDLK_UP:
-			m_mv = &Snake::moveUp;
+			setMove(&Snake::moveUp);
 			break;
 		case SDLK_DOWN:
-			m_mv = &Snake::moveDown;
+			setMove(&Snake::moveDown);
 			break;
 		case SDLK_RIGHT:
-			m_mv = &Snake::moveRight;
+			setMove(&Snake::moveRight);
 			break;
 		case SDLK_LEFT:
-			m_mv = &Snake::moveLeft;
+			setMove(&Snake::moveLeft);
 			break;
 		default:
 			return false;

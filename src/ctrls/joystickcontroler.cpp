@@ -86,16 +86,16 @@ bool JoystickControler::processEvent(const SDL_Event& ev)
 			if(ev.jaxis.axis % 2 == 1) // Impair = vertical
 			{
 				if(ev.jaxis.value > SENSIBILITY)
-					m_mv = &Snake::moveDown;
+					setMove(&Snake::moveDown);
 				else if(ev.jaxis.value < -SENSIBILITY)
-					m_mv = &Snake::moveUp;
+					setMove(&Snake::moveUp);
 			}
 			else
 			{
 				if(ev.jaxis.value > SENSIBILITY)
-					m_mv = &Snake::moveRight;
+					setMove(&Snake::moveRight);
 				else if(ev.jaxis.value < -SENSIBILITY)
-					m_mv = &Snake::moveLeft;
+					setMove(&Snake::moveLeft);
 			}
 			break;
 		case SDL_JOYHATMOTION:
@@ -105,16 +105,16 @@ bool JoystickControler::processEvent(const SDL_Event& ev)
 			switch(ev.jhat.value)
 			{
 				case SDL_HAT_UP:
-					m_mv = &Snake::moveUp;
+					setMove(&Snake::moveUp);
 					break;
 				case SDL_HAT_DOWN:
-					m_mv = &Snake::moveDown;
+					setMove(&Snake::moveDown);
 					break;
 				case SDL_HAT_LEFT:
-					m_mv = &Snake::moveLeft;
+					setMove(&Snake::moveLeft);
 					break;
 				case SDL_HAT_RIGHT:
-					m_mv = &Snake::moveRight;
+					setMove(&Snake::moveRight);
 					break;
 				default:
 					return false;
