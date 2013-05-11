@@ -29,12 +29,14 @@ class Controler
 		SDL_Surface* picture() const;
 
 	protected:
+		void loadPict(std::string name);
+		typedef void (Snake::*Move)();
+		void setMove(Move mv);
+
+	private:
 		Snake* m_snk;
 		SDL_Surface* m_img;
-
-		typedef void (Snake::*Move)();
 		Move m_mv;
-		void loadPict(std::string name);
 };
 
 #endif

@@ -57,3 +57,14 @@ void Controler::loadPict(std::string name)
 	m_img = IMG_Load(path.str().c_str());
 }
 
+void Controler::setMove(Move mv)
+{
+	if((m_mv == &Snake::moveRight && mv == &Snake::moveLeft)
+			|| (m_mv == &Snake::moveLeft && mv == &Snake::moveRight)
+			|| (m_mv == &Snake::moveUp && mv == &Snake::moveDown)
+			|| (m_mv == &Snake::moveDown && mv == &Snake::moveUp))
+		return;
+	else
+		m_mv = mv;
+}
+
