@@ -50,14 +50,10 @@ TTF_Font* Gui::getFont() const
 
 SDL_Color Gui::getPlayerColor(int p) const
 {
-	if(p < max_players)
+	if(p < max_players && p >= 0)
 		return m_colors[p];
 	else
-	{
-		SDL_Color c;
-		c.r = c.g = c.b = 0;
-		return c;
-	}
+		return fgColor();
 }
 
 SDL_Color Gui::fgColor() const
