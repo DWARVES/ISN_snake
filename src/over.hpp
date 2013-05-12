@@ -25,8 +25,15 @@ class GameOver
 		SDL_Surface* m_scores[max_players]; // "Player X : scr"
 		Button* m_back;
 
-		void createScr(Snake* snks[max_players], int idx);
-		int computeWin(Snake* snks[max_players]) const;
+		struct SnkRank
+		{
+			Snake* snk;
+			int idx;
+			unsigned int scr;
+		};
+
+		void createScr(SnkRank snks[max_players], int idx);
+		int computeWin(Snake* snks[max_players], SnkRank rank[max_players]) const;
 };
 
 #endif

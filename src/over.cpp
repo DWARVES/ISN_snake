@@ -10,9 +10,10 @@
 GameOver::GameOver(Gui* g, SDL_Surface* s, Snake* snks[max_players])
 	: m_gui(g), m_scr(s), m_txt(NULL), m_back(NULL)
 {
-	int win = computeWin(snks);
+	SnkRank rank[max_players];
+	int win = computeWin(snks, rank);
 	for(int i = 0; i < max_players; ++i)
-		createScr(snks, i);
+		createScr(rank, i);
 
 	std::ostringstream oss;
 	if(win >= 0)
@@ -21,7 +22,7 @@ GameOver::GameOver(Gui* g, SDL_Surface* s, Snake* snks[max_players])
 		oss << "Equality !";
 	m_txt = TTF_RenderText_Blended(m_gui->getFont(),
 			oss.str().c_str(),
-			m_gui->fgColor());
+			m_gui->getPlayerColor(win));
 
 	m_back = new Button("End", m_gui);
 	SDL_Rect pos;
@@ -123,37 +124,61 @@ bool GameOver::run()
 	return true;
 }
 
-void GameOver::createScr(Snake* snks[max_players], int idx)
+void GameOver::createScr(SnkRank snks[max_players], int idx)
 {
 	std::ostringstream oss;
-	if(snks[idx] != NULL)
-		oss << "Player " << idx + 1 << " : " << snks[idx]->getScore();
+	if(snks[idx].snk != NULL)
+		oss << idx + 1 << ". Player " << snks[idx].idx + 1 << " : " << snks[idx].snk->getScore();
 	else
 		oss << "No player";
 
 	m_scores[idx] = TTF_RenderText_Blended(m_gui->getFont(),
 			oss.str().c_str(),
-			m_gui->getPlayerColor(idx));
+			m_gui->getPlayerColor(snks[idx].idx));
 }
 
-int GameOver::computeWin(Snake* snks[max_players]) const
+int GameOver::computeWin(Snake* snks[max_players], SnkRank rank[max_players]) const
 {
 	int w = 0;
 	unsigned int max = 0;
+	for(int i = 0; i < max_players; ++i)
+	{
+		rank[i].scr = 0;
+		rank[i].idx = -1;
+		rank[i].snk = NULL;
+	}
 
 	for(int i = 0; i < max_players; ++i)
 	{
 		if(snks[i] == NULL)
 			continue;
 
+		// Rank
 		unsigned int scr = snks[i]->getScore();
+
+		int j;
+		for(j = max_players - 1; j > 0  && rank[j - 1].scr <= scr; --j)
+		{
+			rank[j].scr = rank[j - 1].scr;
+			rank[j].idx = rank[j - 1].idx;
+		}
+		rank[j].scr = snks[i]->getScore();
+		rank[j].idx = i;
+		
+		// Winner
 		if(scr > max)
 		{
-			max = snks[i]->getScore();
+			max = scr;
 			w = i;
 		}
 		else if(scr == max)
 			w = -1;
+	}
+
+	for(int i = 0; i < max_players; ++i)
+	{
+		if(rank[i].idx >= 0)
+			rank[i].snk = snks[rank[i].idx];
 	}
 
 	return w;
