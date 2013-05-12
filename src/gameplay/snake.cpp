@@ -395,11 +395,6 @@ bool Snake::died(int still)
 	return ret;
 }
 
-bool Snake::isDead() const
-{
-	return m_dead;
-}
-
 Snake::Dir Snake::getDir(const Case* c1, const Case* c2) const
 {
 	if(c1 == NULL || c2 == NULL)
