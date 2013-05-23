@@ -36,6 +36,7 @@ class Controler
 	private:
 		Snake* m_snk;
 		SDL_Surface* m_img;
+		Move m_lmv;
 		Move m_mv;
 };
 

@@ -6,7 +6,7 @@
 #include <SDL_image.h>
 
 Controler::Controler()
-	: m_snk(NULL), m_img(NULL), m_mv(&Snake::moveRight)
+	: m_snk(NULL), m_img(NULL), m_lmv(&Snake::moveRight), m_mv(&Snake::moveRight)
 {}
 
 Controler::~Controler()
@@ -43,6 +43,7 @@ void Controler::clearMove()
 void Controler::move()
 {
 	(m_snk->*m_mv)();
+	m_lmv = m_mv;
 }
 
 SDL_Surface* Controler::picture() const
@@ -59,10 +60,10 @@ void Controler::loadPict(std::string name)
 
 void Controler::setMove(Move mv)
 {
-	if((m_mv == &Snake::moveRight && mv == &Snake::moveLeft)
-			|| (m_mv == &Snake::moveLeft && mv == &Snake::moveRight)
-			|| (m_mv == &Snake::moveUp && mv == &Snake::moveDown)
-			|| (m_mv == &Snake::moveDown && mv == &Snake::moveUp))
+	if((m_lmv == &Snake::moveRight && mv == &Snake::moveLeft)
+			|| (m_lmv == &Snake::moveLeft && mv == &Snake::moveRight)
+			|| (m_lmv == &Snake::moveUp && mv == &Snake::moveDown)
+			|| (m_lmv == &Snake::moveDown && mv == &Snake::moveUp))
 		return;
 	else
 		m_mv = mv;
