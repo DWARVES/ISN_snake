@@ -46,7 +46,7 @@ Menu::~Menu()
 	if(m_bjoin != NULL)
 		delete m_bjoin;
 	if(m_title != NULL)
-		delete m_title;
+		SDL_FreeSurface(m_title);
 }
 
 bool Menu::run()
