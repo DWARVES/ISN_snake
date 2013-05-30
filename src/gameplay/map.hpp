@@ -18,11 +18,12 @@ class Map
 		enum ColType{BONUS, // Bonus
 			WALL, // Corp d'un serpent
 			EMPTY};
-		ColType testCase(unsigned int x, unsigned int y) const;
 
+		ColType testCase(unsigned int x, unsigned int y, int id) const;
 		Bonus* getBonusAt(unsigned int x, unsigned int y); // Supprime le bonus, le retour ne doit pas être libéré
 		void addBonus(); // Ajoute aléatoirement un bonus
 
+		void setStatus(unsigned int x, unsigned int y, int id);
 		void addWall(unsigned int x, unsigned int y);
 		void deleteWall(unsigned int x, unsigned int y);
 		
@@ -47,9 +48,20 @@ class Map
 		void addBonus(unsigned int x, unsigned int y, unsigned int bon);
 
 		// Les tiles
+		enum Status{
+			SNK0,
+			SNK1,
+			SNK2,
+			SNK3,
+			NOTHING
+		};
+		std::list<std::pair<unsigned int,unsigned int>> m_status;
+		void deleteStatus(unsigned int x, unsigned int y);
+
 		struct Tile
 		{
 			ColType col;
+			Status state;
 			bon_it bon; // Valide si col == BONUS
 		};
 		Tile m_map[widthMap][heightMap];

@@ -13,7 +13,7 @@
 #include "music.hpp"
 
 	Snake::Snake(Map* map, const SDL_Rect& begin, int id)
-: m_map(map), m_toadd(0), m_score(0), m_dead(false), m_lastd(m_dead), m_loaded(true),
+: m_id(id), m_map(map), m_toadd(0), m_score(0), m_dead(false), m_lastd(m_dead), m_loaded(true),
 	m_ltime(SDL_GetTicks()), m_step(0), m_first(NULL), m_last(NULL)
 {
 	// Création des premières cases
@@ -140,7 +140,7 @@ void Snake::moveRight()
 
 bool Snake::dead()
 {
-	Map::ColType col = m_map->testCase(m_first->x, m_first->y);
+	Map::ColType col = m_map->testCase(m_first->x, m_first->y, m_id);
 	if(col == Map::WALL)
 	{
 		music->playSound(Music::DEATH);
@@ -360,7 +360,10 @@ void Snake::checkDeath()
 	if(!dead())
 		return;
 	m_dead = true;
+}
 
+void Snake::applyDeath()
+{
 	Case* actual = m_first;
 	while(actual != NULL)
 	{
@@ -380,13 +383,12 @@ void Snake::moveFirst(signed int x, signed int y)
 
 	m_first->x = pos.x;
 	m_first->y = pos.y;
-	checkDeath();
-	if(!m_dead)
-		m_map->addWall(m_first->x, m_first->y);
+	m_map->setStatus(m_first->x, m_first->y, m_id);
 }
 
 bool Snake::died(int still)
 {
+	checkDeath();
 	bool ret = (m_dead != m_lastd); // seul cas possible pour true : m_dead = true et m_lastd = false
 	m_lastd = m_dead;
 

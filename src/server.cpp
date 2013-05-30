@@ -123,16 +123,34 @@ bool Server::run()
 				if(m_conts[i] == NULL)
 					continue;
 				m_conts[i]->move();
-
-				if(m_snks[i]->died(m_alive))
-				{
-					--m_alive;
-					if(m_alive == 0 && m_onlyone)
-						continuer = false;
-					else if(m_alive == 1 && !m_onlyone)
-						continuer = false;
-				}
 			}
+
+			int nalive = m_alive;
+			bool dieds[max_players];
+			for(int i = 0; i < max_players; ++i)
+			{
+				if(m_conts[i] == NULL)
+					continue;
+				else if(m_snks[i]->died(m_alive))
+				{
+					--nalive;
+					dieds[i] = true;
+				}
+				else
+					dieds[i] = false;
+			}
+
+			m_alive = nalive;
+			if(m_alive == 0 ||
+					(m_alive == 1 && !m_onlyone))
+				continuer = false;
+
+			for(int i = 0; i < max_players; ++i)
+			{
+				if(m_conts[i] != NULL && dieds[i])
+					m_snks[i]->applyDeath();
+			}
+
 			sltime = SDL_GetTicks();
 		}
 	}

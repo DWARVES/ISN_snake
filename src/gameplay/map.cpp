@@ -16,15 +16,35 @@ Map::Map(Gui* g)
 	for(unsigned int x = 0; x < widthMap; ++x)
 	{
 		for(unsigned int y = 0; y < heightMap; ++y)
+		{
 			m_map[x][y].col = EMPTY;
+			m_map[x][y].state = NOTHING;
+		}
 	}
 
 	m_bg = g->background();
 }
 
-Map::ColType Map::testCase(unsigned int x, unsigned int y) const
+Map::ColType Map::testCase(unsigned int x, unsigned int y, int id) const
 {
-	return m_map[x][y].col;
+	if(m_map[x][y].col == WALL && m_map[x][y].state != NOTHING)
+	{
+		Status s;
+		switch(id)
+		{
+			case 0: s = SNK0; break;
+			case 1: s = SNK1; break;
+			case 2: s = SNK2; break;
+			case 3: s = SNK3; break;
+			default: s = NOTHING; break;
+		}
+		if(m_map[x][y].state == s)
+			return EMPTY;
+		else
+			return WALL;
+	}
+	else
+		return m_map[x][y].col;
 }
 
 Bonus* Map::getBonusAt(unsigned int x, unsigned int y)
@@ -39,7 +59,7 @@ void Map::addBonus()
 	// Position du bonus
 	unsigned int x = rand() % widthMap;
 	unsigned int y = rand() % heightMap;
-	while(testCase(x,y) != EMPTY)
+	while(m_map[x][y].col != EMPTY)
 	{
 		x = rand() % widthMap;
 		y = rand() % heightMap;
@@ -62,11 +82,13 @@ void Map::addBonus()
 void Map::addWall(unsigned int x, unsigned int y)
 {
 	m_map[x][y].col = WALL;
+	deleteStatus(x, y);
 }
 
 void Map::deleteWall(unsigned int x, unsigned int y)
 {
 	m_map[x][y].col = EMPTY;
+	deleteStatus(x, y);
 }
 
 void Map::blitOn(SDL_Surface* dst, SDL_Rect* pos)
@@ -101,6 +123,13 @@ void Map::blitOn(SDL_Surface* dst, SDL_Rect* pos)
 		}
 	}
 
+	for(auto it = m_status.begin(); it != m_status.end();)
+	{
+		auto toErase = it;
+		++it;
+		addWall(toErase->first, toErase->second);
+	}
+
 	m_ltime = SDL_GetTicks();
 }
 
@@ -121,4 +150,34 @@ void Map::addBonus(unsigned int x, unsigned int y, unsigned int bon)
 	m_map[x][y].col = BONUS;
 }
 
+void Map::setStatus(unsigned int x, unsigned int y, int id)
+{
+	if(m_map[x][y].col == WALL)
+		return;
+	else if(m_map[x][y].state != NOTHING)
+	{
+		addWall(x, y);
+		return;
+	}
+
+	Status s;
+	switch(id)
+	{
+		case 0: s = SNK0; break;
+		case 1: s = SNK1; break;
+		case 2: s = SNK2; break;
+		case 3: s = SNK3; break;
+		default: s = NOTHING; break;
+	}
+	m_map[x][y].state = s;
+	m_status.insert(m_status.end(), std::pair<unsigned int,unsigned int>(x,y));
+}
+
+void Map::deleteStatus(unsigned int x, unsigned int y)
+{
+	m_map[x][y].state = NOTHING;
+	auto it = std::find(m_status.begin(), m_status.end(), std::pair<unsigned int, unsigned int>(x,y));
+	if(it != m_status.end())
+		m_status.erase(it);
+}
 
