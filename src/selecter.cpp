@@ -108,8 +108,15 @@ bool Selecter::run()
 						music->playSound(Music::CANCEL);
 
 						Controler* conts[max_players];
+						bool end = true;
 						for(int i = 0; i < max_players; ++i)
+						{
 							conts[i] = m_sels[i]->getControler();
+							if(conts[i] != NULL)
+								end = false;
+						}
+						if(end)
+							break;
 
 						Server srv(m_gui, m_scr, conts);
 						if(!srv.run())
