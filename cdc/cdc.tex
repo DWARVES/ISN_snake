@@ -20,21 +20,21 @@
 \tableofcontents
 
 \section{Introduction.}
-Ce programme a été conçu dans le cadre d'un projet d'ISN en 2013. L'objectif était de créer un snake à plusieurs joueurs, permettent à certains serpents d'en coincer.
+Ce programme a été conçu dans le cadre d'un projet d'ISN en 2013. L'objectif était de créer un snake à plusieurs joueurs, faisant lutter plusieurs serpents.
 
 Le jeu permet jusqu'à quatre joueurs de faire un snake sur une grille constituée de case de 20 pixels sur 20 pixels. Chaque joueur contrôle son serpent à l'aide du clavier (seule les touches fléchées sont utilisable) ou d'une manette (les joysticks et croix directionnelles sont utilisables).
 
 \section{Règles du jeu.}
 Le terrain est constitué de cases qui peuvent être vide, contenir un bonus ou contenir un serpent. Chaque joueur peut déplacer son serpent dans les quatre directions, mais il ne peut pas stopper son serpent. Quant un serpent mange un bonus, différentes modifications lui sont appliquées (voir~\ref{bonus}). Il va notamment gagner ou perdre des points et sa taille va varier.
 
-Un serpent meurt quand il heurte un serpent, que ce soit lui-même ou un autre. Lors de sa mort, un malus est appliqué à ses points : si il y a trois serpents vivant lors de sa mort (lui compris), son score est divisé par trois. Si deux serpents meurent en même temps, ils subiront le même malus. La mort est donc extrêmement punitive et un serpent peux donc essayer d'enfermer les autres serpents dans sa queue afin de les faire mourir, imitant un peux le gameplay de jeux comme \emph{armagetron}.
+Un serpent meurt quand il heurte un serpent, que ce soit lui-même ou un autre. Lors de sa mort, un malus est appliqué à ses points : si il y a trois serpents vivant lors de sa mort (lui compris), son score est divisé par trois. Si deux serpents meurent en même temps, ils subiront le même malus. La mort est donc extrêmement punitive et un serpent peux donc essayer d'enfermer les autres serpents dans sa queue afin de les faire mourir, imitant un peux le gameplay de jeux comme \href{http://armagetronad.org/}{armagetron}.
 
 Le jeux se termine lorsqu'il n'y a plus qu'un seul serpent vivant s'il y en avait plusieurs au début ou lors de la mort du seul serpent joueur.
 
 \subsection{Les bonus.} \label{bonus}
 % TODO ajouter les images.
 Le jeux compte 5 bonus par défaut :\begin{description}
-	\item[base] \includegraphics{img/base.png} ce bonus à plus grosse fréquence d'apparition. Il rapporte 5 points et augmente la longueur du serpent de 3 cases. Il disparait au bout de 10 secondes.
+	\item[base] \includegraphics{img/base.png} ce bonus a la plus grande fréquence d'apparition. Il rapporte 5 points et augmente la longueur du serpent de 3 cases. Il disparait au bout de 10 secondes.
 	\item[big]  \includegraphics{img/big.png}ce bonus est assez rare, mais surtout il ne reste affiché que 1.5 seconde, ce qui le rend très difficile à attraper. Il rapporte 50 points et augmente la longueur du serpent de 5.
 	\item[pic]  \includegraphics{img/pic.png}ce \emph{bonus} est en fait un malus : il fait perdre 25 points et réduit la taille de 2 cases. Il a une fréquence d'apparition presque aussi élevée que le \emph{base} mais ne reste affiché que 1.5 seconde.
 	\item[snake]  \includegraphics{img/snake.png}ce bonus a une fréquence d'apparition plus faible. Il augmente beaucoup la longueur du serpent; c'est à dire de 10, mais ne rapporte que 2 points. Il disparait au bout de 2 secondes.
@@ -67,7 +67,7 @@ L'image du fond est la même dans chaque menu et dans le jeu. C'est une image de
 \begin{center}
 	\includegraphics[scale=0.4]{img/empty.png}
 \end{center}
-Ce menu possède quatre cases. Chaque case correspond à un joueur. Pour ajouter un joueur, il faut laisser appuyé un bouton sur le controleur (joystick ou clavier) qu'il souhaite utiliser jusqu'à ce qu'une jauge ait finit de se remplir. Les conexions de clients apparaissent aussi ici. Cette interface est inspirée de celle du jeu indépendant \emph{Jamestown}.
+Ce menu possède quatre cases. Chaque case correspond à un joueur. Pour ajouter un joueur, il faut laisser appuyé un bouton sur le controleur (joystick ou clavier) qu'il souhaite utiliser jusqu'à ce qu'une jauge ait finit de se remplir. Les conexions de clients apparaissent aussi ici. Cette interface est inspirée de celle du jeu indépendant \href{http://finalformgames.com/jamestown/}{Jamestown}.
 
 Ce menu avec un clavier et un joystick connecté ressemble à :
 \begin{center}
@@ -113,7 +113,7 @@ Les ressources graphiques (images, tileset) ont été crées par Luc Chabassier 
 
 Les sons et musiques sont tirées du jeu \href{http://supertux.lethargik.org/}{SuperTux2}, et sont sous licence \href{https://creativecommons.org/licenses/by-sa/2.0/}{CC-BY-SA}.
 
-La police d'écritue utilisée est la \href{http://openfontlibrary.org/en/font/lenka-stabilo}{Lenka Stabilo}, obéissant à la licence libre \href{http://www-old.gnome.org/fonts/}{Bitstream Vera License}.
+La police d'écritue utilisée est \href{http://openfontlibrary.org/en/font/lenka-stabilo}{Lenka Stabilo}, obéissant à la licence libre \href{http://www-old.gnome.org/fonts/}{Bitstream Vera License}.
 
 Ce document lui-même et ses sources sont sous licence \href{https://creativecommons.org/licenses/by-sa/2.0/}{CC-BY-SA}.
 
