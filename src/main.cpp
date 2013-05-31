@@ -12,6 +12,8 @@ namespace fs = boost::filesystem;
 
 int main(int argc, char *argv[])
 {
+	if(argc && argv) {}
+
 	// Chargement de la SDL
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
