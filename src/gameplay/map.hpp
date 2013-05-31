@@ -68,7 +68,5 @@ class Map
 
 };
 
-extern Map* map;
-
 #endif
 
