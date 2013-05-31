@@ -20,58 +20,36 @@
 \tableofcontents
 
 \section{Introduction.}
-Ce programme doit être créé dans le cadre d'un projet d'ISN en 2013. L'idée initiale est de faire un snake en réseau (deux joueurs).
+Ce programme a été conçu dans le cadre d'un projet d'ISN en 2013. L'objectif était de créer un snake à plusieurs joueurs, permettent à certains serpents d'en coincer.
 
-\section{Fonctionnalités.}
-Contrairement à l'idée initiale, le jeu est finalement capable de gérer jusqu'à quatre joueurs en local, en connectant des joysticks. L'idée du réseau est conservée : un des joueurs sera le serveurs, et donc effectuera la majorité des calculs, et des joueurs devront pouvoir se connecter à lui.
+Le jeu permet jusqu'à quatre joueurs de faire un snake sur une grille constituée de case de 20 pixels sur 20 pixels. Chaque joueur contrôle son serpent à l'aide du clavier (seule les touches fléchées sont utilisable) ou d'une manette (les joysticks et croix directionnelles sont utilisables).
 
-Le jeu s'organise sur une grille virtuelle composée de case de 20 pixels sur 20 pixels.
+\section{Règles du jeu.}
+Le terrain est constitué de cases qui peuvent être vide, contenir un bonus ou contenir un serpent. Chaque joueur peut déplacer son serpent dans les quatre directions, mais il ne peut pas stopper son serpent. Quant un serpent mange un bonus, différentes modifications lui sont appliquées (voir~\ref{bonus}). Il va notamment gagner ou perdre des points et sa taille va varier.
 
-\subsection{Règles du jeu.}
-Le programme est un snake classique, c'est à dire que le terrain ne contient que les serpents et les bonus. Quand un serpent sort d'un côté, il entre de l'autre. Les bonus apportent un certain nombre de points chacun. Le jeu se termine quand un des serpents meurt, c'est à dire qu'il se cogne contre un autre des serpents ou contre lui-même. Le gagnant est celui qui a le plus de points. Afin de dévaloriser la mort, chaque serpent a un malus en fonction du nombre de serpents restants quand il meurt.
+Un serpent meurt quand il heurte un serpent, que ce soit lui-même ou un autre. Lors de sa mort, un malus est appliqué à ses points : si il y a trois serpents vivant lors de sa mort (lui compris), son score est divisé par trois. Si deux serpents meurent en même temps, ils subiront le même malus. La mort est donc extrêmement punitive et un serpent peux donc essayer d'enfermer les autres serpents dans sa queue afin de les faire mourir, imitant un peux le gameplay de jeux comme \emph{armagetron}.
 
-S'il y a plusieurs joueurs, le jeu se termine quand n'y n'en reste plus qu'un vivant. S'il n'y a qu'un seul joueur, le jeu se termine à sa mort.
+Le jeux se termine lorsqu'il n'y a plus qu'un seul serpent vivant s'il y en avait plusieurs au début ou lors de la mort du seul serpent joueur.
 
-\subsection{TODO liste.}
-\begin{description}
-	\item[Terminé :] \begin{itemize}
-			\item Chargement et affichage du serpent.
-			\item Chargement des bonus.
-			\item Collisions.
-			\item Écran de game over.
-			\item Menu principal.
-			\item Gestion des joysticks.
-			\item Écran de sélection des joueurs.
-			\item Musique et sons.
-		\end{itemize}
-	\item[À faire :] \begin{itemize}
-			\item Le réseau.
-			\item Écran de connexion.
-		\end{itemize}
+\subsection{Les bonus.} \label{bonus}
+% TODO ajouter les images.
+Le jeux compte 5 bonus par défaut :\begin{description}
+	\item[base] ce bonus à plus grosse fréquence d'apparition. Il rapporte 5 points et augmente la longueur du serpent de 3 cases. Il disparait au bout de 10 secondes.
+	\item[big] ce bonus est assez rare, mais surtout il ne reste affiché que 1.5 seconde, ce qui le rend très difficile à attraper. Il rapporte 50 points et augmente la longueur du serpent de 5.
+	\item[pic] ce \emph{bonus} est en fait un malus : il fait perdre 25 points et réduit la taille de 2 cases. Il a une fréquence d'apparition presque aussi élevée que le \emph{base} mais ne reste affiché que 1.5 seconde.
+	\item[snake] ce bonus a une fréquence d'apparition plus faible. Il augmente beaucoup la longueur du serpent; c'est à dire de 10, mais ne rapporte que 2 points. Il disparait au bout de 2 secondes.
+	\item[cut] ce bonus ne rapporte pas de points, mais il réduit la taille du serpent de 5. Il a la même fréquence d'apparition que le bonus \emph{snake}. Il reste par contre affiché 10 secondes.
 \end{description}
 
-\subsection{Les bonus.}
-Un bonus possède plusieurs attributs. Tout d'abord, le nombre de points qu'il rapporte et l'influence sur la taille : un bonus peut donc faire perdre des points et/ou raccourcir le serpent. Un bonus possède aussi une durée durant laquelle il reste affiché et une probabilité d'apparition. Enfin, chaque bonus possède une image propre.
+Chaque bonus est décrit dans un fichier placé dans un dossier spécifique, dont le contenu est scanné à chaque lancement de jeu. Il est donc très simple de modifier, ajouter ou supprimer des bonus.
 
-Les bonus sont stocké dans un ficher config (clé=valeur) de la forme :
-\begin{verbatim}
-pts = 10
-length = 3 # influence for the snake length
-time = 10000 # in milliseconds
-picture = pictures/banana.png
-fact = 20 # Higher is fact, higher is the apparition frequency
-\end{verbatim}
+\subsection{Le serpent.} \label{snake}
+Il existe quatre serpents, chacun associé à un joueur. Chaque serpent a une apparence et une couleur différente. Le rouge est la couleur du premier joueur, le vert le second joueur, le bleu le troisième et le jaune le quatrième.
 
-Tous les fichiers des bonus sont dans un dossier dont le contenu est scanné au début du programme.
-
-\subsection{Le serpent.}
-Le serpent est stocké dans un structure. Il peut se déplacer dans quatre directions. Un serpent est affiché avec une succession d'images, chargée depuis un tileset. Il existe quatre image pour le serpent : la tête, un corp droit, un corp courbe et la queue. Chacune de ces images existe en deux exemplaire, qui servent à créer une animation lors du déplacement du serpent.
-
-\subsection{Le terrain.}
-Le terrain est constitué d'une image de fond, uniquement décorative. Le nombre de cases, ainsi que leur taille, est fixé dans le code. Chaque case non vide contient ou un bonus, ou une information de collision quand il y a le corp du serpent.
+Chaque serpent est chargé depuis une seule image sous la forme d'un tileset. Il suffit donc de changer ces images pour modifier les apparences des serpents pour personnaliser un peu le jeu.
 
 \section{L'interface.}
-Le jeu étant encore en développement, les interfaces présentées et/ou décrites sont susceptibles d'être différentes de celles de la release du programme.
+Les images des interfaces sont susceptibles de changer d'ici à la présentation, mais les changements devraient être mineurs.
 
 \subsection{Le menu.} \label{menu}
 \begin{center}
@@ -79,16 +57,17 @@ Le jeu étant encore en développement, les interfaces présentées et/ou décri
 \end{center}
 Le menu possède trois boutons, en dessous du titre :
 \begin{description}
-	\item[New Game] Ce bouton permet de lancer une partie en local et/ou en serveur. Il amène à l'écran décrit en~\ref{select}.
-	\item[Join Game] Ce bouton permet de rejoindre une partie créée par un New Game sur un autre ordinateur. Il lance le client réseau et amène à l'écran décrit en~\ref{connect}.
+	\item[New Game] Ce bouton permet de lancer une partie. Il amène à l'écran décrit en~\ref{select}.
 	\item[Quit] Ce bouton termine le jeu. Il a le même effet que fermer la fenêtre.
 \end{description}
+
+L'image du fond est la même dans chaque menu et dans le jeu. C'est une image de taille 800*625 qu'il est facile de changer. Le titre est aussi une image qui peut être changée dans le dossier des ressources.
 
 \subsection{La sélection des joueurs.} \label{select}
 \begin{center}
 	\includegraphics[scale=0.4]{img/empty.png}
 \end{center}
-Ce menu possède quatre case. Chaque case correspond à un joueur. Pour ajouter un joueur, il faut laisser appuyé un bouton sur le controleur (joystick ou clavier) qu'il souhaite utiliser. Les conexions de clients apparaissent aussi ici.
+Ce menu possède quatre case. Chaque case correspond à un joueur. Pour ajouter un joueur, il faut laisser appuyé un bouton sur le controleur (joystick ou clavier) qu'il souhaite utiliser jusqu'à ce qu'une jauge ait finit de se remplir. Les conexions de clients apparaissent aussi ici. Cette interface est inspirée de celle du jeu indépendant \emph{Jamestown}.
 
 Ce menu avec un clavier et un joystick connecté ressemble à :
 \begin{center}
@@ -101,29 +80,17 @@ Ce menu possède deux boutons :
 	\item[Play] Ce bouton lance un jeu (voir~\ref{game}) avec les joueurs connectés.
 \end{description}
 
-\subsection{La connexion.} \label{connect}
-Cet écran n'a pas encore été implémenté, l'image est un simple dessin réalisé avec \href{http://inkscape.org/}{inkscape} pour aider à se le représenter :
-\begin{center}
-	\includegraphics[scale=0.4]{img/connect.png}
-\end{center}
-
-Cet écran contient trois groupes d'éléments importants : \begin{enumerate}
-	\item En noir : un champ de texte associé à un bouton \emph{Connect} qui permet d'entrer l'adresse à laquelle se connecter puis de lancer la connexion.
-	\item En bleu : un cadre permettant de choisir quel contrôleur (joystick, clavier) on veut utiliser. Ce contrôleur est identique aux quatre que l'on trouve en~\ref{select}.
-	\item En vert : un bouton cancel qui permet de retourné au menu principal décrit en~\ref{menu}.
-\end{enumerate}
-
 \subsection{Le jeu.} \label{game}
 \begin{center}
 	\includegraphics[scale=0.4]{img/game.png}
 \end{center}
-On remarque sur cette capture d'écran deux serpents, donc deux joueurs connectés, ainsi que divers bonus. En bas de l'écran se trouve la barre qui indique les score des joueurs.
+On remarque sur cette capture d'écran deux serpents, donc deux joueurs connectés, ainsi que divers bonus. En bas de l'écran se trouve la barre qui indique le score des joueurs.
 
-Lorsque le jeu est terminé, on arrive sur cet écran :
+Lorsque le jeu est terminé, il se stoppe pendant deux secondes, permettant de comprendre ce qui a causé la mort du dernier serpent, puis on arrive sur cet écran :
 \begin{center}
 	\includegraphics[scale=0.4]{img/game_over.png}
 \end{center}
-Cet écran affiche le score de chaque joueur ainsi que le gagnant. Le bouton \emph{End} permet de retourner à l'écran de sélection des joueurs (partie~\ref{select}) avec les joueurs connectés comme avant la partie, permettant de relancer une partie très rapidement.
+Cet écran affiche le score de chaque joueur par ordre décroissant ainsi que le gagnant. Le bouton \emph{End} permet de retourner à l'écran de sélection des joueurs (partie~\ref{select}) avec les joueurs connectés comme avant la partie, permettant de relancer une partie très rapidement.
 
 \section{Développement.}
 \subsection{Bibliothèques utilisées.}
@@ -134,10 +101,15 @@ Ce cahier des charges est rédigé en \href{http://www.latex-project.org/}{\LaTe
 \subsection{Outils.}
 L'outil utilisé pour écrire le code est \href{http://www.vim.org/}{Vim} (éditeur et colorateur). Le code est versionné avec \href{http://git-scm.com/}{git} (le code est hébergé sur \href{https://github.com/Lycee/ISN\_snake}{github}) et la chaine de compilation est générée par \href{http://www.cmake.org/}{Cmake}. Le jeu est dévellopé sous \href{https://en.wikipedia.org/wiki/Linux}{GNU/Linux} mais devra être compatible avec d'autre plateforme comme Windows ou Mac.
 
+\subsection{Correction des bugs.}
+Le code a subit des tests de couverture de code à l'aide de \href{http://gcc.gnu.org/onlinedocs/gcc-4.5.2/gcc/Gcov.html#Gcov}{gcov}.
+
+La détection des sources des bugs a été faite à l'aide de \href{https://www.gnu.org/software/gdb/}{gdb} et la détection des fuites de mémoire a été permise par \href{http://www.valgrind.org/}{valgrind}.
+
 \section{Licence.}
 Le code est sous licence \href{http://gplv3.fsf.org/}{GNU GPLv3} (voir le fichier LICENCE fournit avec le code), au copyright de Luc Chabassier et Pablo Donato.
 
-Les ressources graphiques (images, tileset) ont été crées par Luc Chabassier à l'aide de \href{http://www.gimp.org/}{Gimp} et de \href{http://mypaint.intilinux.com/}{MyPaint}, et sont sous licence \href{https://creativecommons.org/licenses/by-sa/2.0/}{CC-BY-SA}.
+Les ressources graphiques (images, tileset) ont été crées par Luc Chabassier à l'aide de \href{http://www.gimp.org/}{Gimp} et de \href{http://mypaint.intilinux.com/}{MyPaint}, et sont sous licence \href{https://creativecommons.org/licenses/by-sa/2.0/}{CC-BY-SA}. Remerciement particuliers à Lucas Saliou, pour ses conseils pour l'esthétique du jeu.
 
 Les sons et musiques sont tirées du jeu \href{http://supertux.lethargik.org/}{SuperTux2}, et sont sous licence \href{https://creativecommons.org/licenses/by-sa/2.0/}{CC-BY-SA}.
 
