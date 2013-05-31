@@ -70,16 +70,16 @@
 				part.y = step * sizeTile;
 				part.w = part.h = sizeTile;
 
-				SDL_Surface* tmp = SDL_CreateRGBSurface(tile->flags, sizeTile, sizeTile, tile->format->BitsPerPixel, 0, 0, 0, 0);
+				SDL_Surface* spart = SDL_CreateRGBSurface(tile->flags, sizeTile, sizeTile, tile->format->BitsPerPixel, 0, 0, 0, 0);
 				if(tmp == NULL)
 				{
 					m_loaded = false;
 					return;
 				}
 
-				SDL_BlitSurface(tile, &part, tmp, NULL);
-				m_tiles[x][angle][step] = rotTile(tmp, angle);
-				SDL_FreeSurface(tmp);
+				SDL_BlitSurface(tile, &part, spart, NULL);
+				m_tiles[x][angle][step] = rotTile(spart, angle);
+				SDL_FreeSurface(spart);
 			}
 		}
 	}
