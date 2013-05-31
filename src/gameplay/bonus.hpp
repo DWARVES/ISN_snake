@@ -8,8 +8,8 @@ struct SDL_Surface;
 namespace boost {
 	namespace filesystem {
 		class path;
-	};
-};
+	}
+}
 
 class Bonus
 {
