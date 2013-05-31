@@ -13,21 +13,17 @@ namespace fs = boost::filesystem;
 
 	Menu::Menu(Gui* g, SDL_Surface* scr)
 : m_gui(g), m_scr(scr),
-	m_bret(NULL), m_bplay(NULL), m_bjoin(NULL),
+	m_bret(NULL), m_bplay(NULL),
 	m_title(NULL)
 {
 	SDL_Rect pos;
 	pos.x = m_scr->w / 2;
-	pos.y = m_scr->h / 2 - 50;
+	pos.y = m_scr->h / 2 + 50;
 
 	m_bplay = new Button("New game", m_gui);
 	m_bplay->setPos(pos);
 
-	pos.y += 100;
-	m_bjoin = new Button("Join game", m_gui);
-	m_bjoin->setPos(pos);
-
-	pos.y += 150;
+	pos.y += 200;
 	m_bret = new Button("Quit", m_gui);
 	m_bret->setPos(pos);
 
@@ -43,8 +39,6 @@ Menu::~Menu()
 		delete m_bret;
 	if(m_bplay != NULL)
 		delete m_bplay;
-	if(m_bjoin != NULL)
-		delete m_bjoin;
 	if(m_title != NULL)
 		SDL_FreeSurface(m_title);
 }
@@ -61,7 +55,6 @@ bool Menu::run()
 		SDL_FillRect(m_scr, NULL, SDL_MapRGB(m_scr->format, 0, 0, 0));
 		SDL_BlitSurface(m_gui->background(), NULL, m_scr, NULL);
 		m_bplay->blitOn(m_scr);
-		m_bjoin->blitOn(m_scr);
 		m_bret->blitOn(m_scr);
 		if(m_title != NULL)
 		{
@@ -89,7 +82,6 @@ bool Menu::run()
 					m.x = ev.motion.x;
 					m.y = ev.motion.y;
 					m_bplay->mouse(m);
-					m_bjoin->mouse(m);
 					m_bret->mouse(m);
 					break;
 				case SDL_MOUSEBUTTONDOWN:
@@ -102,11 +94,6 @@ bool Menu::run()
 						Selecter sel(m_gui, m_scr);
 						if(!sel.run())
 							return false;
-					}
-					else if(m_bjoin->clicked(m))
-					{
-						music->playSound(Music::OK);
-						std::cout << "Join game !" << std::endl;
 					}
 					else if(m_bret->clicked(m))
 						continuer = false;

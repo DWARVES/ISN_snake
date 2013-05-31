@@ -20,7 +20,6 @@ class Menu
 
 		Button* m_bret;
 		Button* m_bplay;
-		Button* m_bjoin;
 		SDL_Surface* m_title;
 };
 
