@@ -175,7 +175,12 @@ void Map::setStatus(unsigned int x, unsigned int y, int id)
 
 void Map::deleteStatus(unsigned int x, unsigned int y)
 {
+	if(m_status.begin() == m_status.end()
+			|| m_map[x][y].state == NOTHING)
+		return;
+
 	m_map[x][y].state = NOTHING;
+
 	auto it = std::find(m_status.begin(), m_status.end(), std::pair<unsigned int, unsigned int>(x,y));
 	if(it != m_status.end())
 		m_status.erase(it);
