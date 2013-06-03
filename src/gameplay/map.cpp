@@ -123,12 +123,8 @@ void Map::blitOn(SDL_Surface* dst, SDL_Rect* pos)
 		}
 	}
 
-	for(auto it = m_status.begin(); it != m_status.end();)
-	{
-		auto toErase = it;
-		++it;
-		addWall(toErase->first, toErase->second);
-	}
+	for(size_t i = 0; i < m_status.size(); ++i)
+		addWall(m_status[i].first, m_status[i].second);
 
 	m_ltime = SDL_GetTicks();
 }
@@ -170,18 +166,19 @@ void Map::setStatus(unsigned int x, unsigned int y, int id)
 		default: s = NOTHING; break;
 	}
 	m_map[x][y].state = s;
-	m_status.insert(m_status.end(), std::pair<unsigned int,unsigned int>(x,y));
+	m_status.push_back(std::pair<unsigned int,unsigned int>(x,y));
 }
 
 void Map::deleteStatus(unsigned int x, unsigned int y)
 {
-	if(m_status.begin() == m_status.end()
+	if(m_status.empty()
 			|| m_map[x][y].state == NOTHING)
 		return;
 
 	m_map[x][y].state = NOTHING;
 
-	auto it = std::find(m_status.begin(), m_status.end(), std::pair<unsigned int, unsigned int>(x,y));
+	std::pair<unsigned int, unsigned int> pos(x,y);
+	auto it = std::find(m_status.begin(), m_status.end(), pos);
 	if(it != m_status.end())
 		m_status.erase(it);
 }

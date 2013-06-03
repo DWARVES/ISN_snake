@@ -2,6 +2,7 @@
 #ifndef DEF_MAP
 #define DEF_MAP
 
+#include <vector>
 #include <list>
 #include "config.hpp"
 
@@ -55,7 +56,7 @@ class Map
 			SNK3,
 			NOTHING
 		};
-		std::list<std::pair<unsigned int,unsigned int>> m_status;
+		std::vector<std::pair<unsigned int,unsigned int>> m_status;
 		void deleteStatus(unsigned int x, unsigned int y);
 
 		struct Tile
