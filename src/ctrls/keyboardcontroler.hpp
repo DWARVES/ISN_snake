@@ -2,6 +2,8 @@
 #ifndef DEF_KEYBOARDCONTROLER
 #define DEF_KEYBOARDCONTROLER
 
+#define NB_KEYS_CONFIGS 3
+
 #include "controler.hpp"
 #include <SDL.h>
 
@@ -19,8 +21,22 @@ class KeyboardControler : public Controler
 		virtual Controler* duplicate() const; // Crée un nouveau du même type
 
 	private:
-		static int m_count; // Ne peut y avoir qu'un seul clavier
+        mutable int m_keysUsed;
 		mutable SDLKey m_valid; // ev de validation
+
+        enum Dirs {
+            Left,
+            Right,
+            Up,
+            Down,
+            Last
+        };
+        static SDLKey m_keys[NB_KEYS_CONFIGS][(unsigned int)Last];
+        static bool m_used[NB_KEYS_CONFIGS];
+        static bool m_init;
+
+        int confFromKey(SDLKey key) const;
+        static void init();
 };
 
 #endif
