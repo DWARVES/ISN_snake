@@ -73,10 +73,15 @@ bool Menu::run()
 					return false;
 					break;
 				case SDL_KEYDOWN:
-					if(ev.key.keysym.sym == SDLK_q
-							|| ev.key.keysym.sym == SDLK_BACKSPACE
+			        if(ev.key.keysym.sym == SDLK_BACKSPACE
 							|| ev.key.keysym.sym == SDLK_ESCAPE)
 						continuer = false;
+                    else if(ev.key.keysym.sym == SDLK_RETURN) {
+						music->playSound(Music::OK);
+						Selecter sel(m_gui, m_scr);
+						if(!sel.run())
+							return false;
+                    }
 					break;
 				case SDL_MOUSEMOTION:
 					m.x = ev.motion.x;

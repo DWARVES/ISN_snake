@@ -95,7 +95,7 @@ bool Server::run()
 				case SDL_KEYDOWN:
 					switch(ev.key.keysym.sym)
 					{
-						case SDLK_q:
+						case SDLK_ESCAPE:
 							continuer = false;
 							end = true;
 							break;
