@@ -32,6 +32,7 @@ class Snake
 		mutable bool m_lastd; // m_dead avant l'appel à died
 		SDL_Surface* m_tiles[4][4][2]; // [partie][rotation][anim]
 		bool m_loaded;
+        unsigned int m_createdTime;
 
 		mutable unsigned int m_ltime;
 		mutable int m_step;
@@ -55,6 +56,8 @@ class Snake
 		void moveFirst(signed int x, signed int y);
 		void checkDeath();
 		bool dead(); // Indique si le serpent est mort et utilise les bonus
+        void free(); // Free everything
+        void resizeToOne(const SDL_Rect& begin);
 };
 
 #endif
