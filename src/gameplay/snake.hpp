@@ -30,7 +30,7 @@ class Snake
 		unsigned int m_score;
 		bool m_dead;
 		mutable bool m_lastd; // m_dead avant l'appel à died
-		SDL_Surface* m_tiles[4][4][2]; // [partie][rotation][anim]
+		SDL_Surface* m_tiles[4][4][2][2]; // [partie][rotation][anim][dead]
 		bool m_loaded;
         unsigned int m_createdTime;
 

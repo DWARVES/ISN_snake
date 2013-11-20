@@ -24,7 +24,7 @@
     // Chargement de l'image des tiles
     for(int i = 0; i < 4; ++i)
         for(int j = 0; j < 4; ++j)
-            m_tiles[i][j][0] = m_tiles[i][j][1] = NULL;
+            m_tiles[i][j][0][0] = m_tiles[i][j][0][1] = m_tiles[i][j][1][0] = m_tiles[i][j][1][1] = NULL;
 
     std::ostringstream path;
     path << rcdir << snake_subdir << id << ".png";
@@ -51,21 +51,24 @@
         {
             for(int step = 0; step < 2; ++step)
             {
-                SDL_Rect part;
-                part.x = x * sizeTile;
-                part.y = step * sizeTile;
-                part.w = part.h = sizeTile;
-
-                SDL_Surface* spart = SDL_CreateRGBSurface(tile->flags, sizeTile, sizeTile, tile->format->BitsPerPixel, 0, 0, 0, 0);
-                if(tmp == NULL)
+                for(int dead = 0; dead < 2; ++dead)
                 {
-                    m_loaded = false;
-                    return;
-                }
+                    SDL_Rect part;
+                    part.x = x * sizeTile;
+                    part.y = step * sizeTile + 2 * dead * sizeTile;
+                    part.w = part.h = sizeTile;
 
-                SDL_BlitSurface(tile, &part, spart, NULL);
-                m_tiles[x][angle][step] = rotTile(spart, angle);
-                SDL_FreeSurface(spart);
+                    SDL_Surface* spart = SDL_CreateRGBSurface(tile->flags, sizeTile, sizeTile, tile->format->BitsPerPixel, 0, 0, 0, 0);
+                    if(tmp == NULL)
+                    {
+                        m_loaded = false;
+                        return;
+                    }
+
+                    SDL_BlitSurface(tile, &part, spart, NULL);
+                    m_tiles[x][angle][step][dead] = rotTile(spart, angle);
+                    SDL_FreeSurface(spart);
+                }
             }
         }
     }
@@ -86,10 +89,14 @@ Snake::~Snake()
     {
         for(int j = 0; j < 4; ++j)
         {
-            if(m_tiles[i][j][0] != NULL)
-                SDL_FreeSurface(m_tiles[i][j][0]);
-            if(m_tiles[i][j][1] != NULL)
-                SDL_FreeSurface(m_tiles[i][j][1]);
+            if(m_tiles[i][j][0][0] != NULL)
+                SDL_FreeSurface(m_tiles[i][j][0][0]);
+            if(m_tiles[i][j][1][0] != NULL)
+                SDL_FreeSurface(m_tiles[i][j][1][0]);
+            if(m_tiles[i][j][0][1] != NULL)
+                SDL_FreeSurface(m_tiles[i][j][0][1]);
+            if(m_tiles[i][j][1][1] != NULL)
+                SDL_FreeSurface(m_tiles[i][j][1][1]);
         }
     }
     free();
@@ -240,7 +247,7 @@ void Snake::blitOn(SDL_Surface* dst, SDL_Rect* pos) const
         cpos.y += rpos.y;
 
         // La rotation
-        SDL_BlitSurface(m_tiles[part][angle][m_step], NULL, dst, &cpos);
+        SDL_BlitSurface(m_tiles[part][angle][m_step][(int)m_dead], NULL, dst, &cpos);
         actual = actual->next;
     }
 }
