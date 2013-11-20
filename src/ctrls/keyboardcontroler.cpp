@@ -43,6 +43,7 @@ bool KeyboardControler::stillValid(const SDL_Event& ev) const
         return true;
 
     if(ev.key.keysym.sym == m_valid) {
+        m_used[m_keysUsed] = false;
         m_keysUsed = -1;
         return false;
     }
