@@ -420,11 +420,6 @@ bool Snake::died(int still)
             m_score = 0;
         else
             m_score /= still;
-
-        SDL_Rect begin;
-        begin.x = m_first->x;
-        begin.y = m_first->y;
-        resizeToOne(begin);
     }
     return ret;
 }
