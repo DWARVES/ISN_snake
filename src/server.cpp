@@ -56,6 +56,9 @@ bool Server::run()
 	SDL_Event ev;
 	Uint32 sltime = SDL_GetTicks(); // Pour le déplacement du serpent
 	Uint32 bltime = sltime; // Pour les bonus
+    bool dieds[max_players];
+    for(int i = 0; i < max_players; ++i)
+        dieds[i] = false;
 
 	// Mainloop
 	while(continuer)
@@ -126,23 +129,22 @@ bool Server::run()
 			}
 
 			int nalive = m_alive;
-			bool dieds[max_players];
+            bool just[max_players];
 			for(int i = 0; i < max_players; ++i)
 			{
+                just[i] = false;
 				if(m_conts[i] == NULL)
 					continue;
 				else if(m_snks[i]->died(m_alive))
 				{
 					--nalive;
-					dieds[i] = true;
+					just[i] = true;
 				}
                 else if(dieds[i] && m_snks[i]->alive())
                 {
                     ++nalive;
                     dieds[i] = false;
                 }
-				else
-					dieds[i] = false;
 			}
 
 			m_alive = nalive;
@@ -152,8 +154,10 @@ bool Server::run()
 
 			for(int i = 0; i < max_players; ++i)
 			{
-				if(m_conts[i] != NULL && dieds[i])
+				if(m_conts[i] != NULL && just[i]) {
 					m_snks[i]->applyDeath();
+                    dieds[i] = true;
+                }
 			}
 
 			sltime = SDL_GetTicks();

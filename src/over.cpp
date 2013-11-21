@@ -131,7 +131,7 @@ void GameOver::createScr(SnkRank snks[max_players], int idx)
 {
     std::ostringstream oss;
     if(snks[idx].snk != NULL)
-        oss << idx + 1 << ". Player " << snks[idx].idx + 1 << " : " << snks[idx].snk->getScore();
+        oss << idx + 1 << ". Player " << snks[idx].idx + 1 << " : " << snks[idx].snk->getScore(true);
     else
         oss << "No player";
 
@@ -157,7 +157,7 @@ int GameOver::computeWin(Snake* snks[max_players], SnkRank rank[max_players]) co
             continue;
 
         // Rank
-        unsigned int scr = snks[i]->getScore();
+        unsigned int scr = snks[i]->getScore(true);
 
         int j;
         for(j = max_players - 1; j > 0  && rank[j - 1].scr <= scr; --j)
@@ -165,7 +165,7 @@ int GameOver::computeWin(Snake* snks[max_players], SnkRank rank[max_players]) co
             rank[j].scr = rank[j - 1].scr;
             rank[j].idx = rank[j - 1].idx;
         }
-        rank[j].scr = snks[i]->getScore();
+        rank[j].scr = snks[i]->getScore(true);
         rank[j].idx = i;
 
         // Winner
