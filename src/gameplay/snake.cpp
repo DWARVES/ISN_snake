@@ -5,6 +5,7 @@
 #include <SDL/SDL_image.h>
 #include <algorithm>
 #include <sstream>
+#include <iostream>
 
 #include "map.hpp"
 #include "config.hpp"
@@ -12,10 +13,11 @@
 #include "utilities.hpp"
 #include "music.hpp"
 
-#define NULL_BEGIN_TIME 20000
+#define NULL_BEGIN_TIME 10000
+#define SCORE_TO_REVIVE 50
 
     Snake::Snake(Map* map, const SDL_Rect& begin, int id)
-: m_id(id), m_map(map), m_toadd(0), m_score(0), m_dead(false), m_lastd(m_dead), m_loaded(true),
+: m_id(id), m_map(map), m_toadd(0), m_score(0), m_deadScore(0), m_dead(false), m_lastd(m_dead), m_loaded(true),
     m_ltime(SDL_GetTicks()), m_step(0), m_first(NULL), m_last(NULL)
 {
     // Création des premières cases
@@ -174,20 +176,32 @@ bool Snake::dead()
     else if(col == Map::BONUS)
     {
         Bonus* bon = m_map->getBonusAt(m_first->x, m_first->y);
-        if(m_dead)
-            return false;
-
         int scr = bon->getPts();
         if(scr < 0)
             music->playSound(Music::CANCEL);
         else
             music->playSound(Music::EAT);
 
-        if(scr < 0 
-                && (unsigned int)-scr > m_score)
-            m_score = 0;
+        int used;
+        if(m_dead)
+            used = m_deadScore;
         else
-            m_score += scr;
+            used = m_score;
+
+        if(scr < 0 
+                && (unsigned int)-scr > used)
+            used = 0;
+        else
+            used += scr;
+
+        if(!m_dead)
+            m_score = used;
+        else {
+            m_deadScore = used;
+            if(m_deadScore >= SCORE_TO_REVIVE)
+                revive();
+            return false;
+        }
 
         int length = bon->getLength();
         if(length < 0) // On supprime les cases
@@ -344,9 +358,12 @@ void Snake::incrementPos(SDL_Rect* dst, signed int x, signed int y) const
         dst->y -= heightMap;
 }
 
-unsigned int Snake::getScore() const
+unsigned int Snake::getScore(bool life) const
 {
-    return m_score;
+    if(m_dead && !life)
+        return m_deadScore;
+    else
+        return m_score;
 }
 
 void Snake::decal()
@@ -411,7 +428,7 @@ void Snake::moveFirst(signed int x, signed int y)
 bool Snake::died(int still)
 {
     checkDeath();
-    bool ret = (m_dead != m_lastd); // seul cas possible pour true : m_dead = true et m_lastd = false
+    bool ret = (m_dead && !m_lastd); // seul cas possible pour true : m_dead = true et m_lastd = false
     m_lastd = m_dead;
 
     if(ret)
@@ -420,6 +437,7 @@ bool Snake::died(int still)
             m_score = 0;
         else
             m_score /= still;
+        std::cout << "Score at death : " << m_score << std::endl;
     }
     return ret;
 }
@@ -459,3 +477,21 @@ Snake::Dir Snake::getDir(const Case* c1, const Case* c2) const
     }
 }
 
+void Snake::revive()
+{
+    m_deadScore = 0;
+    SDL_Rect begin;
+    begin.x = m_first->x;
+    begin.y = m_first->y;
+    resizeToOne(begin);
+    m_dead = false;
+    m_lastd = false;
+    std::cout << "Score at revive : " << m_score << std::endl;
+}
+        
+bool Snake::alive()
+{
+    return !m_dead;
+}
+
+        

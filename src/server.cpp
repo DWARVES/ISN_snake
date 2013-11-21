@@ -136,6 +136,11 @@ bool Server::run()
 					--nalive;
 					dieds[i] = true;
 				}
+                else if(dieds[i] && m_snks[i]->alive())
+                {
+                    ++nalive;
+                    dieds[i] = false;
+                }
 				else
 					dieds[i] = false;
 			}

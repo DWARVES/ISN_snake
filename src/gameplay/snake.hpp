@@ -20,14 +20,16 @@ class Snake
 
 		void blitOn(SDL_Surface* dst, SDL_Rect* pos) const;
 		bool died(int still); // still = nombre de snakes encore vivants
+        bool alive();
 		void applyDeath();
-		unsigned int getScore() const;
+		unsigned int getScore(bool life = false) const;
 
 	private:
 		int m_id;
 		Map* m_map;
 		unsigned int m_toadd;
 		unsigned int m_score;
+        unsigned int m_deadScore;
 		bool m_dead;
 		mutable bool m_lastd; // m_dead avant l'appel à died
 		SDL_Surface* m_tiles[4][4][2][2]; // [partie][rotation][anim][dead]
@@ -58,6 +60,7 @@ class Snake
 		bool dead(); // Indique si le serpent est mort et utilise les bonus
         void free(); // Free everything
         void resizeToOne(const SDL_Rect& begin);
+        void revive();
 };
 
 #endif
