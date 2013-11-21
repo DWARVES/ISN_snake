@@ -5,7 +5,6 @@
 #include <SDL/SDL_image.h>
 #include <algorithm>
 #include <sstream>
-#include <iostream>
 
 #include "map.hpp"
 #include "config.hpp"
@@ -437,7 +436,6 @@ bool Snake::died(int still)
             m_score = 0;
         else
             m_score /= still;
-        std::cout << "Score at death : " << m_score << std::endl;
     }
     return ret;
 }
@@ -486,7 +484,6 @@ void Snake::revive()
     resizeToOne(begin);
     m_dead = false;
     m_lastd = false;
-    std::cout << "Score at revive : " << m_score << std::endl;
 }
         
 bool Snake::alive()
