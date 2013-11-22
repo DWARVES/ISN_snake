@@ -369,7 +369,8 @@ void Snake::decal()
 {
     if(m_toadd == 0)
     {
-        m_map->deleteWall(m_last->x, m_last->y);
+        if(!m_dead)
+            m_map->deleteWall(m_last->x, m_last->y);
 
         m_last->x = m_last->prev->x;
         m_last->y = m_last->prev->y;
