@@ -59,7 +59,7 @@ void Mode::start()
 
 bool Mode::end() const
 {
-    return (SDL_GetTicks() - m_start > m_end);
+    return (m_end > 0 && SDL_GetTicks() - m_start > m_end);
 }
 
 void Mode::bonus(Map* map)
