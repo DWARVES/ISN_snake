@@ -9,6 +9,7 @@
 class Button;
 class Gui;
 class Controler;
+class Mode;
 
 class Selecter
 {
@@ -30,6 +31,7 @@ class Selecter
 
 		void loadSels();
 		void loadConts();
+        Mode* selMode();
 };
 
 #endif

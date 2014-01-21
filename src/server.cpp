@@ -1,14 +1,15 @@
 
 #include "server.hpp"
 #include "snake.hpp"
+#include "mode.hpp"
 #include "map.hpp"
 #include "gui.hpp"
 #include "scorebar.hpp"
 #include "over.hpp"
 #include "keyboardcontroler.hpp"
 
-	Server::Server(Gui* g, SDL_Surface* scr, Controler* c[max_players])
-: m_g(g), m_scr(scr), m_conts(c), m_alive(0), m_onlyone(true),
+	Server::Server(Gui* g, SDL_Surface* scr, Controler* c[max_players], Mode* md)
+: m_g(g), m_scr(scr), m_conts(c), m_mode(md), m_alive(0), m_onlyone(true),
 	m_map(NULL), m_sb(NULL)
 {
 	m_map = new Map(g);
@@ -53,9 +54,9 @@ bool Server::run()
 	// Initialisation
 	bool continuer = true;
 	bool end = false; // Signale arrêt prématuré
+    m_mode->start();
 	SDL_Event ev;
 	Uint32 sltime = SDL_GetTicks(); // Pour le déplacement du serpent
-	Uint32 bltime = sltime; // Pour les bonus
     bool dieds[max_players];
     for(int i = 0; i < max_players; ++i)
         dieds[i] = false;
@@ -113,11 +114,11 @@ bool Server::run()
 
 		// Mise à jour des structures
 		// Bonus
-		if(SDL_GetTicks() - bltime > 500)
-		{
-			m_map->addBonus();
-			bltime = SDL_GetTicks();
-		}
+        m_mode->bonus(m_map);
+        // Time end
+        if(m_mode->end())
+            continuer = false;
+
 		// Serpents
 		if(SDL_GetTicks() - sltime > 100)
 		{

@@ -4,6 +4,7 @@
 #include "gui/button.hpp"
 #include "gui/gui.hpp"
 #include "misc/music.hpp"
+#include "gameplay/mode.hpp"
 
 #include "ctrls/controler.hpp"
 #include "ctrls/joystickcontroler.hpp"
@@ -118,7 +119,7 @@ bool Selecter::run()
                         if(end)
                             break;
 
-                        Server srv(m_gui, m_scr, conts);
+                        Server srv(m_gui, m_scr, conts, selMode());
                         if(!srv.run())
                             return false;
                         break;
@@ -145,7 +146,7 @@ bool Selecter::run()
                                 if(end)
                                     break;
 
-                                Server srv(m_gui, m_scr, conts);
+                                Server srv(m_gui, m_scr, conts, selMode());
                                 if(!srv.run())
                                     return false;
                             }
@@ -182,6 +183,24 @@ void Selecter::loadConts()
     m_conts.resize(2);
     m_conts[0] = new KeyboardControler;
     m_conts[1] = new JoystickControler;
+}
+        
+Mode* Selecter::selMode()
+{
+    unsigned int max = 0;
+    for(Mode* md : modes)
+        max += md->prob();
+
+    unsigned int rd = rand() % max;
+    unsigned int actual = 0;
+    for(Mode* md : modes) {
+        actual += md->prob();
+        if(rd <= actual)
+            return md;
+    }
+
+    /* Shouldn't happen */
+    return modes.at(0);
 }
 
 

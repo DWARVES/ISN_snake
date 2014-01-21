@@ -2,7 +2,7 @@
 #include <iostream>
 #include <SDL.h>
 #include "config.hpp"
-#include "bonus.hpp"
+#include "mode.hpp"
 #include "gui.hpp"
 #include "menu.hpp"
 #include "music.hpp"
@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
 
 	// Chargement des bonus
 	fs::path bonPath(rcdir);
-	bonPath /= bonus_subdir;
-	Bonus::loadAll(bonPath.c_str());
+	bonPath /= modes_subdir;
+	Mode::loadAll(bonPath.c_str());
 
 	// Chargement de la Gui
 	Gui gui;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 		std::cout << "Jeu fermé afin sa fin." << std::endl;
 
 	// Libérations diverses
-	Bonus::freeAll();
+	Mode::freeAll();
 	SDL_Quit();
 	return 0;
 }

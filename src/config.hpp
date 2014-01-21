@@ -4,7 +4,7 @@
 
 // Ressources
 #define rcdir "rc/"
-#define bonus_subdir "bonus/" // bonus_dir rcdir/bonus_subdir
+#define modes_subdir "modes/"
 #define bg_path "bg.png"
 #define music_subdir "music/"
 #define ctrl_subdir "ctrl/"

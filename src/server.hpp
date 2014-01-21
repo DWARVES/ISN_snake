@@ -10,11 +10,12 @@ class Snake;
 class Controler;
 class Map;
 class ScoreBar;
+class Mode;
 
 class Server
 {
 	public:
-		Server(Gui* g, SDL_Surface* scr, Controler* c[max_players]);
+		Server(Gui* g, SDL_Surface* scr, Controler* c[max_players], Mode* md);
 		~Server();
 
 		bool run(); // Si renvoie false, programme doit s'arrêter
@@ -25,6 +26,7 @@ class Server
 
 		Controler** m_conts;
 		Snake* m_snks[max_players];
+        Mode* m_mode;
 		int m_alive;
 		bool m_onlyone; // Un seul joueur
 		Map* m_map;
