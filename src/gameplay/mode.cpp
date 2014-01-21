@@ -9,6 +9,7 @@
 #include <fstream>
 #include <sstream>
 
+std::vector<Mode*> modes;
 namespace fs = boost::filesystem;
 
 Mode::Mode(const std::string& path)

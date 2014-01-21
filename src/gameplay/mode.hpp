@@ -29,7 +29,7 @@ class Mode
         std::string m_path;
 };
 
-std::vector<Mode*> modes;
+extern std::vector<Mode*> modes;
 
 #endif
 
