@@ -82,8 +82,16 @@ bool Bonus::loadAll(const std::string& dir)
 {
 	bonus.clear();
 	fs::path p(dir);
-	bool ret = true;
 
+    if(!fs::is_directory(p)) {
+        Bonus* bon = new Bonus;
+        if(!bon->load(p))
+            return false;
+        bonus.push_back(bon);
+        return true;
+    }
+
+	bool ret = true;
 	unsigned int totFact = 0;
 	fs::directory_iterator end;
 	for(fs::directory_iterator it(p); it != end; ++it)
@@ -161,5 +169,6 @@ void Bonus::freeAll()
 {
 	for(auto it = bonus.begin(); it != bonus.end(); ++it)
 		delete *it;
+    bonus.clear();
 }
 
