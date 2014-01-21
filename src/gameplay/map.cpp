@@ -65,8 +65,14 @@ void Map::addBonus()
 		y = rand() % heightMap;
 	}
 
+    // Compute max
+    unsigned int max = 0;
+    for(Bonus* bn : bonus)
+        max += bn->getFact();
+    max += max / 5;
+
 	// Type de bonus
-	int prob = rand() % 1000;
+	int prob = rand() % max;
 	int state = 0;
 	for(size_t i = 0; i < bonus.size(); ++i)
 	{
